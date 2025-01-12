@@ -1,0 +1,227 @@
+<div class="container-fluid py-4">
+  <div class="row" style="width: 1625px;">
+
+    <div class="row my-4">
+      <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+        <div class="card" style=" height: 100vh">
+          <div class="card-header pb-0">
+            <div class="row">
+              <div class="col-lg-6 col-7">
+                <h6>Liste Des jours feries</h6>
+                <p class="text-sm mb-0">
+
+                </p>
+              </div>
+
+              <div class="col-lg-6 col-5 my-auto text-end">
+
+                <div class="dropdown float-lg-end pe-4">
+                  <ul class="nav">
+
+                    <li class="nav-item d-flex align-items-center">
+                      <a class="btn btn-primary btn-sm mb-0 me-3 " style="border-radius: 30px;" href="#"
+                        data-bs-toggle="modal" data-bs-target="#addCampaignModal">AJOUTER Jour Feriee</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- Modal Ajouter Jour Feriee -->
+              <div class="modal fade" id="addCampaignModal" tabindex="-1" role="dialog"
+                aria-labelledby="addCampaignLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document" style="margin-left: 600px;">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="addCampaignLabel">Ajouter un Jour Feriee</h5>
+                      <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" style="width: 1000px;">
+                      <form role="form text-left">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label for="pays" class="form-label">Pays</label>
+                              <select id="pays" class="form-control" [(ngModel)]="joursFeries.pays" name="pays">
+                                <option *ngFor="let pays of listPays" [ngValue]="pays">{{ pays.nom }}</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="description" class="form-label">description</label>
+                              <input type="text" id="description" [(ngModel)]="joursFeries.description"
+                                name="description" class="form-control" placeholder="description">
+                            </div>
+                            <div class="mb-3">
+                              <label for="date" class="form-label">Date</label>
+                              <input type="date" id="date" [(ngModel)]="joursFeries.date" name="date"
+                                class="form-control" placeholder="date">
+                            </div>
+                            <div class="mb-3">
+                              <label for="jourSemaine" class="form-label">jour Semaine</label>
+                              <select id="jourSemaine" class="form-control" [(ngModel)]="joursFeries.jourSemaine" name="jourSemaine">
+                                <option *ngFor="let jourSemaine of listJourSemaine" [ngValue]="jourSemaine">
+                                  {{ jourSemaine.nom }}
+                                </option>
+                              </select>
+                              
+                            </div>
+                            <div class="mb-3">
+                              <label for="mois" class="form-label">mois</label>
+                              <input type="number" id="mois" class="form-control" [(ngModel)]="joursFeries.mois"
+                                name="mois" placeholder="mois" min="1" max="12">
+                              
+
+                            </div>
+                            <div class="mb-3">
+                              <label for="semaineDansMois" class="form-label">Semaine dans mois </label>
+                              <input type="number" id="semaineDansMois" class="form-control" name="semaineDansMois"
+                                [(ngModel)]="joursFeries.semaineDansMois" placeholder="semaineDansMois">
+                            </div>
+                          </div>
+
+                        </div>
+                      </form>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="submit" class="btn bg-gradient-primary"
+                        (click)="submitjoursFeries()">Enregistrer</button>
+                      <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      description
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Jour de la Semaine
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      mois
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Pays
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Semaine dans mois
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Date
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      ACTIONS
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let jour of listJourFeries">
+                    <td>
+                      <div class="d-flex px-2 py-1">
+
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm">{{ jour.description }}</h6>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ jour.jourSemaine.nom }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ jour.mois }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ jour.pays?.nom }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ jour.semaineDansMois }}</span>
+                    </td>
+
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ jour.date }}</span>
+                    </td>
+
+
+                    <td class="align-middle text-left text-sm">
+                      <!-- Bouton Vue -->
+                      <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="viewjoursFeries(joursFeries)">
+                        <i class="fas fa-eye text-secondary"></i>
+                      </a>
+
+                      <!-- Bouton Modifier -->
+                      <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="editjoursFeries(joursFeries)">
+                        <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
+                      </a>
+
+                      <!-- Bouton Supprimer - Ouvre le modal de confirmation -->
+                      <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="openDeleteModal(joursFeries)">
+                        <i class="fas fa-trash text-secondary"></i>
+                      </a>
+
+                      <!-- Modal de confirmation de suppression -->
+                      <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog"
+                        aria-labelledby="modal-notification" aria-hidden="true">
+                        <div class="modal-dialog modal-danger modal-dialog-centered" role="document">
+                          <div class="modal-content" style="width: 1000px;">
+                            <div class="modal-header">
+                              <h6 class="modal-title" id="modal-title-notification">Confirmation de suppression</h6>
+                              <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="py-3 text-center">
+                                <i class="fas fa-exclamation-circle text-warning ni-3x"></i>
+                                <h4 class="text-gradient text-danger mt-4">Êtes-vous sûr(e) de vouloir supprimer cet
+                                  élément ?</h4>
+                                <p>Cette action est irréversible. Veuillez confirmer.</p>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-white" data-bs-dismiss="modal">Annuler</button>
+                              <button type="button" class="btn btn-danger" id="confirm-delete"
+                                (click)="confirmDelete()">Confirmer</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Dropdown menu -->
+                      <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v text-secondary"></i>
+                      </a>
+                      <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action 1</a></li>
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action 2</a></li>
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action 3</a></li>
+                      </ul>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>

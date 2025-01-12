@@ -1,0 +1,395 @@
+<div class="container-fluid py-4">
+  <div class="row" style="width: 1625px;">
+
+    <div class="row my-4">
+      <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+        <div class="card" style=" height: 100vh">
+          <div class="card-header pb-0">
+            <div class="row">
+              <div class="col-lg-6 col-7">
+                <h6>Liste Des Campagnes</h6>
+                <p class="text-sm mb-0">
+
+                </p>
+              </div>
+
+              <!-- Boutons "AJOUTER PLANNING" et autres -->
+              <div class="col-lg-6 col-5 my-auto text-end">
+
+                <div class="dropdown float-lg-end pe-4">
+                  <ul class="nav">
+
+                    <li class="nav-item d-flex align-items-center">
+                      <a class="btn btn-primary btn-sm mb-0 me-3 " style="border-radius: 30px;" href="#"
+                        data-bs-toggle="modal" data-bs-target="#addCampaignModal">AJOUTER CAMPAGNE</a>
+                    </li>
+                    <!-- Bouton qui déclenche le modal pour ajouter un planning -->
+                    <li class="nav-item d-flex align-items-center">
+                      <a class="btn btn-primary btn-sm mb-0 me-3" href="#" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">AJOUTER PLANNING</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                      <a class="btn btn-light btn-sm mb-0 me-3" href="">EXPORTER</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- Modal Ajouter Campagne -->
+              <div class="modal fade" id="addCampaignModal" tabindex="-1" role="dialog"
+                aria-labelledby="addCampaignLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document" style="margin-left: 450px;">
+                  <div class="modal-content" style="width: 1000px;">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="addCampaignLabel">Ajouter une campagne</h5>
+                      <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" style="width: 1000px;">
+                      <form role="form text-left">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label for="nom" class="form-label">Nom de la campagne</label>
+                              <input type="text" id="nom" [(ngModel)]="campagne.nom" name="nom" required
+                                class="form-control" placeholder="Nom de la campagne">
+                            </div>
+                            <div class="mb-3">
+                              <label for="client" class="form-label">Client</label>
+                              <input type="text" id="client" [(ngModel)]="campagne.client" name="client" required
+                                class="form-control" placeholder="Nom du client">
+                            </div>
+                            <div class="mb-3">
+                              <label for="Projetclient" class="form-label">Projet Client</label>
+                              <input type="text" id="Projetclient" [(ngModel)]="campagne.projetclient"
+                                name="Projetclient" required class="form-control"
+                                placeholder="Projet associé au client">
+                            </div>
+                            <div class="mb-3">
+                              <label for="salaireBase" class="form-label">Salaire de Base</label>
+                              <input type="number" id="salaireBase" class="form-control"
+                                [(ngModel)]="campagne.salaireBase" name="salaireBase" required
+                                placeholder="Salaire de base">
+                            </div>
+                            <div class="mb-3">
+                              <label for="salaire2" class="form-label">Deuxième salaire </label>
+                              <input type="number" id="salaire2" class="form-control" name="salaire2"
+                                [(ngModel)]="campagne.salaire2" placeholder="Salaire complémentaire 2">
+                            </div>
+                            <div class="mb-3">
+                              <label for="salaire3" class="form-label">Troisième salaire </label>
+                              <input type="number" id="salaire3" class="form-control" name="salaire3"
+                                [(ngModel)]="campagne.salaire3" placeholder="Salaire complémentaire 3">
+                            </div>
+                            <div class="form-group">
+                              <label for="description">Description de la campagne</label>
+                              <textarea class="form-control" id="description" [(ngModel)]="campagne.description"
+                                rows="3" name="description"></textarea>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label for="cible" class="form-label">Cible</label>
+                              <select id="cible" class="form-control" [(ngModel)]="campagne.cible" name="cible">
+                                <option *ngFor="let cible of listCibles" [ngValue]="cible">{{ cible.type }}</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="pays" class="form-label">Pays</label>
+                              <select id="pays" class="form-control" [(ngModel)]="campagne.pays" name="pays">
+                                <option *ngFor="let pays of listPays" [ngValue]="pays">{{ pays.nom }}</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="langue" class="form-label">Langue</label>
+                              <select id="langue" class="form-control" [(ngModel)]="campagne.langue" name="langue">
+                                <option *ngFor="let langue of listLangues" [ngValue]="langue">{{ langue.nom }}</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="typologie">Typologie:</label>
+                              <select id="typologie" class="form-control" [(ngModel)]="campagne.typologie"
+                                name="typologie">
+                                <option *ngFor="let typologie of listTypologies" [ngValue]="typologie">{{ typologie.nom
+                                  }}</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="typologiecanal">Typologie Canal:</label>
+                              <select id="typologiecanal" class="form-control" [(ngModel)]="campagne.typologieCanal"
+                                name="typologiecanal">
+                                <option *ngFor="let canal of listTypologieCanal" [ngValue]="canal">{{ canal.nom }}
+                                </option>
+                              </select>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="campaign-logo" class="form-label">Logo de la campagne</label>
+                              <input type="file" id="campaign-logo" class="form-control" accept="image/*"
+                                (change)="onFileChange($event)">
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="planning" class="form-label">Plannings</label> <br>
+                              <div *ngFor="let planning of campagne.plannings; let i = index">
+                                <div class="planning-container">
+                                  <label>Planning {{i + 1}}:</label>
+
+                                  <div class="form-group">
+                                    <label for="horaireDebut{{i}}">Heure Début:</label>
+                                    <input id="horaireDebut{{i}}" type="time" class="form-control"
+                                      [(ngModel)]="planning.horaireDebut" name="horaireDebut{{i}}">
+                                  </div>
+
+                                  <div class="form-group">
+                                    <label for="horaireFin{{i}}">Heure Fin:</label>
+                                    <input id="horaireFin{{i}}" type="time" class="form-control"
+                                      [(ngModel)]="planning.horaireFin" name="horaireFin{{i}}">
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Sélecteur de planning à partir des plannings existants -->
+                              <div class="form-group">
+                                <label for="selectPlanning">Sélectionner un planning existant</label>
+                                <select id="selectPlanning" name="selectPlanning" class="form-control"
+                                  [(ngModel)]="selectedPlanningId" (change)="onPlanningChange()">
+                                  <option *ngFor="let planning of availablePlannings" [value]="planning.id">
+                                    {{ planning.horaireDebut }} - {{ planning.horaireFin }}
+                                  </option>
+                                </select>
+                              </div>
+
+                              <button type="button" (click)="addPlanning()">Ajouter un Planning</button>
+                            </div>
+
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="submit" class="btn bg-gradient-primary" (click)="submitCompagne()">Enregistrer les
+                        modifications</button>
+                      <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Ajouter un planning</h5>
+                      <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+
+                      <!-- Nouveau formulaire pour l'ajout du planning -->
+                      <form #planningForm="ngForm" (ngSubmit)="onSubmit()">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="mb-3">
+                              <label for="horaireDebut" class="form-label">Heure Début</label>
+                              <input id="horaireDebut" type="time" class="form-control"
+                                [(ngModel)]="planning.horaireDebut" name="horaireDebut" required
+                                placeholder="Sélectionner...." />
+
+                            </div>
+                            <div class="mb-3">
+                              <label for="horaireFin" class="form-label">Heure Fin</label>
+                              <input id="horaireFin" type="time" class="form-control" [(ngModel)]="planning.horaireFin"
+                                name="horaireFin" required />
+
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Bouton de soumission DANS le formulaire -->
+                        <div class="modal-footer">
+                          <button type="submit" [disabled]="!planningForm.valid" class="btn bg-gradient-primary">
+                            Enregistrer les modifications
+                          </button>
+                          <button type="button" class="btn bg-gradient-secondary"
+                            data-bs-dismiss="modal">Fermer</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- fin modal -->
+
+            </div>
+          </div>
+
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Nom
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Client
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Cible
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Pays
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Langue
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Typologie
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Salaire Base
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 cursor-pointer"
+                      style="width: 100px;" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="Tooltip sur le deuxième salaire" data-container="body" data-animation="true">
+                      Deuxième salaire
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Troisième salaire
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      Typologie Canal
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px;">
+                      ACTIONS
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let campagne of listCampagnes">
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                          <img src="../assets/img/small-logos/logo-xd.svg" class="avatar avatar-sm me-3" alt="xd">
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm">{{ campagne.nom }}</h6>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.client }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.cible?.nom }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.pays?.nom }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.langue?.nom }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.typologie?.nom }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.salaireBase }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.salaire2 }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.salaire3 }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{ campagne.typologieCanal?.nom }}</span>
+                    </td>
+
+                    <td class="align-middle text-left text-sm">
+                      <!-- Bouton Vue -->
+                      <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="viewCampagne(campagne)">
+                        <i class="fas fa-eye text-secondary"></i>
+                      </a>
+
+                      <!-- Bouton Modifier -->
+                      <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="editCampagne(campagne)">
+                        <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
+                      </a>
+
+                      <!-- Bouton Supprimer - Ouvre le modal de confirmation -->
+                      <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="openDeleteModal(campagne)">
+                        <i class="fas fa-trash text-secondary"></i>
+                      </a>
+
+                      <!-- Modal de confirmation de suppression -->
+                      <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog"
+                        aria-labelledby="modal-notification" aria-hidden="true">
+                        <div class="modal-dialog modal-danger modal-dialog-centered" role="document">
+                          <div class="modal-content" style="width: 1000px;">
+                            <div class="modal-header">
+                              <h6 class="modal-title" id="modal-title-notification">Confirmation de suppression</h6>
+                              <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="py-3 text-center">
+                                <i class="fas fa-exclamation-circle text-warning ni-3x"></i>
+                                <h4 class="text-gradient text-danger mt-4">Êtes-vous sûr(e) de vouloir supprimer cet
+                                  élément ?</h4>
+                                <p>Cette action est irréversible. Veuillez confirmer.</p>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-white" data-bs-dismiss="modal">Annuler</button>
+                              <button type="button" class="btn btn-danger" id="confirm-delete"
+                                (click)="confirmDelete()">Confirmer</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Dropdown menu -->
+                      <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v text-secondary"></i>
+                      </a>
+                      <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action 1</a></li>
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action 2</a></li>
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action 3</a></li>
+                      </ul>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>

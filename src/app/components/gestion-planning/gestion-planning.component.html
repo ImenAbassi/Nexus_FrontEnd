@@ -1,0 +1,84 @@
+<!-- Composant HTML -->
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="row my-4">
+            <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+                <div class="card" style="height: 100vh;">
+                    <div class="card-header pb-0">
+                        <div class="row">
+                            <div class="col-lg-6 col-7">
+                                <h6>Liste des Plannings</h6>
+                                <p class="text-sm mb-0">Gestion des Sites.</p>
+                            </div>
+                            <div class="col-lg-6 col-5 my-auto text-end">
+                                <button class="btn btn-primary btn-sm mb-0 me-3" (click)="openModal(planningModal, 'add')">
+                                    Ajouter un Planning
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Début Table -->
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive">
+                            <table class="table align-items-center mb-0" style="text-align: center;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">horaire Debut</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">horaire Fin</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let planning of plannings; let i = index">
+                                        <td>{{ planning.horaireDebut }}</td>
+                                        <td>{{ planning.horaireFin }}</td>
+                                        <td>
+                                            <button class="btn btn-info btn-sm me-2" (click)="openModal(planningModal, 'edit', planning)">
+                                                Modifier
+                                            </button>
+                                            <button class="btn btn-danger btn-sm" (click)="deleteSite(planning.id)">
+                                                Supprimer
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination justify-content-center mt-4">
+                        <pagination-controls (pageChange)="currentPage = $event" [autoHide]="true" class="pagination-sm">
+                        </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Template Modal -->
+<ng-template #planningModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">{{ modalTitle }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form (ngSubmit)="saveSite(modal)">
+            <div class="mb-3">
+                <label for="horaireDebut" class="form-label">horaireDebut</label>
+                <input type="text" class="form-control" id="horaireDebut" [(ngModel)]="planning.horaireDebut" name="horaireDebut" required>
+            </div>
+            <div class="mb-3">
+                <label for="horaireFin" class="form-label">horaireFin</label>
+                <input type="text" class="form-control" id="horaireFin" [(ngModel)]="planning.horaireFin" name="horaireFin" required>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+                <button type="submit" class="btn btn-primary">{{ modalButtonLabel }}</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

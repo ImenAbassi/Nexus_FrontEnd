@@ -1,0 +1,143 @@
+<body class="g-sidenav-show bg-gray-100">
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-white" id="sidenav-main">
+        <app-sidenav></app-sidenav>
+    </aside>
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+        <app-navbar></app-navbar>
+        <div class="container-fluid py-4" style="margin-top: 150px;">
+            <div class="row mt-lg-n10 mt-md-n11 mt-n10">
+                <div>
+                    <div class="card z-index-0" style="height: 825px; width: 1580px; margin-top: 50px;">
+                        <div class="card-header text-center pt-4 bg-primary" style="margin-bottom: 20px;">
+                            <h5 class="font-weight-bolder text-white">Ajout d'une campagne</h5>
+                        </div>
+                        <div class="card-body">
+                            <form role="form text-left">
+                                <div class="row">
+                                    <!-- Première colonne (6) -->
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="nom" class="form-label">Nom de la campagne</label>
+                                            <input type="text" id="nom" class="form-control" placeholder="Nom de la campagne">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="client" class="form-label">Client</label>
+                                            <input type="text" id="client" class="form-control" placeholder="Nom du client">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="projetClient" class="form-label">Projet Client</label>
+                                            <input type="text" id="projetClient" class="form-control" placeholder="Projet associé au client">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="salaireBase" class="form-label">Salaire de Base</label>
+                                            <input type="number" id="salaireBase" class="form-control" placeholder="Salaire de base">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="salaire2" class="form-label">Salaire 2</label>
+                                            <input type="number" id="salaire2" class="form-control" placeholder="Salaire complémentaire 2">
+                                        </div>
+                                        <!-- Champ pour l'upload de l'image du logo -->
+                                        <div class="mb-3">
+                                            <label for="salaire3" class="form-label">Salaire 3</label>
+                                            <input type="number" id="salaire3" class="form-control" placeholder="Salaire complémentaire 3">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Deuxième colonne (6) -->
+                                    <div class="col-md-6">
+                                        
+                                        <div class="mb-3">
+                                            <label for="logo" class="form-label">Logo de la campagne</label>
+                                            <input type="file" id="logo" class="form-control" accept="image/*">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="cible" class="form-label">Cible</label>
+                                            <select id="cible" class="form-control">
+                                                <option value="">Choisir la cible</option>
+                                                <!-- Options basées sur l'enum Cible -->
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="pays" class="form-label">Pays</label>
+                                            <select id="pays" class="form-control">
+                                                <option value="">Choisir le pays</option>
+                                                <!-- Options basées sur l'enum Pays -->
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="langue" class="form-label">Langue</label>
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="btn bg-gradient-dark dropdown-toggle" data-bs-toggle="dropdown" id="navbarDropdownMenuLinkLangue">
+                                                    Sélectionner la langue
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkLangue">
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-lang="FRANCAIS">
+                                                            <img src="https://flagcdn.com/w20/fr.png" alt="Français" /> Français
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-lang="ANGLAIS">
+                                                            <img src="https://flagcdn.com/w20/gb.png" alt="Anglais" /> Anglais
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-lang="ALLEMAND">
+                                                            <img src="https://flagcdn.com/w20/de.png" alt="Allemand" /> Allemand
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-lang="ITALIEN">
+                                                            <img src="https://flagcdn.com/w20/it.png" alt="Italien" /> Italien
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-lang="ESPAGNOL">
+                                                            <img src="https://flagcdn.com/w20/es.png" alt="Espagnol" /> Espagnol
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-lang="ARABE">
+                                                            <img src="https://flagcdn.com/w20/tn.png" alt="Arabe" /> Arabe
+                                                        </a>
+                                                    </li>
+                                                    
+                                                    <li>
+                                                        <a class="dropdown-item" href="javascript:;" data-lang="BILINGUE">
+                                                            <img src="https://flagcdn.com/w20/un.png" alt="Bilingue" /> Bilingue
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <div class="mb-3">
+                                            <label for="typologie" class="form-label">Typologie</label>
+                                            <select id="typologie" class="form-control">
+                                                <option value="">Choisir la typologie</option>
+                                                <!-- Options basées sur l'enum Typologie -->
+                                            </select>
+                                        </div>
+                                        <!-- Liste déroulante pour le Planning -->
+                                        <div class="mb-3">
+                                            <label for="planning" class="form-label">Planning</label>
+                                            <select id="planning" class="form-control">
+                                                <option value="">Choisir le planning</option>
+                                                <!-- Options basées sur l'enum Planning -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Bouton au bas, centré -->
+                                <div class="text-center" style="margin-top: 10px;">
+                                    <button type="button" class="btn bg-primary font-weight-bolder text-white w-30 my-4">Enregistrer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>

@@ -1,0 +1,300 @@
+<div class="container-fluid py-4">
+  <div class="row">
+
+    <div class="row my-4">
+      <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+        <div class="card" style=" height: 100vh">
+          <div class="card-header pb-0">
+            <div class="row">
+              <div class="col-lg-6 col-7">
+                <h6>Liste Des Agents</h6>
+                <p class="text-sm mb-0">
+
+                </p>
+              </div>
+              <div class="col-lg-6 col-5 my-auto text-end">
+                <div class="dropdown float-lg-end pe-4">
+                  <ul class="nav">
+                    <li class="nav-item d-flex align-items-center">
+                      <!-- Bouton pour ouvrir le formulaire d'ajout -->
+                      <a class="btn btn-primary btn-sm mb-0 me-3" data-bs-toggle="modal"
+                        data-bs-target="#addUserModal">AJOUTER AGENT</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                      <a class="btn btn-light btn-sm mb-0 me-3" href="">EXPORTER</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- Modal pour ajouter un utilisateur -->
+              <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="addUserModalLabel">Ajouter un Agent</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <!-- 
+                    <div class="modal-body">
+                      <form *ngIf="selectedUser" #addUserForm="ngForm" (ngSubmit)="onSubmitEditForm()">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label for="addCin" class="form-label">CIN</label>
+                              <input type="text" id="addCin" [(ngModel)]="selectedUser.cin" name="cin" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                              <label for="addName" class="form-label">Nom & Prénom</label>
+                              <input type="text" id="addName" [(ngModel)]="selectedUser.nom" name="nom" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                              <label for="addEmail" class="form-label">Email</label>
+                              <input type="email" id="addEmail" [(ngModel)]="selectedUser.adresseMail" name="email" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                              <label for="addPhone" class="form-label">Téléphone</label>
+                              <input type="text" id="addPhone" [(ngModel)]="selectedUser.telPortable1" name="phone" class="form-control" />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label for="addFonction" class="form-label">Fonction</label> 
+                              <select [(ngModel)]="selectedUser.fonction" name="fonction" class="form-control"> 
+                                <option *ngFor="let fonction of fonctionOptions" [value]="fonction.value"> {{ fonction.label }} </option> </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="addPassword" class="form-label">Mot de Passe</label>
+                              <input type="password" id="addPassword" [(ngModel)]="selectedUser.password" name="password" class="form-control" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn bg-gradient-dark">Enregistrer</button>
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Fermer</button>
+                        </div>
+                      </form>
+                      
+                    </div>
+                  -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 10px; ">COMPAGNES</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px; ">SALAIRE
+                    </th>
+
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 90px;">CIN</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style=" width: 100px; text-align: center;">ETAT</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px; "> FONCTION</th>
+
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px; ">NOM & prenom</th>
+
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 100px; ">TELEPHONE</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      style="width: 150px; ">ACTION</th>
+                  </tr>
+                </thead>
+               <!--  <tbody>
+                  <tr *ngFor="let user of users">
+
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                          <img src="../assets/img/small-logos/logo-xd.svg" class="avatar avatar-sm me-3" alt="xd">
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm">Soft UI XD Version</h6>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold"> {{user.salaire}} </span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{user.cin}}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="badge badge-sm bg-gradient-success">{{ user.etatActuel }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{user.fonction}}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{user.prenom}} {{user.nom}}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold">{{user.telPortable1}}</span>
+                    </td>
+                    <td class="align-middle text-left text-sm ">
+
+                      <a class="btn btn-link text-dark mb-0" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editUserModal" (click)="selectUser(user)">
+                        <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
+                      </a>
+                      
+                      
+                      <a class="btn btn-link text-dark mb-0" href="javascript:;" data-bs-toggle="modal"
+                        data-bs-target="#modal-notification">
+                        <i class="fas fa-trash text-secondary"></i>
+                      </a>
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1000px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserLabel">Modifier l'utilisateur</h5>
+        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #editUserForm="ngForm" (ngSubmit)="onSubmitEditForm()">
+          <div class="row" *ngIf="selectedUser">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="editCin" class="form-label">CIN</label>
+                <input type="text" id="editCin" [(ngModel)]="selectedUser.cin" name="cin" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="editName" class="form-label">Nom & Prénom</label>
+                <input type="text" id="editName" [(ngModel)]="selectedUser.nom" name="nom" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="editEmail" class="form-label">Email</label>
+                <input type="email" id="editEmail" [(ngModel)]="selectedUser.adresseMail" name="email" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="editPhone" class="form-label">Téléphone</label>
+                <input type="text" id="editPhone" [(ngModel)]="selectedUser.telPortable1" name="phone" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="editTelFixe" class="form-label">Téléphone Fixe</label>
+                <input type="text" id="editTelFixe" [(ngModel)]="selectedUser.telFixe" name="telFixe" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="editDateNaissance" class="form-label">Date de Naissance</label>
+                <input type="date" id="editDateNaissance" [(ngModel)]="selectedUser.dateNaissance" name="dateNaissance" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="editLieuNaissance" class="form-label">Lieu de Naissance</label>
+                <input type="text" id="editLieuNaissance" [(ngModel)]="selectedUser.lieuNaissance" name="lieuNaissance" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="editAdresseMailPro" class="form-label">Adresse Email Professionnelle</label>
+                <input type="email" id="editAdresseMailPro" [(ngModel)]="selectedUser.adresseMailPro" name="adresseMailPro" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="editFonction" class="form-label">Fonction</label>
+                <select [(ngModel)]="selectedUser.fonction" name="fonction" class="form-control">
+                  <option *ngFor="let fonction of fonctionOptions" [value]="fonction.value">
+                    {{ fonction.label }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="editPassword" class="form-label">Mot de Passe</label>
+                <input type="password" id="editPassword" [(ngModel)]="selectedUser.password" name="password" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="editEtatCivil" class="form-label">État Civil</label>
+                <select id="editEtatCivil" [(ngModel)]="selectedUser.etatCivil" name="etatCivil" class="form-control">
+                    <option *ngFor="let etatCivil of etatCivilOptions" [value]="etatCivil.value">
+                        {{ etatCivil.label }}
+                    </option>
+                </select>              </div>
+              <div class="mb-3">
+                <label for="editSexe" class="form-label">Sexe</label> <select [(ngModel)]="selectedUser.sexe" name="sexe" class="form-control"> <option *ngFor="let sexe of sexeOptions" [value]="sexe.value"> {{ sexe.label }} </option> </select>
+              </div>
+              <div class="mb-3">
+                <label for="editTypeContrat" class="form-label">Type de Contrat</label> <select id="editTypeContrat" [(ngModel)]="selectedUser.typeContrat" name="typeContrat" class="form-control"> <option *ngFor="let typeContrat of typeContratOptions" [value]="typeContrat.value"> {{ typeContrat.label }} </option> </select>
+              </div>
+              <div class="mb-3">
+                <label for="editEtatActuel" class="form-label">État Actuel</label> <select [(ngModel)]="selectedUser.etatActuel" name="etatActuel" class="form-control"> <option *ngFor="let etatUser of etatUserOptions" [value]="etatUser.value"> {{ etatUser.label }} </option> </select>
+                
+              </div>
+              <div class="mb-3">
+                <label for="editDateDebutContrat" class="form-label">Date de Début de Contrat</label>
+                <input type="date" id="editDateDebutContrat" [(ngModel)]="selectedUser.dateDebutContrat" name="dateDebutContrat" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="editDateFinContrat" class="form-label">Date de Fin de Contrat</label>
+                <input type="date" id="editDateFinContrat" [(ngModel)]="selectedUser.dateFinContrat" name="dateFinContrat" class="form-control" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn bg-gradient-dark">Enregistrer les modifications</button>
+            <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Fermer</button>
+          </div>
+        </form>
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+                      <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog"
+                        aria-labelledby="modal-notification" aria-hidden="true">
+                        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+                          <div class="modal-content" style="width: 1000px;">
+                            <div class="modal-header">
+                              <h6 class="modal-title" id="modal-title-notification">Confirmation de suppression</h6>
+                              <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="py-3 text-center">
+                                <i class="fas fa-exclamation-circle text-warning ni-3x"></i>
+                                <h4 class="text-gradient text-danger mt-4">Êtes-vous sûr(e) de vouloir supprimer cet
+                                  élément ?</h4>
+                                <p>Cette action est irréversible. Veuillez confirmer.</p>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-white" data-bs-dismiss="modal">Annuler</button>
+                              <button type="button" class="btn btn-danger" id="confirm-delete"
+                                (click)="deleteUser(user.idUser)">Confirmer</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <a class="cursor-pointer" style="margin-left:10px ;" id="dropdownTable" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa fa-ellipsis-v text-secondary"></i>
+                      </a>
+                      <ul class="dropdown-menu px-2 py-3 ms-lg-n4 ms-n5 bg-dark  " aria-labelledby="dropdownTable">
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Réaffecter</a></li>
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
+                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a>
+                        </li>
+                      </ul>
+
+                    </td>
+                  </tr>
+
+                </tbody>
+                -->
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>

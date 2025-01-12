@@ -1,0 +1,67 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Enfant, EtatUser, User, UserCompagne, UserCompagneDTO } from '../models/user.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UserService {
+  private apiUrl = 'http://localhost:8081/nexus/users';
+
+  constructor(private http: HttpClient) {}
+
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl);
+  }
+  getUsersWithoutSupervisorOrProjectLeader(): Observable<UserCompagne[]> {
+    return this.http.get<UserCompagne[]>(`${this.apiUrl}/users-without-supervisor-or-project-leader`);
+  }
+  
+  getUsersWithSupervisorOrProjectLeader(): Observable<UserCompagne[]> {
+    return this.http.get<UserCompagne[]>(`${this.apiUrl}/users-with-supervisor-or-project-leader`);
+  }
+  
+  getUserById(idUser: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${idUser}`);
+  }
+
+  createUserAndAssignToCompagne(dto: UserCompagneDTO): Observable<UserCompagne> {
+    return this.http.post<UserCompagne>(`${this.apiUrl}/create-and-assign`, dto);
+  }
+  // Dans UserService.ts
+  getUserCompagne(userCompagneId: number): Observable<UserCompagne> {
+    return this.http.get<UserCompagne>(`${this.apiUrl}/${userCompagneId}`);
+  }
+  
+  updateUserCompagne(userCompagneId: number, userCompagneDTO: UserCompagneDTO): Observable<UserCompagne> {
+    return this.http.put<UserCompagne>(`${this.apiUrl}/update/${userCompagneId}`, userCompagneDTO);
+  }
+  
+  
+
+  assignUserToCompagne(dto: UserCompagneDTO): Observable<UserCompagne> {
+    return this.http.post<UserCompagne>(`${this.apiUrl}/assignToCompagne`, dto);
+  }
+
+  updateUser(idUser: number, userDetails: User): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${idUser}`, userDetails);
+  }
+
+  deleteUser(idUser: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${idUser}`);
+  }
+
+  updateUserEtat(idUser: number, nouvelEtat: EtatUser, motif: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${idUser}/etat`, { nouvelEtat, motif });
+  }
+
+  addEnfantsToUser(userId: number, enfants: Enfant[]): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/${userId}/enfants`, enfants);
+  }
+
+  assignUserToSociete(userId: number, societeId: number): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${userId}/assign-societe/${societeId}`, {});
+  }
+
+}

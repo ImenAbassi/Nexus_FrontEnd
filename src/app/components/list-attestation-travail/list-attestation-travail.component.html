@@ -1,0 +1,174 @@
+
+
+<div class="container-fluid px-4">
+  <div class="row">
+      <div class="col-md-12 p-3">
+          <!-- demande de congé -->
+          <div class="card mb-4" style="border-radius: 50px;">
+              <div class="card-body px-4 py-2">
+                  <div class="mt-3">
+                      <div class="accordion accordion-flush mb-3" id="accordionFlushExample">
+                          <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingOne" style="background: #eef1f3;border-radius: 30px;padding-left: 10px;">
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" style="color: #344767;">
+                                  Faire une demande
+                              </button>
+                            </h2>
+                            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                              <div class="accordion-body">
+                                <form role="form text-left">
+                                  <div class="row">
+                                    <!-- Première colonne -->
+                                    <div class="col-md-12">
+                                      <!-- Type d'attestation -->
+                                      <div class="mb-3">
+                                        <label for="type-attestation" class="form-label">Type d'attestation</label>
+                                        <select id="type-attestation" class="form-control" (change)="updateAvailableDates($event)">
+                                          <option value="" selected>Choisir le type de l'attestation</option>
+                                          <option value="STANDARD">Non Légalisée</option>
+                                          <option value="LEGALISED">Légalisée</option>
+                                        </select>
+                                      </div>
+                                
+                                      <!-- Liste des dates valides -->
+                                      <div class="mb-3">
+                                        <label for="date-souhaitee" class="form-label">Date souhaitée de récupération</label>
+                                        <select id="date-souhaitee" class="form-control" [disabled]="availableDates.length === 0">
+                                          <option *ngFor="let date of availableDates" [value]="date">
+                                            {{ date }}
+                                          </option>
+                                        </select>
+                                      </div>
+                                
+                                      <!-- Motif -->
+                                      <div class="mb-3">
+                                        <label for="motif" class="form-label">Motif</label>
+                                        <input type="text" id="motif" class="form-control" placeholder="Saisir le motif" aria-label="Motif">
+                                      </div>
+                                      <button type="submit" class="btn bg-gradient-primary btn-sm mb-3 float-end">Enregistrer</button>
+
+                                    </div>
+                                  </div>
+                                </form>
+                                
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="card">
+              <div class="card-header pb-0 p-3">
+                  <h6 class="mb-0 px-4">Liste des Attestations de travail</h6>
+              </div>
+              <div class="card-body px-0 pb-2">
+                <div class="table-responsive">
+                  <table class="table align-items-center mb-0" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                          style="width: 100px; ">NOM & PRENOM</th>
+
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                          style="width: 100px; ">TYPE 
+                        </th>
+
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                          style="width: 90px;">date souhaitéé</th>
+                        
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                          style="width: 100px; "> DESCRIPTION</th>
+                       
+                      
+
+
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                          style="width: 100px; ">ACTION</th>
+
+
+
+
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2 py-1">
+
+                            <div class="d-flex flex-column justify-content-center">
+                              <h6 class="mb-0 text-sm">abassi imen</h6>
+                            </div>
+                          </div>
+                        </td>
+
+
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-xs font-weight-bold">sans solde</span>
+                        </td>
+
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-xs font-weight-bold">15-11-2024</span>
+                        </td>
+                   
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-xs font-weight-bold">description bdjfufhd</span>
+                        </td>
+                     
+                        <td class="align-middle text-left text-sm">
+
+
+                          <a class="btn btn-link text-dark  mb-0" href="javascript:;"><i
+                              class="fas fa-check text-success " aria-hidden="true"></i></a>
+                          <a class="btn btn-link text-dark mb-0" href="javascript:;"><i
+                              class="fas fa-times text-danger"></i></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2 py-1">
+
+                            <div class="d-flex flex-column justify-content-center">
+                              <h6 class="mb-0 text-sm">abassi imen</h6>
+                            </div>
+                          </div>
+                        </td>
+
+
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-xs font-weight-bold">sans solde</span>
+                        </td>
+
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-xs font-weight-bold">15-11-2024</span>
+                        </td>
+                       
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-xs font-weight-bold">description bdjfufhd</span>
+                        </td>
+                       
+
+                        <td class="align-middle text-left text-sm">
+
+
+                          <a class="btn btn-link text-dark  mb-0" href="javascript:;"><i
+                              class="fas fa-check text-success " aria-hidden="true"></i></a>
+                          <a class="btn btn-link text-dark mb-0" href="javascript:;"><i
+                              class="fas fa-times text-danger"></i></a>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      

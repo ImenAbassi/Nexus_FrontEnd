@@ -1,0 +1,375 @@
+<div class="container-fluid py-4">
+    <div class="row">
+
+        <div class="row my-4">
+            <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+                <div class="card" style=" height: 100vh">
+                    <div class="card-header pb-0">
+                        <div class="row">
+                            <div class="col-lg-6 col-7">
+                                <h6>Liste Des Candidats</h6>
+                                <p class="text-sm mb-0">
+
+                                </p>
+                            </div>
+                            <div class="col-lg-6 col-5 my-auto text-end">
+                                <div class="dropdown float-lg-end pe-4">
+
+                                    <li class="nav-item d-flex align-items-center">
+                                        <a class="btn btn-primary btn-sm mb-0 me-3" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">AJOUTER
+                                            CANDIDAT</a>
+                                    </li>
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document"
+                                    style="margin-left: 450px;">
+                                    <div class="modal-content" style="width: 1000px;">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Ajouter un candidat</h5>
+                                            <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body" style="width: 1000px;">
+                                            <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="cin" class="form-label">CIN</label>
+                                                            <input id="cin" formControlName="cin" type="text"
+                                                                class="form-control" />
+
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="nom" class="form-label">Nom</label>
+                                                            <input id="nom" formControlName="nom" type="text"
+                                                                class="form-control" />
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="prenom" class="form-label">Prénom</label>
+                                                            <input id="prenom" formControlName="prenom" type="text"
+                                                                class="form-control" />
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="adresseMail">Email</label>
+                                                            <input id="adresseMail" formControlName="adresseMail"
+                                                                type="email" class="form-control" />
+
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="telPortable1">Téléphone</label>
+                                                            <input id="telPortable1" formControlName="telPortable1"
+                                                                type="text" class="form-control" />
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="fonction" class="form-label">Fonction</label>
+                                                            <select id="fonction" formControlName="fonction"
+                                                                class="form-control" required>
+                                                                <option *ngFor="let fonction of fonctions"
+                                                                    [value]="fonction">{{ fonction }}</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="compagne" class="form-label">Sélectionner une
+                                                                compagne</label>
+                                                            <select id="compagne" formControlName="compagneId"
+                                                                class="form-control" required>
+                                                                <option *ngFor="let compagne of compagnes"
+                                                                    [value]="compagne.id">{{ compagne.nom }}</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="dateHeureFormation">Date et heure de
+                                                                formation</label>
+                                                            <input id="dateHeureFormation"
+                                                                formControlName="dateHeureFormation"
+                                                                type="datetime-local" class="form-control" />
+
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="password" class="form-label">Mot De
+                                                                Passe</label>
+                                                            <input id="password" formControlName="password"
+                                                                type="password" class="form-control" />
+
+                                                        </div>
+                                                       
+
+
+                                                        <div class="mb-3 form-check">
+                                                            <input type="radio" id="radio2" name="remplissageOption"
+                                                                class="form-check-input">
+                                                            <label for="radio2" class="form-check-label">Envoyer un
+                                                                e-mail au candidat pour remplir la fiche</label>
+                                                        </div>
+                                                        <div class="mb-3 form-check">
+                                                            <input type="radio" id="radio1" name="remplissageOption"
+                                                                class="form-check-input">
+                                                            <label for="radio1" class="form-check-label">Remplir la
+                                                                fiche de la part du recruteur</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" [disabled]="userForm.invalid"
+                                                        class="btn btn-primary">Ajouter</button>
+
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Fermer</button>
+                                                </div>
+                                            </form>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--debut table    -->
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive">
+                            <table class="table align-items-center mb-0" style="text-align: center;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            CAMPAGNES</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            style="width: 150px;">CIN</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            style="width: 150px;">Nom & Prénom</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            style="width: 150px;">Téléphone</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            style="width: 150px;">Email</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            style="margin-left: 30px;">Etat Formulaire</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            FONCTION</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            style="width: 150px;">Date Formation</th>
+                                       
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            style="width: 130px; padding-left: 50px; padding-right:50px ;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let userCompagne of usersWithoutSupervisorOrProjectLeader  | paginate: { itemsPerPage: 9, currentPage: currentPage }">
+                                        <td>
+
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm"> {{ getCompagneNom(userCompagne.compagneId|| 0)
+                                                    }}
+                                                </h6>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle text-left text-sm">
+                                            <span class="text-xs font-weight-bold">{{ userCompagne.user?.cin }}</span>
+                                        </td>
+                                        <td class="align-middle text-left text-sm">
+                                            <span class="text-xs font-weight-bold" style="margin-left: 20px;"> {{
+                                                userCompagne.user?.prenom }} {{ userCompagne.user?.nom }}</span>
+                                        </td>
+                                        <td class="align-middle text-left text-sm">
+                                            <span class="text-xs font-weight-bold" style="margin-left: 20px;">{{
+                                                userCompagne.user?.telPortable1 }}</span>
+                                        </td>
+                                        <td class="align-middle text-left text-sm">
+                                            <span class="text-xs font-weight-bold">{{ userCompagne.user?.adresseMail
+                                                }}</span>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="progress-wrapper w-75 mx-auto">
+                                                <div class="progress-info">
+                                                    <div class="progress-percentage">
+                                                        <span class="text-xs font-weight-bold">100%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-gradient-success" role="progressbar"
+                                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                                                        style="width: 100%;"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle text-left text-sm">
+                                            <span class="text-xs font-weight-bold" style="margin-left: 20px;">{{
+                                                userCompagne.fonction }}</span>
+                                        </td>
+                                        <td class="align-middle text-left text-sm">
+                                            <span class="text-xs font-weight-bold"
+                                                style="margin-left: 20px; width: 40px;">
+                                                {{ userCompagne.dateHeureFormation | date: 'dd/MM/yyyy HH:mm' }}
+                                            </span>
+
+                                        </td>
+                                       
+                                        <td class="align-middle text-left text-sm">
+                                            <!-- Icône de modification -->
+                                            <a class="btn btn-link text-dark mb-0" href="javascript:;"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editModal"
+                                            (click)="openEditModal(userCompagne)">
+                                            <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
+                                         </a>
+                                         
+                                         
+
+<!-- Modal pour Modifier -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="margin-left: 450px;">
+        <div class="modal-content" style="width: 1000px;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modifier un candidat</h5>
+                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="width: 1000px;">
+                <!-- Formulaire de modification -->
+                <form [formGroup]="userForm" (ngSubmit)="onSubmitUpdate()">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cin" class="form-label">CIN</label>
+                                <input id="cin" formControlName="cin" type="text" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="nom" class="form-label">Nom</label>
+                                <input id="nom" formControlName="nom" type="text" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="prenom" class="form-label">Prénom</label>
+                                <input id="prenom" formControlName="prenom" type="text" class="form-control" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="adresseMail">Email</label>
+                                <input id="adresseMail" formControlName="adresseMail" type="email" class="form-control" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="telPortable1">Téléphone</label>
+                                <input id="telPortable1" formControlName="telPortable1" type="text" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="fonction" class="form-label">Fonction</label>
+                                <select id="fonction" formControlName="fonction" class="form-control" required>
+                                    <option *ngFor="let fonction of fonctions" [value]="fonction">{{ fonction }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="compagne" class="form-label">Sélectionner une compagne</label>
+                                <select id="compagne" formControlName="compagneId" class="form-control" required>
+                                    <option *ngFor="let compagne of compagnes" [value]="compagne.id">{{ compagne.nom }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dateHeureFormation">Date et heure de formation</label>
+                                <input id="dateHeureFormation" formControlName="dateHeureFormation" type="datetime-local" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Mot De Passe</label>
+                                <input id="password" formControlName="password" type="password" class="form-control" />
+                            </div>
+                          
+
+                       
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary">Mettre à jour</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+                                            <a class="btn btn-link text-dark mb-0" href="javascript:;"
+                                                data-bs-toggle="modal" data-bs-target="#modal-notification">
+                                                <i class="fas fa-trash text-secondary"></i>
+                                            </a>
+                                            <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog"
+                                                aria-labelledby="modal-notification" aria-hidden="true">
+                                                <div class="modal-dialog modal-danger modal-dialog-centered modal-"
+                                                    role="document">
+                                                    <div class="modal-content" style="width: 1000px;">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title" id="modal-title-notification">
+                                                                Confirmation de suppression</h6>
+                                                            <button type="button" class="btn-close text-dark"
+                                                                data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="py-3 text-center">
+                                                                <i
+                                                                    class="fas fa-exclamation-circle text-warning ni-3x"></i>
+                                                                <h4 class="text-gradient text-danger mt-4">Êtes-vous
+                                                                    sûr(e) de vouloir supprimer cet élément ?</h4>
+                                                                <p>Cette action est irréversible. Veuillez confirmer.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-white"
+                                                                data-bs-dismiss="modal">Annuler</button>
+                                                            <button type="button"
+                                                                class="btn btn-danger">Confirmer</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a class="btn btn-link text-dark mb-0" href="javascript:;"><i
+                                                    class="fas fa-check text-success"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+
+
+                        </div>
+                    </div>
+                    <!--fin table    -->
+                    <!-- Pagination -->
+
+                    <div class="pagination justify-content-center">
+                        <pagination-controls (pageChange)="currentPage = $event" [autoHide]="true"
+                            class="pagination-sm"></pagination-controls>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>

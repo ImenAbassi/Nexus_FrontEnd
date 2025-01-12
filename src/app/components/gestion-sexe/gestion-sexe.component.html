@@ -1,0 +1,76 @@
+<div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+        <div class="card" style="height: 100vh;">
+          <div class="card-header pb-0">
+            <div class="row">
+              <div class="col-lg-6 col-7">
+                <h6>Liste des Sexes</h6>
+                <p class="text-sm mb-0">Gestion des sexes.</p>
+              </div>
+              <div class="col-lg-6 col-5 my-auto text-end">
+                <button class="btn btn-primary btn-sm mb-0 me-3" (click)="openModal(paysModal, 'add')">
+                  Ajouter Sexe
+                </button>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Table des pays -->
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pays of paysList">
+                    <td>{{ pays.nom }}</td>
+                    <td>
+                      <button class="btn btn-info btn-sm me-2" (click)="openModal(paysModal, 'edit', pays)">
+                        Modifier
+                      </button>
+                      <button class="btn btn-danger btn-sm" (click)="deletePays(pays.id)">
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal -->
+    <ng-template #paysModal let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title">{{ modalTitle }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="savePays(modal)">
+          <div class="mb-3">
+            <label for="nom" class="form-label">Nom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nom"
+              [(ngModel)]="selectedPays.nom"
+              name="nom"
+              required
+            />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+            <button type="submit" class="btn btn-primary">{{ modalButtonLabel }}</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+  </div>
+  

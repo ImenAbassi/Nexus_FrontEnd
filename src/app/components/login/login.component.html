@@ -1,0 +1,71 @@
+<section>
+  <div class="page-header min-vh-100">
+    <div class="container">
+      <!-- Logo en haut à gauche -->
+      <img style="margin-left: 425px; width: 400px;" src="assets/img/LOGO2 (1).png" alt="Nexus Logo" class="img-fluid">
+
+      <div class="row">
+        <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+          <div class="card card-plain mt-4">
+            <div class="card-header pb-0 text-left bg-transparent">
+              <h3 class="font-weight-bolder text-info text-gradient">Bienvenue chez NEXUS CONTACT CENTER</h3>
+              <p class="mb-0">Connectez-vous pour accéder à votre interface</p>
+            </div>
+            <div class="card-body">
+              <!-- Formulaire de connexion -->
+              <form (ngSubmit)="login()">
+                <!-- Champ CIN -->
+                <label for="cin">CIN</label>
+                <div class="mb-3">
+                  <input
+                    id="cin"
+                    type="text"
+                    class="form-control"
+                    placeholder="CIN"
+                    [(ngModel)]="cin"
+                    name="cin"
+                    required
+                    aria-label="Entrez votre CIN"
+                  />
+                </div>
+
+                <!-- Champ Mot de Passe -->
+                <label for="password">Mot de Passe</label>
+                <div class="mb-3">
+                  <input
+                    id="password"
+                    type="password"
+                    class="form-control"
+                    placeholder="Mot de Passe"
+                    [(ngModel)]="password"
+                    name="password"
+                    required
+                    aria-label="Entrez votre mot de passe"
+                  />
+                </div>
+
+                <!-- Bouton de soumission -->
+                <div class="text-center">
+                  <button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">
+                    Se Connecter
+                  </button>
+                </div>
+              </form>
+
+              <!-- Message d'erreur -->
+              <p>{{ message }}</p>
+            </div>
+
+            <div class="card-footer text-center pt-0 px-lg-2 px-1">
+              <p class="mb-4 text-sm mx-auto">
+                <a href="javascript:;" class="text-info text-gradient font-weight-bold">
+                  Mot de passe oublié ?
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
