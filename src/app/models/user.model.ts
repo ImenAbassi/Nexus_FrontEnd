@@ -1,6 +1,7 @@
 // user.model.ts
 
 import { Compagne } from "./Compagne.model";
+import { Fonction } from "./fonction.model";
 
 export enum ActionType {
   DEMISSION = 'DEMISSION',
@@ -38,17 +39,6 @@ export enum EtatUser {
   TELETRAVAIL = 'TELETRAVAIL'
 }
 
-export enum Fonction {
-  DIRECTION = 'DIRECTION',
-  RH = 'RH',
-  RECRUTEUR = 'RECRUTEUR',
-  CHEF_PROJET = 'CHEF_PROJET',
-  SUPERVISEUR = 'SUPERVISEUR',
-  AGENT = 'AGENT',
-  CHARGE_QUALITE = 'CHARGE_QUALITE',
-  VIGIE = 'VIGIE',
-  IT = 'IT'
-}
 
 export enum Langue {
   FRANCAIS = 'FRANCAIS',

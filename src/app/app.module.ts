@@ -1,4 +1,4 @@
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
@@ -43,6 +43,8 @@ import { GestionTypeAttestationComponent } from './components/gestion-type-attes
 import { GestionTypeCongeComponent } from './components/gestion-type-conge/gestion-type-conge.component';
 import { GestionTypeContratComponent } from './components/gestion-type-contrat/gestion-type-contrat.component';
 import { GestionEtatCivilComponent } from './components/gestion-etat-civil/gestion-etat-civil.component';
+import { TokenInterceptor } from "./services/TokenInterceptor";
+import { ResponseInterceptor } from "./services/ResponseInterceptor";
 
 
 @NgModule({
@@ -86,7 +88,18 @@ import { GestionEtatCivilComponent } from './components/gestion-etat-civil/gesti
     NgbModule
 
   ],
-  providers: [],
+  providers: [ [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS, // Enregistrez l'intercepteur
+      useClass: ResponseInterceptor,
+      multi: true // Permet d'ajouter plusieurs intercepteurs
+    }
+  ]],
 
   bootstrap: [AppComponent]
 })

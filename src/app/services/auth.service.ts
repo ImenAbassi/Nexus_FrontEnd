@@ -11,13 +11,12 @@ export class AuthService {
   private logoutUrl = 'http://localhost:8081/nexus/auth/logout';
 
   constructor(private http: HttpClient, private router: Router) {}
-  login(cin: string, password: string): Observable<string> {
-    const url = `${this.apiUrl}?cin=${cin}&password=${password}`;
-    return this.http.post<string>(url, null, { 
-      headers: new HttpHeaders(), 
-      responseType: 'text' as 'json',
-      withCredentials: true // Envoie des cookies avec la requête
-    });
+  
+  login(cin: string, password: string): Observable<any> {
+    const loginRequest = { username: cin, password }; // Créez l'objet LoginRequest
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return this.http.post<any>(this.apiUrl, loginRequest, { headers });
   }
   logout(): Observable<any> {
     return this.http.post(this.logoutUrl, {}, {

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Compagne } from 'src/app/models/Compagne.model';
-import { Fonction, UserCompagne, UserCompagneDTO } from 'src/app/models/user.model';
+import { Fonction } from 'src/app/models/fonction.model';
+import { UserCompagne, UserCompagneDTO } from 'src/app/models/user.model';
 import { CompagneService } from 'src/app/services/compagne.service';
+import { FonctionService } from 'src/app/services/fonction.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -14,7 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 export class AllCandidatsComponent implements OnInit {
   userForm!: FormGroup;
   compagnes: Compagne[] = [];
-  fonctions = Object.values(Fonction); // Récupérer les valeurs de l'énumération Fonction
+  fonctions : Fonction[] = [];// Récupérer les valeurs de l'énumération Fonction
   usersWithoutSupervisorOrProjectLeader: UserCompagneDTO[] = [];
  // Variable pour la page actuelle (c'est tout ce que vous avez besoin d'ajouter)
  currentPage: number = 1;
@@ -22,7 +24,8 @@ export class AllCandidatsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private compagneService: CompagneService
+    private compagneService: CompagneService,
+    private fonctionService:FonctionService,
   ) { }
 
   ngOnInit(): void {
@@ -34,9 +37,12 @@ export class AllCandidatsComponent implements OnInit {
       adresseMail: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       compagneId: ['', Validators.required],
-      fonction: ['', Validators.required],
+      fonction: [null, Validators.required],
       dateHeureFormation: ['']
     });
+    this.fonctionService.getAllFonctions().subscribe((fonctions)=>{
+      this.fonctions = fonctions;
+    })
     this.compagneService.getAllCompagnes().subscribe((compagnes) => {
       console.log('Compagnes récupérées:', compagnes);  // Vérification des données
       this.compagnes = compagnes;

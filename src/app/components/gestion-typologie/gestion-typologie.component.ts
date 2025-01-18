@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Typologie } from 'src/app/models/typologie.model';
 import { TypologieService } from 'src/app/services/typologie.service';
 
@@ -13,7 +14,9 @@ export class GestionTypologieComponent implements OnInit {
   modalTitle: string = '';
   modalButtonLabel: string = '';
 
-  constructor(private typologieService: TypologieService) {}
+  constructor(private typologieService: TypologieService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.getAllTypologies();
@@ -38,7 +41,7 @@ export class GestionTypologieComponent implements OnInit {
       this.modalButtonLabel = 'Mettre à jour';
       this.typologie = { ...typologie };
     }
-    modal.open();
+    this.modalService.open(modal, { ariaLabelledBy: 'typologieModalLabel' });
   }
 
   // Enregistrer une typologie (ajouter ou modifier)
