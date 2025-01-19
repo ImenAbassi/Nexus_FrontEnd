@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Enfant, EtatUser, User, UserCompagne, UserCompagneDTO } from '../models/user.model';
+import { Enfant, EtatUser, User, UserCompagne } from '../models/user.model';
+import { UserCompagneDTO } from '../models/UserCompagneDTO.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,8 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }
-  getUsersWithoutSupervisorOrProjectLeader(): Observable<UserCompagne[]> {
-    return this.http.get<UserCompagne[]>(`${this.apiUrl}/users-without-supervisor-or-project-leader`);
+  getUsersWithoutSupervisorOrProjectLeader(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/users-without-supervisor-or-project-leader`);
   }
   
   getUsersWithSupervisorOrProjectLeader(): Observable<UserCompagne[]> {
@@ -34,7 +35,7 @@ export class UserService {
     return this.http.get<UserCompagne>(`${this.apiUrl}/${userCompagneId}`);
   }
   
-  updateUserCompagne(userCompagneId: number, userCompagneDTO: UserCompagneDTO): Observable<UserCompagne> {
+  updateUserCompagne(userCompagneId: any, userCompagneDTO: UserCompagneDTO): Observable<UserCompagne> {
     return this.http.put<UserCompagne>(`${this.apiUrl}/update/${userCompagneId}`, userCompagneDTO);
   }
   

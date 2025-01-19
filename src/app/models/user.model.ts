@@ -170,19 +170,7 @@ export interface ValidationHistorique {
   dateValidation: Date;
 }
 
-export interface UserCompagneDTO {
 
-  userId?: number;
-  user?: User;
-  compagneId?: number;
-  supervisorId?: number;
-  projectLeaderId?: number;
-  fonction: Fonction;
-  commentaire?: string;
-  dateAffectation?: Date;
-  dateFinAffectation?: Date;
-  dateHeureFormation?: Date;
-}
 
 
 export interface AutorisationSortie {

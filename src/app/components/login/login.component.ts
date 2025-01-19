@@ -16,16 +16,13 @@ export class LoginComponent {
   login() {
     this.authService.login(this.cin, this.password).subscribe(
       (response) => {
-        // Store the user and token separately in localStorage
-        localStorage.setItem('user', JSON.stringify(response.user)); // Store user data
-        localStorage.setItem('token', response.token); // Store the token (no need to stringify if it's already a string)
-  
-        this.message = 'Authentification réussie'; // Display success message
-        console.log('Authentification réussie:', response);
-        this.router.navigate(['/home']); // Redirect to /home after successful authentication
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('token', response.token);
+        this.message = 'Authentification réussie';
+        this.router.navigate(['/home']);
       },
       (error) => {
-        this.message = 'Verifier login et mot de passe'; // Error message if authentication fails
+        this.message = 'Verifier login et mot de passe';
         console.error('Erreur d\'authentification:', error);
       }
     );

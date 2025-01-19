@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { Compagne } from 'src/app/models/Compagne.model';
 import { Fonction } from 'src/app/models/fonction.model';
-import { UserCompagne, UserCompagneDTO } from 'src/app/models/user.model';
+import { UserCompagne } from 'src/app/models/user.model';
+import { UserCompagneDTO } from 'src/app/models/UserCompagneDTO.model';
 import { CompagneService } from 'src/app/services/compagne.service';
 import { FonctionService } from 'src/app/services/fonction.service';
 import { UserService } from 'src/app/services/user.service';
-
 
 @Component({
   selector: 'app-all-candidats',
@@ -16,16 +17,16 @@ import { UserService } from 'src/app/services/user.service';
 export class AllCandidatsComponent implements OnInit {
   userForm!: FormGroup;
   compagnes: Compagne[] = [];
-  fonctions : Fonction[] = [];// Récupérer les valeurs de l'énumération Fonction
-  usersWithoutSupervisorOrProjectLeader: UserCompagneDTO[] = [];
- // Variable pour la page actuelle (c'est tout ce que vous avez besoin d'ajouter)
- currentPage: number = 1;
-
+  fonctions: Fonction[] = [];
+  usersWithoutSupervisorOrProjectLeader: UserCompagne[] = [];
+  currentPage: number = 1;
+  loading: boolean = false; // Variable pour gérer l'état de chargement
+idUser:any;
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private compagneService: CompagneService,
-    private fonctionService:FonctionService,
+    private fonctionService: FonctionService,
   ) { }
 
   ngOnInit(): void {
@@ -40,35 +41,61 @@ export class AllCandidatsComponent implements OnInit {
       fonction: [null, Validators.required],
       dateHeureFormation: ['']
     });
-    this.fonctionService.getAllFonctions().subscribe((fonctions)=>{
-      this.fonctions = fonctions;
-    })
-    this.compagneService.getAllCompagnes().subscribe((compagnes) => {
-      console.log('Compagnes récupérées:', compagnes);  // Vérification des données
-      this.compagnes = compagnes;
-    }, error => {
-      console.error('Erreur lors de la récupération des compagnes:', error);  // Vérification des erreurs
-    });
-    this.getUsersWithoutSupervisorOrProjectLeader();
 
+    this.loadData(); // Charger les données au démarrage
   }
+
+  // Méthode pour charger les données
+  loadData(): void {
+    this.loading = true; // Activer le loading
+
+    forkJoin({
+      fonctions: this.fonctionService.getAllFonctions(),
+      compagnes: this.compagneService.getAllCompagnes()
+    }).subscribe({
+      next: (results) => {
+        this.fonctions = results.fonctions;
+        this.compagnes = results.compagnes;
+        console.log('Compagnes récupérées:', results.compagnes);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des données:', error);
+        this.loading = false; // Désactiver le loading en cas d'erreur
+      },
+      complete: () => {
+        this.getUsersWithoutSupervisorOrProjectLeader();
+        this.loading = false; // Désactiver le loading une fois les données chargées
+      }
+    });
+  }
+
+  // Méthode pour récupérer les utilisateurs sans superviseur ou chef de projet
   getUsersWithoutSupervisorOrProjectLeader(): void {
+    this.loading = true; // Activer le loading
+
     this.userService.getUsersWithoutSupervisorOrProjectLeader().subscribe(
-      (data: UserCompagneDTO[]) => {
+      (data: UserCompagne[]) => {
         this.usersWithoutSupervisorOrProjectLeader = data;
+        this.loading = false; // Désactiver le loading une fois les données chargées
       },
       (error) => {
         console.error('Error fetching users', error);
+        this.loading = false; // Désactiver le loading en cas d'erreur
       }
     );
   }
+
+  // Méthode pour obtenir le nom de la compagne
   getCompagneNom(compagneId: number): string {
     const compagne = this.compagnes.find(c => c.id === compagneId);
-    return compagne ? compagne?.nom ? compagne.nom : 'Inconnu'  : 'Inconnu'; // Retourner "Inconnu" si la compagne n'est pas trouvée
+    return compagne ? compagne?.nom ? compagne.nom : 'Inconnu' : 'Inconnu';
   }
-  
+
+  // Méthode pour soumettre le formulaire
   onSubmit(): void {
     if (this.userForm.valid) {
+      this.loading = true; // Activer le loading
+
       const formData = this.userForm.value;
       const userCompagneDTO: UserCompagneDTO = {
         user: {
@@ -80,55 +107,90 @@ export class AllCandidatsComponent implements OnInit {
           password: formData.password,
         },
         compagneId: formData.compagneId,
-        fonction: formData.fonction,
+        fonctionId: formData.fonction,
+        dateAffectation: formData.dateAffectation,
+        dateFinAffectation: formData.dateFinAffectation,
         dateHeureFormation: formData.dateHeureFormation
       };
 
-      this.userService.createUserAndAssignToCompagne(userCompagneDTO).subscribe(response => {
-        console.log('Utilisateur ajouté et affecté à une compagne', response);
-        // Redirection ou message de succès
+      this.userService.createUserAndAssignToCompagne(userCompagneDTO).subscribe({
+        next: (response) => {
+          console.log('Utilisateur ajouté et affecté à une compagne', response);
+          this.loading = false; // Désactiver le loading
+          this.refresh(); // Rafraîchir les données après l'ajout
+        },
+        error: (error) => {
+          console.error('Erreur lors de la création de l\'utilisateur', error);
+          this.loading = false; // Désactiver le loading en cas d'erreur
+        }
       });
+    } else {
+      console.error('Le formulaire est invalide');
     }
   }
-  openEditModal(userCompagne: UserCompagne): void {
+
+  // Méthode pour ouvrir le modal d'édition
+  openEditModal(userCompagne: any): void { 
+    console.log(userCompagne);
+    this.idUser = userCompagne.id;
     this.userForm.patchValue({
-      userCompagneId: userCompagne.id,  // Ajouter l'ID de UserCompagne pour la mise à jour
-      userId: userCompagne.user?.idUser,  // Récupérer l'ID de l'utilisateur
+      userCompagneId: userCompagne.id,
+      userId: userCompagne.user?.idUser,
       cin: userCompagne.user?.cin,
       nom: userCompagne.user?.nom,
       prenom: userCompagne.user?.prenom,
       telPortable1: userCompagne.user?.telPortable1,
       adresseMail: userCompagne.user?.adresseMail,
-      password: '',  // Vous pouvez laisser ce champ vide ou le rendre optionnel si non modifié
+      password: '',
       compagneId: userCompagne.compagneId,
-      fonction: userCompagne.fonction,
+      fonction: userCompagne.fonction.id,
       dateAffectation: userCompagne.dateAffectation,
       dateFinAffectation: userCompagne.dateFinAffectation,
       dateHeureFormation: userCompagne.dateHeureFormation
     });
   }
 
+  // Méthode pour soumettre la mise à jour
   onSubmitUpdate(): void {
+    console.log(this.userForm.value);
     if (this.userForm.valid) {
-      const formData = this.userForm.value;
+      this.loading = true; // Activer le loading
 
+      const formData = this.userForm.value;
       const userCompagneDTO: UserCompagneDTO = {
-        userId: formData.userId,  // Assurez-vous que l'ID de l'utilisateur est correct
+        id:this.idUser,
+        user: {
+          idUser:formData.userId,
+          cin: formData.cin,
+          nom: formData.nom,
+          prenom: formData.prenom,
+          telPortable1: formData.telPortable1,
+          adresseMail: formData.adresseMail,
+          password: formData.password,
+        },
         compagneId: formData.compagneId,
-        fonction: formData.fonction,
+        fonctionId: formData.fonction,
         dateAffectation: formData.dateAffectation,
         dateFinAffectation: formData.dateFinAffectation,
         dateHeureFormation: formData.dateHeureFormation
       };
 
-      // Appeler le service pour mettre à jour l'utilisateur et la compagne
-      this.userService.updateUserCompagne(formData.userCompagneId, userCompagneDTO).subscribe(response => {
-        console.log('Utilisateur mis à jour', response);
-        // Fermer le modal et éventuellement recharger la liste
-      }, error => {
-        console.error('Erreur lors de la mise à jour', error);
+      this.userService.updateUserCompagne(this.idUser , userCompagneDTO).subscribe({
+        next: (response) => {
+          console.log('Utilisateur mis à jour', response);
+          this.loading = false; // Désactiver le loading
+          this.refresh(); // Rafraîchir les données après la mise à jour
+        },
+        error: (error) => {
+          console.error('Erreur lors de la mise à jour', error);
+          this.loading = false; // Désactiver le loading en cas d'erreur
+        }
       });
     }
   }
-  
+
+  // Méthode pour rafraîchir les données
+  refresh(): void {
+    this.loadData(); // Recharge les données
+  }
 }
