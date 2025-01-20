@@ -8,23 +8,23 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  
-  constructor(private authService: AuthService, private router: Router) {}
-  onLogout() {
-    this.router.navigate(['/login']);
+  isLoggingOut = false;
 
-  }
-  /*onLogout() {
+  constructor(private authService: AuthService, private router: Router) { }
+
+  onLogout() {
+    this.isLoggingOut = true;
     this.authService.logout().subscribe({
       next: () => {
-        // Si la déconnexion réussit, redirigez l'utilisateur vers la page de connexion
-        this.router.navigate(['/login']);
+        this.isLoggingOut = false;
+        localStorage.clear();
+        //this.router.navigate(['/login']);
       },
       error: (err) => {
+        this.isLoggingOut = false;
         console.error('Erreur lors de la déconnexion', err);
+       // this.router.navigate(['/login']); // Redirect even if logout fails
       }
     });
-  }*/
-  
-
+  }
 }

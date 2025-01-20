@@ -41,6 +41,6 @@ export class Compagne {
     this.salaire3 = compagne?.salaire3;
     this.typologieCanal = compagne?.typologieCanal;
     //this.joursFeries = compagne.joursFeries || [];  // Correction ici
-   // this.plannings = compagne?.plannings || [];
+    this.plannings = compagne?.plannings || [];
   }
 }

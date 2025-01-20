@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { Compagne } from 'src/app/models/Compagne.model';
 import { Fonction } from 'src/app/models/fonction.model';
@@ -11,15 +11,16 @@ import { UserService } from 'src/app/services/user.service';
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-all-candidats',
-  templateUrl: './all-candidats.component.html',
-  styleUrls: ['./all-candidats.component.css']
+  selector: 'app-agent-list',
+  templateUrl: './agent-list.component.html',
+  styleUrls: ['./agent-list.component.css']
 })
-export class AllCandidatsComponent implements OnInit {
-  userForm!: FormGroup;
+export class AgentListComponent {
+userForm!: FormGroup;
   compagnes: Compagne[] = [];
   fonctions: Fonction[] = [];
   usersWithoutSupervisorOrProjectLeader: UserCompagne[] = [];
+  usersWithSupervisorOrProjectLeader: UserCompagne[] = [];
   currentPage: number = 1;
   loading: boolean = false; // Variable pour gérer l'état de chargement
   idUser: any;
@@ -78,6 +79,21 @@ export class AllCandidatsComponent implements OnInit {
     this.userService.getUsersWithoutSupervisorOrProjectLeader().subscribe(
       (data: UserCompagne[]) => {
         this.usersWithoutSupervisorOrProjectLeader = data;
+        this.loading = false; // Désactiver le loading une fois les données chargées
+      },
+      (error) => {
+        console.error('Error fetching users', error);
+        this.loading = false; // Désactiver le loading en cas d'erreur
+      }
+    );
+  }
+
+  getUsersWithSupervisorOrProjectLeader(): void {
+    this.loading = true; // Activer le loading
+
+    this.userService.getUsersWithSupervisorOrProjectLeader().subscribe(
+      (data: UserCompagne[]) => {
+        this.usersWithSupervisorOrProjectLeader = data;
         this.loading = false; // Désactiver le loading une fois les données chargées
       },
       (error) => {
@@ -198,7 +214,7 @@ export class AllCandidatsComponent implements OnInit {
 
   // Méthode pour exporter en Excel
   exportToExcel(): void {
-    const data = this.usersWithoutSupervisorOrProjectLeader.map(user => ({
+    const data = this.usersWithSupervisorOrProjectLeader.map(user => ({
       'CAMPAGNES': this.getCompagneNom(user.compagneId || 0),
       'CIN': user.user?.cin,
       'Nom & Prénom': `${user.user?.prenom} ${user.user?.nom}`,
@@ -227,3 +243,4 @@ export class AllCandidatsComponent implements OnInit {
     window.URL.revokeObjectURL(url);
   }
 }
+

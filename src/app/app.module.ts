@@ -11,7 +11,6 @@ import { AddCampagneComponent } from "./components/add-campagne/add-campagne.com
 import { AddCongeComponent } from "./components/add-conge/add-conge.component";
 import { AddPlanningComponent } from "./components/add-planning/add-planning.component";
 import { AllCandidatsComponent } from "./components/all-candidats/all-candidats.component";
-import { AllUsersComponent } from "./components/all-users/all-users.component";
 import { FooterComponent } from "./components/footer/footer.component";
 import { GestionSiteComponent } from './components/gestion-site/gestion-site.component';
 import { GestionSocieteComponent } from './components/gestion-societes/gestion-societes.component';
@@ -45,6 +44,7 @@ import { GestionTypeContratComponent } from './components/gestion-type-contrat/g
 import { GestionEtatCivilComponent } from './components/gestion-etat-civil/gestion-etat-civil.component';
 import { TokenInterceptor } from "./services/TokenInterceptor";
 import { ResponseInterceptor } from "./services/ResponseInterceptor";
+import { AgentListComponent } from "./components/agent-list/agent-list.component";
 
 
 @NgModule({
@@ -54,7 +54,6 @@ import { ResponseInterceptor } from "./services/ResponseInterceptor";
     FooterComponent,
     LoginComponent,
     SidenavComponent,
-    AllUsersComponent,
     NavbarComponent,
     UpdateUserComponent, AllCandidatsComponent, AddCongeComponent, ListCongeComponent,
     ListCampagnesComponent, AddCampagneComponent, AddPlanningComponent, TestComponent,
@@ -76,6 +75,7 @@ import { ResponseInterceptor } from "./services/ResponseInterceptor";
     GestionTypeCongeComponent,
     GestionTypeContratComponent,
     GestionEtatCivilComponent,
+    AgentListComponent,
   ],
   imports: [
     BrowserModule,

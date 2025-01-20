@@ -6,7 +6,6 @@ import { AddCampagneComponent } from './components/add-campagne/add-campagne.com
 import { AddCongeComponent } from './components/add-conge/add-conge.component';
 import { AddPlanningComponent } from './components/add-planning/add-planning.component';
 import { AllCandidatsComponent } from './components/all-candidats/all-candidats.component';
-import { AllUsersComponent } from './components/all-users/all-users.component';
 import { GestionCiblesComponent } from './components/gestion-cibles/gestion-cibles.component';
 import { GestionEtatCivilComponent } from './components/gestion-etat-civil/gestion-etat-civil.component';
 import { GestionFonctionComponent } from './components/gestion-fonction/gestion-fonction.component';
@@ -34,6 +33,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MapComponent } from './components/map/map.component';
 import { TaxiComponent } from './components/taxi/taxi.component';
 import { AuthGuard } from './services/auth.guard';
+import { AgentListComponent } from './components/agent-list/agent-list.component';
 
 
 
@@ -42,7 +42,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirection vers /login par défaut
   { path: 'login', component: LoginComponent, data: { showSidebar: false } }, // Route publique
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] }, // Protégée par AuthGuard
-  { path: 'all-users', component: AllUsersComponent, canActivate: [AuthGuard] },
+  { path: 'all-users', component: AgentListComponent, canActivate: [AuthGuard] },
   { path: 'all-candidats', component: AllCandidatsComponent, canActivate: [AuthGuard] },
   { path: 'list-conge', component: ListCongeComponent, canActivate: [AuthGuard] },
   { path: 'add-conge', component: AddCongeComponent, canActivate: [AuthGuard] },

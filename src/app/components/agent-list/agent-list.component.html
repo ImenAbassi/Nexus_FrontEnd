@@ -1,0 +1,318 @@
+<div *ngIf="loading" class="loading-spinner">
+    <p>Chargement en cours...</p>
+    <!-- Vous pouvez ajouter un spinner ici -->
+</div>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+            <div class="card" style="height: 100vh;">
+                <div class="card-header pb-0">
+                    <div class="row">
+                        <div class="col-lg-4 col-4">
+                            <h6>Liste Des Agents</h6>
+                            <p class="text-sm mb-0"></p>
+                        </div>
+                        <div class="col-lg-8 col-8 my-auto text-end">
+                            <div class="dropdown float-lg-end pe-4">
+                                <ul class="nav">
+                                    <!-- Bouton pour ajouter un agent -->
+                                    <li class="nav-item d-flex align-items-center">
+                                        <a class="btn btn-primary btn-sm mb-0 me-3 d-flex align-items-center" href="#"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <i class="fas fa-plus-circle me-2"></i>
+                                            AJOUTER Agents
+                                        </a>
+                                    </li>
+                                    <!-- Bouton pour exporter en Excel -->
+                                    <li class="nav-item d-flex align-items-center">
+                                        <button class="btn btn-success btn-sm mb-0 me-3 d-flex align-items-center"
+                                            (click)="exportToExcel()">
+                                            <i class="fas fa-file-excel me-2"></i>
+                                            Exporter en Excel
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Début de la table -->
+                <div class="card-body px-0 pb-2">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0" style="text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        CAMPAGNES</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                        style="width: 150px;">CIN</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                        style="width: 150px;">Nom & Prénom</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                        style="width: 150px;">Téléphone</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                        style="width: 150px;">Email</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        État Formulaire</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        FONCTION</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                        style="width: 150px;">Date Formation</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                        style="width: 130px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let userCompagne of usersWithSupervisorOrProjectLeader | paginate: { itemsPerPage: 9, currentPage: currentPage }">
+                                    <td>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{ getCompagneNom(userCompagne.compagneId || 0) }}</h6>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-left text-sm">
+                                        <span class="text-xs font-weight-bold">{{ userCompagne.user?.cin }}</span>
+                                    </td>
+                                    <td class="align-middle text-left text-sm">
+                                        <span class="text-xs font-weight-bold">{{ userCompagne.user?.prenom }} {{ userCompagne.user?.nom }}</span>
+                                    </td>
+                                    <td class="align-middle text-left text-sm">
+                                        <span class="text-xs font-weight-bold">{{ userCompagne.user?.telPortable1 }}</span>
+                                    </td>
+                                    <td class="align-middle text-left text-sm">
+                                        <span class="text-xs font-weight-bold">{{ userCompagne.user?.adresseMail }}</span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="progress-wrapper w-75 mx-auto">
+                                            <div class="progress-info">
+                                                <div class="progress-percentage">
+                                                    <span class="text-xs font-weight-bold">100%</span>
+                                                </div>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-gradient-success" role="progressbar"
+                                                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                                                    style="width: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-left text-sm">
+                                        <span class="text-xs font-weight-bold">{{ userCompagne.fonction.nom }}</span>
+                                    </td>
+                                    <td class="align-middle text-left text-sm">
+                                        <span class="text-xs font-weight-bold">{{ userCompagne.dateHeureFormation | date: 'dd/MM/yyyy HH:mm' }}</span>
+                                    </td>
+                                    <td class="align-middle text-left text-sm">
+                                        <!-- Bouton pour modifier l'agent -->
+                                        <a class="btn btn-link text-dark mb-0" href="javascript:;"
+                                            data-bs-toggle="modal" data-bs-target="#editModal"
+                                            (click)="openEditModal(userCompagne)">
+                                            <i class="fas fa-user-edit text-secondary"></i>
+                                        </a>
+
+                                        <!-- Bouton pour supprimer l'agent -->
+                                        <a class="btn btn-link text-dark mb-0" href="javascript:;"
+                                            data-bs-toggle="modal" data-bs-target="#modal-notification">
+                                            <i class="fas fa-trash text-secondary"></i>
+                                        </a>
+
+                                        <!-- Bouton pour valider l'agent -->
+                                        <a class="btn btn-link text-dark mb-0" href="javascript:;">
+                                            <i class="fas fa-check text-success"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination justify-content-center">
+                        <pagination-controls (pageChange)="currentPage = $event" [autoHide]="true"
+                            class="pagination-sm"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour ajouter un agent -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="margin-left: 450px;">
+        <div class="modal-content" style="width: 1000px;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un Agent</h5>
+                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <!-- Sélecteur pour le candidat -->
+                        <div class="mb-3 col-md-6">
+                            <label for="candidat" class="form-label">Candidat : </label>
+                            <select id="candidat" class="form-select" formControlName="candidat">
+                                <option value="">Sélectionnez un candidat</option>
+                                <option *ngFor="let userCompagne of usersWithoutSupervisorOrProjectLeader"
+                                    [value]="userCompagne.userId">
+                                    {{ userCompagne.user?.nom }} {{ userCompagne.user?.prenom }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Sélecteur pour le superviseur ou chef de projet -->
+                        <div class="mb-3 col-md-6">
+                            <label for="supervisor" class="form-label">Superviseur ou Chef de Projet :</label>
+                            <select id="supervisor" class="form-select" formControlName="supervisor">
+                                <option value="">Sélectionnez un superviseur ou chef de projet</option>
+                                <option *ngFor="let userCompagne of usersWithSupervisorOrProjectLeader"
+                                    [value]="userCompagne.userId">
+                                    {{ userCompagne.user?.nom }} {{ userCompagne.user?.prenom }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Boutons radio pour le rôle -->
+                        <div class="mb-3 col-md-12">
+                            <label class="form-label">Rôle :</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="roleSupervisor"
+                                    formControlName="role" value="supervisor">
+                                <label class="form-check-label" for="roleSupervisor">Superviseur</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="roleProjectLeader"
+                                    formControlName="role" value="projectLeader">
+                                <label class="form-check-label" for="roleProjectLeader">Chef de Projet</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Boutons du formulaire -->
+                    <div class="modal-footer">
+                        <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary">Ajouter</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour modifier un agent -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="margin-left: 450px;">
+        <div class="modal-content" style="width: 1000px;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modifier un Agent</h5>
+                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="editForm" (ngSubmit)="onSubmitUpdate()">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cin" class="form-label">CIN</label>
+                                <input id="cin" formControlName="cin" type="text" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="nom" class="form-label">Nom</label>
+                                <input id="nom" formControlName="nom" type="text" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="prenom" class="form-label">Prénom</label>
+                                <input id="prenom" formControlName="prenom" type="text" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="adresseMail" class="form-label">Email</label>
+                                <input id="adresseMail" formControlName="adresseMail" type="email"
+                                    class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="telPortable1" class="form-label">Téléphone</label>
+                                <input id="telPortable1" formControlName="telPortable1" type="text"
+                                    class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="fonction" class="form-label">Fonction</label>
+                                <select id="fonction" formControlName="fonction" class="form-control" required>
+                                    <option *ngFor="let fonction of fonctions" [value]="fonction.id">{{ fonction.nom }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="compagne" class="form-label">Compagne</label>
+                                <select id="compagne" formControlName="compagneId" class="form-control" required>
+                                    <option *ngFor="let compagne of compagnes" [value]="compagne.id">{{ compagne.nom }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dateHeureFormation" class="form-label">Date et Heure de Formation</label>
+                                <input id="dateHeureFormation" formControlName="dateHeureFormation"
+                                    type="datetime-local" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Mot de Passe</label>
+                                <input id="password" formControlName="password" type="password" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Boutons pour modifier chef de projet ou superviseur -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-warning" (click)="updateRole('projectLeader')">
+                                Modifier Chef de Projet
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-info" (click)="updateRole('supervisor')">
+                                Modifier Superviseur
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Boutons du formulaire -->
+                    <div class="modal-footer">
+                        <button type="submit" [disabled]="editForm.invalid" class="btn btn-primary">Mettre à jour</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour confirmer la suppression -->
+<div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-notification">Confirmation de suppression</h6>
+                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="py-3 text-center">
+                    <i class="fas fa-exclamation-circle text-warning ni-3x"></i>
+                    <h4 class="text-gradient text-danger mt-4">Êtes-vous sûr(e) de vouloir supprimer cet élément ?</h4>
+                    <p>Cette action est irréversible. Veuillez confirmer.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDelete()">Confirmer</button>
+            </div>
+        </div>
+    </div>
+</div>
