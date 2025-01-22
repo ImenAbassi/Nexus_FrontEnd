@@ -1,0 +1,155 @@
+<div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+        <div class="card" style="height: 100vh;">
+          <div class="card-header pb-0">
+            <div class="row">
+              <div class="col-lg-6 col-7">
+                <h6>Liste des Associations User-Compagne</h6>
+                <p class="text-sm mb-0">Gestion des associations entre utilisateurs et campagnes.</p>
+              </div>
+              <div class="col-lg-6 col-5 my-auto text-end">
+                <button class="btn btn-primary btn-sm mb-0 me-3" (click)="openModal(userCompagneModal, 'add',userCompagne)">
+                  Ajouter une Association
+                </button>
+                <button class="btn btn-success btn-sm mb-0" (click)="exportToExcel()">
+                    Exporter en Excel
+                  </button>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Tableau des associations -->
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Utilisateur</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Campagne</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fonction</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rôle</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Commentaire</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Formation</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Affectation</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Fin Affectation</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Superviseur</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Chef de Projet</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let uc of userCompagnes; let i = index">
+                    <td>{{ uc.user?.nom }} {{ uc.user?.prenom }}</td>
+                    <td>{{ uc.compagne?.nom }}</td>
+                    <td>{{ uc.fonction.nom }}</td>
+                    <td>{{ uc.role?.name }}</td>
+                    <td>{{ uc.commentaire }}</td>
+                    <td>{{ uc.dateHeureFormation | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ uc.dateAffectation | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ uc.dateFinAffectation | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ uc.supervisor?.nom }} {{ uc?.supervisor?.prenom }}</td>
+                    <td>{{ uc.projectLeader?.nom }} {{ uc.projectLeader?.prenom }}</td>
+                    <td>
+                      <button class="btn btn-info btn-sm me-2" (click)="openModal(userCompagneModal, 'edit', uc)">
+                        Modifier
+                      </button>
+                      <button class="btn btn-danger btn-sm" (click)="deleteUserCompagne(uc.id)">
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal pour ajouter/modifier une association -->
+  <ng-template #userCompagneModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">{{ modalTitle }}</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="saveUserCompagne(modal)">
+        <div class="row">
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="user" class="form-label">Utilisateur</label>
+              <select class="form-control" id="user" [(ngModel)]="userCompagne.user" name="user" required [compareWith]="compareUsers">
+                <option *ngFor="let user of users" [ngValue]="user">
+                  {{ user.nom }} {{ user.prenom }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="compagne" class="form-label">Campagne</label>
+              <select class="form-control" id="compagne" [(ngModel)]="userCompagne.compagne" name="compagne" required [compareWith]="compareCampagnes">
+                <option *ngFor="let campagne of campagnes" [ngValue]="campagne">
+                  {{ campagne.nom }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="fonction" class="form-label">Fonction</label>
+              <select class="form-control" id="fonction" [(ngModel)]="userCompagne.fonction" name="fonction" [compareWith]="compareFonctions">
+                <option *ngFor="let fonction of fonctions" [ngValue]="fonction">
+                  {{ fonction.nom }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="role" class="form-label">Rôle</label>
+              <select class="form-control" id="role" [(ngModel)]="userCompagne.role" name="role" [compareWith]="compareRoles">
+                <option *ngFor="let role of roles" [ngValue]="role">
+                  {{ role.name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="commentaire" class="form-label">Commentaire</label>
+              <input type="text" class="form-control" id="commentaire" [(ngModel)]="userCompagne.commentaire" name="commentaire">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="dateHeureFormation" class="form-label">Date et Heure de Formation</label>
+              <input type="datetime-local" class="form-control" id="dateHeureFormation" [(ngModel)]="userCompagne.dateHeureFormation" name="dateHeureFormation">
+            </div>
+            <div class="mb-3">
+              <label for="dateAffectation" class="form-label">Date d'Affectation</label>
+              <input type="date" class="form-control" id="dateAffectation" [(ngModel)]="userCompagne.dateAffectation" name="dateAffectation">
+            </div>
+            <div class="mb-3">
+              <label for="dateFinAffectation" class="form-label">Date de Fin d'Affectation</label>
+              <input type="date" class="form-control" id="dateFinAffectation" [(ngModel)]="userCompagne.dateFinAffectation" name="dateFinAffectation">
+            </div>
+            <div class="mb-3">
+              <label for="supervisor" class="form-label">Superviseur</label>
+              <select class="form-control" id="supervisor" [(ngModel)]="userCompagne.supervisor" name="supervisor" [compareWith]="compareUsers">
+                <option *ngFor="let user of users" [ngValue]="user">
+                  {{ user.nom }} {{ user.prenom }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="projectLeader" class="form-label">Chef de Projet</label>
+              <select class="form-control" id="projectLeader" [(ngModel)]="userCompagne.projectLeader" name="projectLeader" [compareWith]="compareUsers">
+                <option *ngFor="let user of users" [ngValue]="user">
+                  {{ user.nom }} {{ user.prenom }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+          <button type="submit" class="btn btn-primary">{{ modalButtonLabel }}</button>
+        </div>
+      </form>
+    </div>
+  </ng-template>

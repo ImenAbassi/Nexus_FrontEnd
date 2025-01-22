@@ -11,17 +11,16 @@ export class AttestationTravailService {
 
   constructor(private http: HttpClient) {}
 
-  creerAttestation(userId: number, attestation: AttestationTravail): Observable<AttestationTravail> {
-    return this.http.post<AttestationTravail>(`${this.apiUrl}/creer/${userId}`, attestation);
+  creerAttestation(attestation: AttestationTravail): Observable<AttestationTravail> {
+    return this.http.post<AttestationTravail>(`${this.apiUrl}/creer`, attestation);
   }
 
   obtenirAttestationsParUtilisateur(userId: number): Observable<AttestationTravail[]> {
     return this.http.get<AttestationTravail[]>(`${this.apiUrl}/utilisateur/${userId}`);
   }
 
-  mettreAJourEtat(attestationId: number, nouvelEtat: EtatDemande): Observable<AttestationTravail> {
-    const params = new HttpParams().set('nouvelEtat', nouvelEtat);
-    return this.http.put<AttestationTravail>(`${this.apiUrl}/${attestationId}/etat`, {}, { params });
+  mettreAJourEtat(attestationId: number): Observable<AttestationTravail> {
+    return this.http.put<AttestationTravail>(`${this.apiUrl}/${attestationId}/etat`, {});
   }
 
   obtenirToutesLesAttestations(): Observable<AttestationTravail[]> {

@@ -204,7 +204,7 @@ export class AllCandidatsComponent implements OnInit {
       'Nom & Prénom': `${user.user?.prenom} ${user.user?.nom}`,
       'Téléphone': user.user?.telPortable1,
       'Email': user.user?.adresseMail,
-      'FONCTION': user.fonction.nom,
+      'FONCTION': user.fonction?.nom,
       'Date Formation': user.dateHeureFormation ? new Date(user.dateHeureFormation).toLocaleString() : ''
     }));
 

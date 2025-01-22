@@ -2,7 +2,7 @@ import { User } from './user.model'; // Assurez-vous d'importer l'interface User
 import { Fonction } from './fonction.model'; // Assurez-vous d'importer l'interface Fonction
 import { Compagne } from './Compagne.model';
 
-export interface UserCompagneDTO {
+export interface UserCompagne {
   id?: number; // Optionnel car généré automatiquement
   userId?: number; // Optionnel, référence à l'utilisateur
   user?: User; // Référence à l'objet User
@@ -14,7 +14,8 @@ export interface UserCompagneDTO {
   projectLeader?: User; // Référence à l'objet User pour le chef de projet
   fonction: Fonction; // Fonction de l'utilisateur dans la campagne
   commentaire?: string; // Commentaire sur l'association
-  dateAffectation?: Date; // Date d'affectation
-  dateFinAffectation?: Date; // Date de fin d'affectation
-  dateHeureFormation?: Date; // Date et heure de formation
+  dateAffectation: Date | null; // Date d'affectation
+  dateFinAffectation: Date | null; // Date de fin d'affectation
+  dateHeureFormation: Date | null; // Date et heure de formation
+  role?:any;
 }

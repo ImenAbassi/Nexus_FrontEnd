@@ -110,7 +110,19 @@ export interface MouvementHistorique {
   // Définir les champs pour l'entité MouvementHistorique
 }
 
-export interface DemandeConge { id: number; type: TypeConge; dateCreation: Date; dateDebut: Date; dateFin: Date; etatSuperviseur: EtatDemande; etatChefProjet: EtatDemande; etatRH: EtatDemande; user: User; raison: string; nbreJours: number; historique: ValidationHistorique[]; }
+export interface DemandeConge {
+   id: number; 
+   type: TypeConge; 
+   dateCreation: Date; 
+   dateDebut: Date; 
+   dateFin: Date;
+    etatSuperviseur: EtatDemande;
+     etatChefProjet: EtatDemande; 
+     etatRH: EtatDemande;
+      user: User; 
+      raison: string; 
+      nbreJours: number; 
+      historique: ValidationHistorique[]; }
 export interface Planning {
   id?: number;
   horaireDebut:
@@ -133,13 +145,15 @@ export interface UserCompagne {
   userId?: number;
   user?: User;
   compagneId?: number;
+  compagne?: any;
   supervisorId?: number;
   projectLeaderId?: number;
-  fonction: Fonction;
+  fonction?: Fonction;
   commentaire?: string;
   dateAffectation?: Date;
   dateFinAffectation?: Date;
   dateHeureFormation?: Date;
+  role?:any
 }
 /*
 export interface Compagne {
@@ -174,7 +188,7 @@ export interface ValidationHistorique {
 
 
 export interface AutorisationSortie {
-  id?: number;
+  id: number;
   dateCreation?: Date;
   dateDebut: Date;
   dateFin: Date;
@@ -183,9 +197,9 @@ export interface AutorisationSortie {
   nbreHeure: number;
   utilisateur?: User;
   compagne?: Compagne;
-  etatSuperviseur?: EtatDemande;
-  etatChefProjet?: EtatDemande;
-  etatRH?: EtatDemande;
+  etatSuperviseur: string;
+  etatChefProjet: string;
+  etatRH: string;
   raison: string;
   historique: ValidationHistorique[];
 }

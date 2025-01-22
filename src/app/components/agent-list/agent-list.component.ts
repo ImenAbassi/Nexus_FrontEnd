@@ -16,7 +16,7 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./agent-list.component.css']
 })
 export class AgentListComponent {
-userForm!: FormGroup;
+  userForm!: FormGroup;
   compagnes: Compagne[] = [];
   fonctions: Fonction[] = [];
   usersWithoutSupervisorOrProjectLeader: UserCompagne[] = [];
@@ -24,7 +24,8 @@ userForm!: FormGroup;
   currentPage: number = 1;
   loading: boolean = false; // Variable pour gérer l'état de chargement
   idUser: any;
-
+  selectedUserForDeletion: any = null; // Utilisateur sélectionné pour la suppression
+  editForm!: FormGroup;
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -67,6 +68,7 @@ userForm!: FormGroup;
       },
       complete: () => {
         this.getUsersWithoutSupervisorOrProjectLeader();
+        this.getUsersWithSupervisorOrProjectLeader(); // Charger les utilisateurs avec superviseur ou chef de projet
         this.loading = false; // Désactiver le loading une fois les données chargées
       }
     });
@@ -88,6 +90,7 @@ userForm!: FormGroup;
     );
   }
 
+  // Méthode pour récupérer les utilisateurs avec superviseur ou chef de projet
   getUsersWithSupervisorOrProjectLeader(): void {
     this.loading = true; // Activer le loading
 
@@ -126,8 +129,6 @@ userForm!: FormGroup;
         },
         compagneId: formData.compagneId,
         fonctionId: formData.fonction,
-        dateAffectation: formData.dateAffectation,
-        dateFinAffectation: formData.dateFinAffectation,
         dateHeureFormation: formData.dateHeureFormation
       };
 
@@ -148,12 +149,10 @@ userForm!: FormGroup;
   }
 
   // Méthode pour ouvrir le modal d'édition
-  openEditModal(userCompagne: any): void { 
+  openEditModal(userCompagne: any): void {
     console.log(userCompagne);
     this.idUser = userCompagne.id;
     this.userForm.patchValue({
-      userCompagneId: userCompagne.id,
-      userId: userCompagne.user?.idUser,
       cin: userCompagne.user?.cin,
       nom: userCompagne.user?.nom,
       prenom: userCompagne.user?.prenom,
@@ -162,8 +161,6 @@ userForm!: FormGroup;
       password: '',
       compagneId: userCompagne.compagneId,
       fonction: userCompagne.fonction.id,
-      dateAffectation: userCompagne.dateAffectation,
-      dateFinAffectation: userCompagne.dateFinAffectation,
       dateHeureFormation: userCompagne.dateHeureFormation
     });
   }
@@ -178,7 +175,6 @@ userForm!: FormGroup;
       const userCompagneDTO: UserCompagneDTO = {
         id: this.idUser,
         user: {
-          idUser: formData.userId,
           cin: formData.cin,
           nom: formData.nom,
           prenom: formData.prenom,
@@ -188,8 +184,6 @@ userForm!: FormGroup;
         },
         compagneId: formData.compagneId,
         fonctionId: formData.fonction,
-        dateAffectation: formData.dateAffectation,
-        dateFinAffectation: formData.dateFinAffectation,
         dateHeureFormation: formData.dateHeureFormation
       };
 
@@ -201,6 +195,44 @@ userForm!: FormGroup;
         },
         error: (error) => {
           console.error('Erreur lors de la mise à jour', error);
+          this.loading = false; // Désactiver le loading en cas d'erreur
+        }
+      });
+    }
+  }
+
+  // Méthode pour modifier le rôle (chef de projet ou superviseur)
+  updateRole(role: string): void {
+    if (this.idUser) {
+      this.loading = true; // Activer le loading
+
+     /* this.userService.updateUserRole(this.idUser, role).subscribe({
+        next: (response) => {
+          console.log(`Rôle mis à jour en ${role}`, response);
+          this.loading = false; // Désactiver le loading
+          this.refresh(); // Rafraîchir les données après la mise à jour
+        },
+        error: (error) => {
+          console.error('Erreur lors de la mise à jour du rôle', error);
+          this.loading = false; // Désactiver le loading en cas d'erreur
+        }
+      });*/
+    }
+  }
+
+  // Méthode pour confirmer la suppression
+  confirmDelete(): void {
+    if (this.selectedUserForDeletion) {
+      this.loading = true; // Activer le loading
+
+      this.userService.deleteUser(this.selectedUserForDeletion.id).subscribe({
+        next: (response) => {
+          console.log('Utilisateur supprimé', response);
+          this.loading = false; // Désactiver le loading
+          this.refresh(); // Rafraîchir les données après la suppression
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression', error);
           this.loading = false; // Désactiver le loading en cas d'erreur
         }
       });
@@ -220,7 +252,7 @@ userForm!: FormGroup;
       'Nom & Prénom': `${user.user?.prenom} ${user.user?.nom}`,
       'Téléphone': user.user?.telPortable1,
       'Email': user.user?.adresseMail,
-      'FONCTION': user.fonction.nom,
+      'FONCTION': user.fonction?.nom,
       'Date Formation': user.dateHeureFormation ? new Date(user.dateHeureFormation).toLocaleString() : ''
     }));
 
@@ -243,4 +275,3 @@ userForm!: FormGroup;
     window.URL.revokeObjectURL(url);
   }
 }
-

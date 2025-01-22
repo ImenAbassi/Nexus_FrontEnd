@@ -34,6 +34,8 @@ import { MapComponent } from './components/map/map.component';
 import { TaxiComponent } from './components/taxi/taxi.component';
 import { AuthGuard } from './services/auth.guard';
 import { AgentListComponent } from './components/agent-list/agent-list.component';
+import { RoleComponent } from './components/role/role.component';
+import { GestionUserCompagneComponent } from './components/gestion-user-compagne/gestion-user-compagne.component';
 
 
 
@@ -42,7 +44,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirection vers /login par défaut
   { path: 'login', component: LoginComponent, data: { showSidebar: false } }, // Route publique
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] }, // Protégée par AuthGuard
-  { path: 'all-users', component: AgentListComponent, canActivate: [AuthGuard] },
+  { path: 'all-users', component: GestionUserCompagneComponent, canActivate: [AuthGuard] },
   { path: 'all-candidats', component: AllCandidatsComponent, canActivate: [AuthGuard] },
   { path: 'list-conge', component: ListCongeComponent, canActivate: [AuthGuard] },
   { path: 'add-conge', component: AddCongeComponent, canActivate: [AuthGuard] },
@@ -69,6 +71,7 @@ const routes: Routes = [
   { path: 'gestion-fonction', component: GestionFonctionComponent, canActivate: [AuthGuard] },
   { path: 'gestion-type-attestation', component: GestionTypeAttestationComponent, canActivate: [AuthGuard] },
   { path: 'gestion-type-conge', component: GestionTypeCongeComponent, canActivate: [AuthGuard] },
+  { path: 'gestion-role', component: RoleComponent, canActivate: [AuthGuard] },
   { path: 'gestion-type-contrat', component: GestionTypeContratComponent, canActivate: [AuthGuard] },
   { path: 'gestion-etat-civil', component: GestionEtatCivilComponent, canActivate: [AuthGuard] },
 ];

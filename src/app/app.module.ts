@@ -45,6 +45,9 @@ import { GestionEtatCivilComponent } from './components/gestion-etat-civil/gesti
 import { TokenInterceptor } from "./services/TokenInterceptor";
 import { ResponseInterceptor } from "./services/ResponseInterceptor";
 import { AgentListComponent } from "./components/agent-list/agent-list.component";
+import { RoleComponent } from './components/role/role.component';
+import { GestionUserCompagneComponent } from './components/gestion-user-compagne/gestion-user-compagne.component';
+import { GestionUserComponent } from './components/gestion-user/gestion-user.component';
 
 
 @NgModule({
@@ -76,6 +79,9 @@ import { AgentListComponent } from "./components/agent-list/agent-list.component
     GestionTypeContratComponent,
     GestionEtatCivilComponent,
     AgentListComponent,
+    RoleComponent,
+    GestionUserCompagneComponent,
+    GestionUserComponent,
   ],
   imports: [
     BrowserModule,

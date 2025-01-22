@@ -1,188 +1,184 @@
-
-
 <div class="container-fluid px-4">
-    <div class="row">
-        <div class="col-md-12 p-3">
-            <!-- demande de congé -->
-            <div class="card mb-4" style="border-radius: 50px;">
-                <div class="card-body px-4 py-2">
-                    <div class="mt-3">
-                        <div class="accordion accordion-flush mb-3" id="accordionFlushExample">
-                            <div class="accordion-item">
-                              <h2 class="accordion-header" id="flush-headingOne" style="background: #f97316; border-radius: 30px;padding-left: 10px;">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" style="color: #eef1f3;">
-                                    Faire une demande
-                                </button>
-                              </h2>
-                              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body">
-                                    <form method="POST" class="mt-3" id="emailAlertForm">
-                                
-                                        <div class="col-md-12">
-                                            <div class="mb-4">
-                                                <div class="py-2">
-                                                    <div class="">
-                                                        <!-- Ajoutez ici les champs du formulaire pour la demande de congé -->
-                                                        <div class="mb-3">
-                                                            <label for="type_conge" class="form-label">Type de congé</label>
-                                                            <select class="form-control" id="type_conge" name="type_conge" required>
-                                                                    <option value=""></option>
-                                                            </select>
-                                                        </div>
-                                
-                                                        <div class="mb-3">
-                                                            <label for="description" class="form-label">Description</label>
-                                                            <textarea class="form-control" id="description" name="description" required></textarea>
-                                                        </div>
-                                
-                                                        <div class="mb-3 row">
-                                                            <div class="col-md-6">
-                                                                <label for="date_debut" class="form-label">Date de début</label>
-                                                                <input type="date" class="form-control" id="date_debut" name="date_debut" required>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label for="date_fin" class="form-label">Date de fin</label>
-                                                                <input type="date" class="form-control" id="date_fin" name="date_fin" required>
-                                                            </div>
-                                                        </div>
-                                
-                                                        <button type="submit" class="btn bg-gradient-primary btn-sm mb-3 float-end">Enregistrer</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+  <div class="row">
+    <div class="col-md-12 p-3">
+      <!-- Formulaire de demande de congé -->
+      <div class="card mb-4" style="border-radius: 50px;">
+        <div class="card-body px-4 py-2">
+          <div class="mt-3">
+            <div class="accordion accordion-flush mb-3" id="accordionFlushExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne" style="background: #f97316; border-radius: 30px;padding-left: 10px;">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" style="color: #eef1f3;">
+                    Faire une demande
+                  </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">
+                    <form method="POST" class="mt-3" id="emailAlertForm" (ngSubmit)="creerDemande()">
+                      <div class="col-md-12">
+                        <div class="mb-4">
+                          <div class="py-2">
+                            <div class="">
+                              <!-- Type de congé -->
+                              <div class="mb-3">
+                                <label for="type_conge" class="form-label">Type de congé</label>
+                                <select class="form-control" id="type_conge" name="type_conge" [(ngModel)]="nouvelleDemande.typeConge" required>
+                                  <option value="">Sélectionnez un type de congé</option>
+                                  <option *ngFor="let type of typesConge" [ngValue]="type">{{ type.nom }}</option>
+                                </select>
+                              </div>
+
+                              <!-- Description -->
+                              <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" [(ngModel)]="nouvelleDemande.raison" required></textarea>
+                              </div>
+
+                              <!-- Dates -->
+                              <div class="mb-3 row">
+                                <div class="col-md-6">
+                                  <label for="date_debut" class="form-label">Date de début</label>
+                                  <input type="date" class="form-control" id="date_debut" name="date_debut" [(ngModel)]="nouvelleDemande.dateDebut" required>
+                                </div>
+                                <div class="col-md-6">
+                                  <label for="date_fin" class="form-label">Date de fin</label>
+                                  <input type="date" class="form-control" id="date_fin" name="date_fin" [(ngModel)]="nouvelleDemande.dateFin" required>
                                 </div>
                               </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="card">
-                <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0 px-4">Liste des congés</h6>
-                </div>
-                <div class="card-body px-3 pt-1 mt-2">
-                  <table class="table align-items-center mb-0" style="text-align: center;">
-                    <thead>
-                      <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                          style="width: 100px; ">NOM & prenom</th>
-      
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                          style="width: 100px; ">TYPE CONGE
-                        </th>
-      
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                          style="width: 90px;">DATE DEBUT</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                          style=" width: 100px; text-align: center;">DATE FIN</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                          style="width: 100px; "> DESCRIPTION</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                          style="width: 100px; ">VALIDATION SUPERVISEUR</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                          style="width: 100px; ">VALIDATION CHEF PROJET</th>
-      
-      
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                          style="width: 100px; ">ACTION</th>
-      
-      
-      
-      
-      
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="d-flex px-2 py-1">
-      
-                            <div class="d-flex flex-column justify-content-center">
-                              <h6 class="mb-0 text-sm">abassi imen</h6>
+                              <!-- Bouton Enregistrer -->
+                              <button type="submit" class="btn bg-gradient-primary btn-sm mb-3 float-end">Enregistrer</button>
                             </div>
                           </div>
-                        </td>
-      
-      
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">sans solde</span>
-                        </td>
-      
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">15-11-2024</span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">18-11-2024</span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">description bdjfufhd</span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="badge badge-sm bg-gradient-success">ACCEPTEE </span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="badge badge-sm bg-gradient-success">ACCEPTEE </span>
-                        </td>
-      
-                        <td class="align-middle text-left text-sm">
-      
-      
-                          <a class="btn btn-link text-dark  mb-0" href="javascript:;"><i
-                              class="fas fa-check text-secondary " aria-hidden="true"></i></a>
-                          <a class="btn btn-link text-dark mb-0" href="javascript:;"><i
-                              class="fas fa-times text-secondary"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="d-flex px-2 py-1">
-      
-                            <div class="d-flex flex-column justify-content-center">
-                              <h6 class="mb-0 text-sm">abassi imen</h6>
-                            </div>
-                          </div>
-                        </td>
-      
-      
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">sans solde</span>
-                        </td>
-      
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">15-11-2024</span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">18-11-2024</span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="text-xs font-weight-bold">description bdjfufhd</span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="badge badge-sm bg-gradient-success">ACCEPTEE </span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span class="badge badge-sm bg-danger">REFUSEE </span>
-                        </td>
-      
-                        <td class="align-middle text-left text-sm">
-      
-      
-                          <a class="btn btn-link text-dark  mb-0" href="javascript:;"><i
-                              class="fas fa-check text-secondary " aria-hidden="true"></i></a>
-                          <a class="btn btn-link text-dark mb-0" href="javascript:;"><i
-                              class="fas fa-times text-secondary"></i></a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
+              </div>
             </div>
-        
-           
+          </div>
         </div>
+      </div>
+
+      <!-- Liste des congés -->
+      <div class="card">
+        <div class="card-header pb-0 p-3">
+          <h6 class="mb-0 px-4">Liste des congés</h6>
+        </div>
+        <div class="card-body px-3 pt-1 mt-2">
+          <table class="table align-items-center mb-0" style="text-align: center;">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">NOM & prénom</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">TYPE CONGE</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 90px;">DATE DEBUT</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">DATE FIN</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">DESCRIPTION</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">VALIDATION SUPERVISEUR</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">VALIDATION CHEF PROJET</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let demande of demandes">
+                <td>
+                  <div class="d-flex px-2 py-1">
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">{{ demande.user?.nom }} {{ demande.user?.prenom }}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ demande.typeConge?.nom }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ demande.dateDebut | date: 'dd-MM-yyyy' }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ demande.dateFin | date: 'dd-MM-yyyy' }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ demande.raison }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="badge badge-sm" [ngClass]="{
+                    'bg-gradient-success': demande.etatSuperviseur == 'APPROUVEE',
+                      'bg-gradient-danger': demande.etatSuperviseur == 'REJETEE',
+                      'bg-gradient-warning': demande.etatSuperviseur == 'EN_ATTENTE'
+                  }">{{ demande.etatSuperviseur }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="badge badge-sm" [ngClass]="{
+                    'bg-gradient-success': demande.etatChefProjet === 'APPROUVEE',
+                    'bg-gradient-danger': demande.etatChefProjet === 'REJETEE',
+                    'bg-gradient-warning': demande.etatChefProjet === 'EN_ATTENTE'
+                  }">{{ demande.etatChefProjet }}</span>
+                </td>
+                <td class="align-middle text-left text-sm">
+                  <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="ouvrirValiderSuperviseurModal(validerSuperviseurModal, demande.id)">
+                    <i class="fas fa-check text-secondary"></i>
+                  </a>
+                  <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="ouvrirValiderChefProjetModal(validerChefProjetModal, demande.id)">
+                    <i class="fas fa-check text-secondary"></i>
+                  </a>
+                  <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="ouvrirSupprimerModal(supprimerModal, demande.id)">
+                    <i class="fas fa-times text-secondary"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="demandes.length === 0" class="text-center py-3">
+            <p>Aucune demande de congé trouvée.</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
+
+<!-- Modale pour valider par le superviseur -->
+<ng-template #validerSuperviseurModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="validerSuperviseurModalLabel">Valider la demande</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir valider cette demande ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+    <button type="button" class="btn btn-primary" (click)="confirmerValiderSuperviseur()">Valider</button>
+  </div>
+</ng-template>
+
+<!-- Modale pour valider par le chef de projet -->
+<ng-template #validerChefProjetModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="validerChefProjetModalLabel">Valider la demande</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir valider cette demande ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+    <button type="button" class="btn btn-primary" (click)="confirmerValiderChefProjet()">Valider</button>
+  </div>
+</ng-template>
+
+<!-- Modale pour supprimer la demande -->
+<ng-template #supprimerModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="supprimerModalLabel">Supprimer la demande</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir supprimer cette demande ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+    <button type="button" class="btn btn-danger" (click)="confirmerSupprimer()">Supprimer</button>
+  </div>
+</ng-template>
