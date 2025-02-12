@@ -1,0 +1,73 @@
+<div class="container">
+    <h2>Liste des Pointages</h2>
+    <button class="btn btn-primary" (click)="openImportModal()">
+        <i class="fas fa-upload"></i> Importer un fichier Excel
+      </button>
+    <!-- Sélecteur de date -->
+    <div class="mb-3">
+        <label for="datePicker" class="form-label">Sélectionner une date :</label>
+        <input
+        type="date"
+        id="datePicker"
+        class="form-control"
+        [value]="selectedDate"
+        (change)="onDateChange($event)"
+    />
+    </div>
+  
+    <!-- Bouton d'exportation Excel -->
+    <button class="btn btn-success mb-3" (click)="exportToExcel()">
+        Exporter vers Excel
+    </button>
+  
+    <!-- Afficher les pointages groupés par date -->
+    <div *ngFor="let date of getDates()">
+        <h3>{{ date }}</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Utilisateur</th>
+                    <th>Heures Travaillées</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pointage of getPointagesByDate(date)">
+                    <td>{{ pointage.id }}</td>
+                    <td>{{ pointage.user.nom }}</td>
+                    <td>{{ pointage.heuresTravaillees }} minutes</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+              
+
+<!-- Template pour le modal -->
+<ng-template #importModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Importer un fichier Excel</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  
+    <div class="modal-body">
+      <!-- Formulaire pour sélectionner un fichier -->
+      <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" />
+  
+      <!-- Message de statut -->
+      <p *ngIf="message" class="message">{{ message }}</p>
+    </div>
+  
+    <div class="modal-footer">
+      <!-- Bouton pour fermer le modal -->
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+  
+      <!-- Bouton pour envoyer le fichier -->
+      <button type="button" class="btn btn-primary" (click)="onUpload()" [disabled]="!selectedFile">
+        Téléverser
+      </button>
+    </div>
+  </ng-template>

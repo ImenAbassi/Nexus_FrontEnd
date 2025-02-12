@@ -26,18 +26,18 @@ export class GestionTypeContratComponent implements OnInit {
         this.paysList = data;
       },
       (error) => {
-        console.error('Erreur lors de la récupération des pays:', error);
+        console.error('Erreur lors de la récupération des Types Contrat:', error);
       }
     );
   }
 
   openModal(content: any, mode: string, pays?: TypeContrat): void {
     if (mode === 'add') {
-      this.modalTitle = 'Ajouter un Pays';
+      this.modalTitle = 'Ajouter un Type Contrat';
       this.modalButtonLabel = 'Ajouter';
       this.selectedPays = { id: 0, nom: '' };
     } else if (mode === 'edit' && pays) {
-      this.modalTitle = 'Modifier le Pays';
+      this.modalTitle = 'Modifier le Type Contrat';
       this.modalButtonLabel = 'Modifier';
       this.selectedPays = { ...pays };
     }
@@ -53,7 +53,7 @@ export class GestionTypeContratComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de l\'ajout du pays:', error);
+          console.error('Erreur lors de l\'ajout du Type Contrat:', error);
         }
       );
     } else {
@@ -64,7 +64,7 @@ export class GestionTypeContratComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de la mise à jour du pays:', error);
+          console.error('Erreur lors de la mise à jour du Type Contrat:', error);
         }
       );
     }
@@ -76,7 +76,7 @@ export class GestionTypeContratComponent implements OnInit {
         this.getAllPays();
       },
       (error) => {
-        console.error('Erreur lors de la suppression du pays:', error);
+        console.error('Erreur lors de la suppression du Type Contrat:', error);
       }
     );
   }

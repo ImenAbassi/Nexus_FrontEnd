@@ -33,11 +33,11 @@ export class GestionJoursSemaineComponent implements OnInit {
 
   openModal(content: any, mode: string, pays?: JourSemaine): void {
     if (mode === 'add') {
-      this.modalTitle = 'Ajouter un Pays';
+      this.modalTitle = 'Ajouter un Jour de la Semaine';
       this.modalButtonLabel = 'Ajouter';
       this.selectedJour = { id: 0, nom: '' };
     } else if (mode === 'edit' && pays) {
-      this.modalTitle = 'Modifier le Pays';
+      this.modalTitle = 'Modifier le Jour de la Semaine';
       this.modalButtonLabel = 'Modifier';
       this.selectedJour = { ...pays };
     }
@@ -53,7 +53,7 @@ export class GestionJoursSemaineComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de l\'ajout du pays:', error);
+          console.error('Erreur lors de l\'ajout du Jour de la Semaine:', error);
         }
       );
     } else {
@@ -64,7 +64,7 @@ export class GestionJoursSemaineComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de la mise à jour du pays:', error);
+          console.error('Erreur lors de la mise à jour du Jour de la Semaine:', error);
         }
       );
     }
@@ -76,7 +76,7 @@ export class GestionJoursSemaineComponent implements OnInit {
         this.getAllJours();
       },
       (error) => {
-        console.error('Erreur lors de la suppression du pays:', error);
+        console.error('Erreur lors de la suppression du Jour de la Semaine:', error);
       }
     );
   }

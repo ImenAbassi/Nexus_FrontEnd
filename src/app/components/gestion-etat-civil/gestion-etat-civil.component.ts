@@ -26,18 +26,18 @@ export class GestionEtatCivilComponent implements OnInit {
         this.paysList = data;
       },
       (error) => {
-        console.error('Erreur lors de la récupération des pays:', error);
+        console.error('Erreur lors de la récupération des Etats civil:', error);
       }
     );
   }
 
   openModal(content: any, mode: string, pays?: EtatCivil): void {
     if (mode === 'add') {
-      this.modalTitle = 'Ajouter un Pays';
+      this.modalTitle = 'Ajouter un Etat civil';
       this.modalButtonLabel = 'Ajouter';
       this.selectedPays = { id: 0, nom: '' };
     } else if (mode === 'edit' && pays) {
-      this.modalTitle = 'Modifier le Pays';
+      this.modalTitle = 'Modifier Etat civil';
       this.modalButtonLabel = 'Modifier';
       this.selectedPays = { ...pays };
     }
@@ -53,7 +53,7 @@ export class GestionEtatCivilComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de l\'ajout du pays:', error);
+          console.error('Erreur lors de l\'ajout des Etats civil:', error);
         }
       );
     } else {

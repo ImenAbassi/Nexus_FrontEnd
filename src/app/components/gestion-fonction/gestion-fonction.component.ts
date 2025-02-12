@@ -26,18 +26,18 @@ export class GestionFonctionComponent implements OnInit {
         this.paysList = data;
       },
       (error) => {
-        console.error('Erreur lors de la récupération des pays:', error);
+        console.error('Erreur lors de la récupération des Fonctions:', error);
       }
     );
   }
 
   openModal(content: any, mode: string, pays?: Fonction): void {
     if (mode === 'add') {
-      this.modalTitle = 'Ajouter un Pays';
+      this.modalTitle = 'Ajouter une Fonction';
       this.modalButtonLabel = 'Ajouter';
       this.selectedPays = { id: 0, nom: '' };
     } else if (mode === 'edit' && pays) {
-      this.modalTitle = 'Modifier le Pays';
+      this.modalTitle = 'Modifier la Fonction';
       this.modalButtonLabel = 'Modifier';
       this.selectedPays = { ...pays };
     }
@@ -53,7 +53,7 @@ export class GestionFonctionComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de l\'ajout du pays:', error);
+          console.error('Erreur lors de l\'ajout du Fonction:', error);
         }
       );
     } else {
@@ -64,7 +64,7 @@ export class GestionFonctionComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de la mise à jour du pays:', error);
+          console.error('Erreur lors de la mise à jour du Fonction:', error);
         }
       );
     }
@@ -76,7 +76,7 @@ export class GestionFonctionComponent implements OnInit {
         this.getAllPays();
       },
       (error) => {
-        console.error('Erreur lors de la suppression du pays:', error);
+        console.error('Erreur lors de la suppression du Fonction:', error);
       }
     );
   }

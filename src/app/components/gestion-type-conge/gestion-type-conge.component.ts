@@ -26,18 +26,18 @@ export class GestionTypeCongeComponent implements OnInit {
         this.paysList = data;
       },
       (error) => {
-        console.error('Erreur lors de la récupération des pays:', error);
+        console.error('Erreur lors de la récupération des Types Congés:', error);
       }
     );
   }
 
   openModal(content: any, mode: string, pays?: TypeConge): void {
     if (mode === 'add') {
-      this.modalTitle = 'Ajouter un Pays';
+      this.modalTitle = 'Ajouter un Type Congé';
       this.modalButtonLabel = 'Ajouter';
       this.selectedPays = { id: 0, nom: '' };
     } else if (mode === 'edit' && pays) {
-      this.modalTitle = 'Modifier le Pays';
+      this.modalTitle = 'Modifier le Type Congé';
       this.modalButtonLabel = 'Modifier';
       this.selectedPays = { ...pays };
     }
@@ -53,7 +53,7 @@ export class GestionTypeCongeComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de l\'ajout du pays:', error);
+          console.error('Erreur lors de l\'ajout du Type Congé:', error);
         }
       );
     } else {
@@ -64,7 +64,7 @@ export class GestionTypeCongeComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de la mise à jour du pays:', error);
+          console.error('Erreur lors de la mise à jour du Type Congé:', error);
         }
       );
     }
@@ -76,7 +76,7 @@ export class GestionTypeCongeComponent implements OnInit {
         this.getAllPays();
       },
       (error) => {
-        console.error('Erreur lors de la suppression du pays:', error);
+        console.error('Erreur lors de la suppression du Type Congé:', error);
       }
     );
   }

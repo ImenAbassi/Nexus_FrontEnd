@@ -24,6 +24,7 @@ import { GestionTypeCongeComponent } from './components/gestion-type-conge/gesti
 import { GestionTypeContratComponent } from './components/gestion-type-contrat/gestion-type-contrat.component';
 import { GestionTypologieCanalComponent } from './components/gestion-typologie-canal/gestion-typologie-canal.component';
 import { GestionTypologieComponent } from './components/gestion-typologie/gestion-typologie.component';
+import { GestionUserCompagneComponent } from './components/gestion-user-compagne/gestion-user-compagne.component';
 import { HomeComponent } from './components/home/home.component';
 import { ListAttestationTravailComponent } from './components/list-attestation-travail/list-attestation-travail.component';
 import { ListCampagnesComponent } from './components/list-campagnes/list-campagnes.component';
@@ -31,11 +32,12 @@ import { ListCongeComponent } from './components/list-conge/list-conge.component
 import { ListSortieComponent } from './components/list-sortie/list-sortie.component';
 import { LoginComponent } from './components/login/login.component';
 import { MapComponent } from './components/map/map.component';
+import { PostListComponent } from './components/post-list/post-list.component';
+import { RoleComponent } from './components/role/role.component';
 import { TaxiComponent } from './components/taxi/taxi.component';
 import { AuthGuard } from './services/auth.guard';
-import { AgentListComponent } from './components/agent-list/agent-list.component';
-import { RoleComponent } from './components/role/role.component';
-import { GestionUserCompagneComponent } from './components/gestion-user-compagne/gestion-user-compagne.component';
+import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
+import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
 
 
 
@@ -74,6 +76,11 @@ const routes: Routes = [
   { path: 'gestion-role', component: RoleComponent, canActivate: [AuthGuard] },
   { path: 'gestion-type-contrat', component: GestionTypeContratComponent, canActivate: [AuthGuard] },
   { path: 'gestion-etat-civil', component: GestionEtatCivilComponent, canActivate: [AuthGuard] },
+  { path: 'news', component: PostListComponent, canActivate: [AuthGuard] },
+  { path: 'news', component: PostListComponent, canActivate: [AuthGuard] },
+  { path: 'gestion-candidats', component: GestionCandidatsComponent, canActivate: [AuthGuard] },
+  { path: 'pointage', component: GestionPointageComponent, canActivate: [AuthGuard] },
+
 ];
 
 @NgModule({

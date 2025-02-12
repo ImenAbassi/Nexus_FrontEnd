@@ -1,0 +1,12 @@
+.message {
+    margin-top: 20px;
+    color: green;
+  }
+  
+  .message.error {
+    color: red;
+  }
+  
+  input[type='file'] {
+    margin-bottom: 20px;
+  }

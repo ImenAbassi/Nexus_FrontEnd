@@ -33,11 +33,11 @@ export class GestionHeureDepartComponent implements OnInit {
 
   openModal(content: any, mode: string, pays?: HeureDepart): void {
     if (mode === 'add') {
-      this.modalTitle = 'Ajouter un Pays';
+      this.modalTitle = 'Ajouter une Heure de depart';
       this.modalButtonLabel = 'Ajouter';
       this.selectedPays = { id: 0, heure: '' };
     } else if (mode === 'edit' && pays) {
-      this.modalTitle = 'Modifier le Pays';
+      this.modalTitle = 'Modifier une Heure de depart';
       this.modalButtonLabel = 'Modifier';
       this.selectedPays = { ...pays };
     }
@@ -53,7 +53,7 @@ export class GestionHeureDepartComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de l\'ajout du pays:', error);
+          console.error('Erreur lors de l\'ajout  Heure de depart:', error);
         }
       );
     } else {
@@ -64,7 +64,7 @@ export class GestionHeureDepartComponent implements OnInit {
           modal.close();
         },
         (error) => {
-          console.error('Erreur lors de la mise à jour du pays:', error);
+          console.error('Erreur lors de la mise à jour Heure de depart:', error);
         }
       );
     }
@@ -76,7 +76,7 @@ export class GestionHeureDepartComponent implements OnInit {
         this.getAllPays();
       },
       (error) => {
-        console.error('Erreur lors de la suppression du pays:', error);
+        console.error('Erreur lors de la suppression du Heure de depart:', error);
       }
     );
   }
