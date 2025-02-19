@@ -1,0 +1,256 @@
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- KPI 1: Productivité par utilisateur -->
+        <div class="col-lg-6 col-md-6 col-12">
+            <div class="card">
+                <span class="mask bg-primary opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-badge text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ totalHeuresTravailleesParUtilisateur }}
+                            </h5>
+                            <span class="text-white text-sm">Productivité par utilisateur</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ productiviteUserPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 2: Nombre de pointages par jour -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4 mt-md-0">
+            <div class="card">
+                <span class="mask bg-dark opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-calendar-grid-58 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ countPointagesParJour }}
+                            </h5>
+                            <span class="text-white text-sm">Nombre de pointages par jour</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ pointageJourPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 3: Taux d'utilisation des opérations -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-success opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-chart-bar-32 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ tauxUtilisationOperation }}%
+                            </h5>
+                            <span class="text-white text-sm">Taux d'utilisation des opérations</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ utilisationOperationPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 4: Temps moyen passé par opération -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-danger opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-clock-13 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ tempsMoyenParOperation }} min
+                            </h5>
+                            <span class="text-white text-sm">Temps moyen passé par opération</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ tempsMoyenPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 5: Productivité globale de l'équipe -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-warning opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-world text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ productiviteGlobale }} heures
+                            </h5>
+                            <span class="text-white text-sm">Productivité globale de l'équipe</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ productiviteGlobalePercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 6: Répartition des heures travaillées par utilisateur -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-info opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-chart-pie-35 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ repartitionHeuresParUtilisateur }}
+                            </h5>
+                            <span class="text-white text-sm">Répartition des heures travaillées par utilisateur</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ repartitionHeuresPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 7: Opérations les plus fréquemment réalisées -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-primary opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-settings-gear-65 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ operationsFrequentes }}
+                            </h5>
+                            <span class="text-white text-sm">Opérations les plus fréquemment réalisées</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ operationsFrequentesPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 8: Taux de productivité par jour -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-dark opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-calendar-check text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ tauxProductiviteParJour }}%
+                            </h5>
+                            <span class="text-white text-sm">Taux de productivité par jour</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ productiviteJourPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 9: Nombre d'opérations par utilisateur -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-success opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-single-02 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ nbOperationsParUtilisateur }}
+                            </h5>
+                            <span class="text-white text-sm">Nombre d'opérations par utilisateur</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ nbOperationsPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 10: Top utilisateurs les plus productifs -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-danger opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-trophy text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ topProductifs }}
+                            </h5>
+                            <span class="text-white text-sm">Top utilisateurs les plus productifs</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ topProductifsPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI 11: Taux d'achèvement des opérations -->
+        <div class="col-lg-6 col-md-6 col-12 mt-4">
+            <div class="card">
+                <span class="mask bg-warning opacity-10 border-radius-lg"></span>
+                <div class="card-body p-3 position-relative">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                <i class="ni ni-check-bold text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                            <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                {{ tauxAchevement }}%
+                            </h5>
+                            <span class="text-white text-sm">Taux d'achèvement des opérations</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+{{ achevementPercentage }}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

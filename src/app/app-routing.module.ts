@@ -38,6 +38,7 @@ import { TaxiComponent } from './components/taxi/taxi.component';
 import { AuthGuard } from './services/auth.guard';
 import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
 import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
+import { KpiComponent } from './kpi/kpi.component';
 
 
 
@@ -80,6 +81,7 @@ const routes: Routes = [
   { path: 'news', component: PostListComponent, canActivate: [AuthGuard] },
   { path: 'gestion-candidats', component: GestionCandidatsComponent, canActivate: [AuthGuard] },
   { path: 'pointage', component: GestionPointageComponent, canActivate: [AuthGuard] },
+  { path: 'kpi', component: KpiComponent, canActivate: [AuthGuard] },
 
 ];
 

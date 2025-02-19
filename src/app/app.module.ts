@@ -51,6 +51,7 @@ import { ResponseInterceptor } from "./services/ResponseInterceptor";
 import { TokenInterceptor } from "./services/TokenInterceptor";
 import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
 import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
+import { KpiComponent } from './kpi/kpi.component';
 
 
 @NgModule({
@@ -88,6 +89,7 @@ import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.co
     PostListComponent,
     GestionCandidatsComponent,
     GestionPointageComponent,
+    KpiComponent,
 
   ],
   imports: [
