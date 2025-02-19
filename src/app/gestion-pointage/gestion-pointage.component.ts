@@ -12,14 +12,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class GestionPointageComponent {
   @ViewChild('importModal') importModal!: TemplateRef<any>; // Référence au template du modal
-
   pointages: Pointage[] = [];
   groupedPointages: { [key: string]: Pointage[] } = {}; // Données groupées par date
   selectedDate: string = new Date().toISOString().split('T')[0]; // Date du jour par défaut
   selectedFile: File | null = null;
   message: string = '';
+  loading: boolean = false; // Indicateur de chargement
+  @ViewChild('detailsModal') detailsModal!: TemplateRef<any>; // Référence au modal de détails
+  selectedPointage: Pointage | null = null; // Stocke le pointage sélectionné
 
-  constructor(private http: HttpClient,private modalService: NgbModal) {}
+  constructor(private http: HttpClient, private modalService: NgbModal) {}
 
   ngOnInit(): void {
     this.loadPointages();
@@ -32,15 +34,21 @@ export class GestionPointageComponent {
     });
   }
 
+
   // Charger tous les pointages
   loadPointages(): void {
+    this.loading = true; // Démarrer le chargement
     this.http.get<Pointage[]>('http://localhost:8081/nexus/pointages').subscribe(
       (data) => {
         this.pointages = data;
+        console.log( this.pointages);
         this.groupPointagesByDate(); // Grouper les données par date
+        this.loading = false; // Arrêter le chargement
       },
       (error) => {
         console.error('Erreur lors du chargement des pointages :', error);
+        this.message = 'Une erreur est survenue lors du chargement des pointages. Veuillez réessayer plus tard.';
+        this.loading = false; // Arrêter le chargement
       }
     );
   }
@@ -59,72 +67,65 @@ export class GestionPointageComponent {
 
   // Exporter les données vers Excel
   exportToExcel(): void {
-    console.log('Export to Excel');
+    this.loading = true; // Démarrer le chargement
+    setTimeout(() => { // Simuler une opération asynchrone
+      const selectedDateObj = new Date(this.selectedDate);
+      selectedDateObj.setHours(0, 0, 0, 0);
 
-    // Convertir la date sélectionnée en objet Date
-    const selectedDateObj = new Date(this.selectedDate);
-    selectedDateObj.setHours(0, 0, 0, 0);
-
-    // Filtrer les pointages pour ne garder que ceux de la date sélectionnée
-    const pointagesFiltres = this.pointages.filter(pointage => {
+      const pointagesFiltres = this.pointages.filter(pointage => {
         const datePointage = new Date(pointage.datePointage);
         datePointage.setHours(0, 0, 0, 0);
         return datePointage.getTime() === selectedDateObj.getTime();
-    });
+      });
 
-    // Mapper les données pour formater les colonnes
-    const data = pointagesFiltres.map(pointage => ({
+      const data = pointagesFiltres.map(pointage => ({
         'ID': pointage.id,
         'Utilisateur': pointage.user.nom + ' ' + pointage.user.prenom,
         'CIN': pointage.user.cin,
         'Heures Travaillées': pointage.heuresTravaillees + ' minutes',
-        'Date Pointage': new Date(pointage.datePointage).toLocaleDateString() // Formater la date
-    }));
+        'Date Pointage': new Date(pointage.datePointage).toLocaleDateString(),
+      }));
 
-    // Créer une feuille de calcul
-    const ws = XLSX.utils.json_to_sheet(data);
+      const ws = XLSX.utils.json_to_sheet(data);
 
-    // Définir les en-têtes personnalisés avec des styles
-    const headers = [
+      const headers = [
         { header: 'ID', style: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '4F81BD' } } } },
         { header: 'Utilisateur', style: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '4F81BD' } } } },
         { header: 'CIN', style: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '4F81BD' } } } },
         { header: 'Heures Travaillées', style: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '4F81BD' } } } },
         { header: 'Date Pointage', style: { font: { bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '4F81BD' } } } }
-    ];
+      ];
 
-    // Ajouter les en-têtes à la feuille de calcul
-    const headerRange = XLSX.utils.decode_range(ws['!ref'] || 'A1:Z1');
-    headers.forEach((header, index) => {
+      const headerRange = XLSX.utils.decode_range(ws['!ref'] || 'A1:Z1');
+      headers.forEach((header, index) => {
         const cellAddress = XLSX.utils.encode_cell({ r: headerRange.s.r, c: index });
         ws[cellAddress] = { v: header.header, t: 's', s: header.style };
-    });
+      });
 
-    // Ajuster la largeur des colonnes
-    const colWidths = [
+      const colWidths = [
         { wch: 10 }, // ID
         { wch: 25 }, // Utilisateur
+        { wch: 20 }, // CIN
         { wch: 20 }, // Heures Travaillées
         { wch: 20 }  // Date Pointage
-    ];
-    ws['!cols'] = colWidths;
+      ];
+      ws['!cols'] = colWidths;
 
-    // Créer un nouveau classeur et ajouter la feuille de calcul
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Pointages');
-
-    // Exporter le fichier Excel
-    XLSX.writeFile(wb, `Pointages_${this.selectedDate}.xlsx`);
-}
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Pointages');
+      XLSX.writeFile(wb, `Pointages_${this.selectedDate}.xlsx`);
+      this.loading = false; // Arrêter le chargement
+    }, 500); // Simuler une latence de 500ms
+  }
 
   // Changer la date sélectionnée
   onDateChange(event: Event): void {
     const target = event.target as HTMLInputElement; // Type assertion
     this.selectedDate = target.value;
-}
+  }
 
   // Obtenir les dates disponibles
-   getDates(): string[] {
+  getDates(): string[] {
     return Object.keys(this.groupedPointages);
   }
 
@@ -133,32 +134,57 @@ export class GestionPointageComponent {
     return this.groupedPointages[date] || [];
   }
 
-
+  // Importer un fichier Excel
   importerFichierExcel(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file); // Ajouter le fichier au FormData
-
     return this.http.post<string>('http://localhost:8081/nexus/pointages/import', formData);
   }
 
-    // Méthode pour gérer la sélection du fichier
-    onFileSelected(event: any): void {
-      this.selectedFile = event.target.files[0];
+  // Méthode pour gérer la sélection du fichier
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel')) {
+      this.selectedFile = file;
+      this.message = ''; // Effacer tout message précédent
+    } else {
+      this.selectedFile = null;
+      this.message = 'Veuillez sélectionner un fichier Excel valide (.xlsx ou .xls).';
     }
-  
-    // Méthode pour envoyer le fichier au backend
-    onUpload(): void {
-      if (this.selectedFile) {
-        this.importerFichierExcel(this.selectedFile).subscribe({
-          next: (response) => {
-            this.message = response; // Afficher le message de succès
-          },
-          error: (error) => {
-            this.message = 'Erreur lors de l\'importation du fichier : ' + error.message;
-          },
-        });
-      } else {
-        this.message = 'Veuillez sélectionner un fichier Excel.';
-      }
+  }
+
+  // Méthode pour envoyer le fichier au backend
+  onUpload(): void {
+    if (this.selectedFile) {
+      this.loading = true; // Démarrer le chargement
+      this.importerFichierExcel(this.selectedFile).subscribe({
+        next: (response) => {
+          this.showMessage(response); // Afficher le message
+          this.loading = false; // Arrêter le chargement
+        },
+        error: (error) => {
+          this.showMessage('Erreur lors de l\'importation du fichier : ' + error.message);
+          this.loading = false; // Arrêter le chargement
+        },
+      });
+    } else {
+      this.showMessage('Veuillez sélectionner un fichier Excel.');
     }
+  }
+
+  // Afficher un message avec suppression automatique après 5 secondes
+  showMessage(message: string): void {
+    this.message = message;
+    setTimeout(() => {
+      this.message = ''; // Effacer le message après 5 secondes
+    }, 5000);
+  }
+
+  openDetailsModal(pointage: Pointage): void {
+    this.selectedPointage = pointage; // Définir le pointage sélectionné
+    const modalRef = this.modalService.open(this.detailsModal, {
+      centered: true,
+      size: 'lg',
+    });
+  }
 }

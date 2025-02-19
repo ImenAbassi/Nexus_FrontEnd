@@ -6,4 +6,5 @@ datePointage:Date; // Date du pointage
 
 
     heuresTravaillees : number;
+    operations:any;
   }

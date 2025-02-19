@@ -10,3 +10,14 @@
   input[type='file'] {
     margin-bottom: 20px;
   }
+
+  /* Style pour l'icône "œil" */
+.btn-link i.fas.fa-eye {
+  font-size: 18px;
+  color: #007bff; /* Bleu */
+  cursor: pointer;
+}
+
+.btn-link i.fas.fa-eye:hover {
+  color: #0056b3; /* Bleu foncé au survol */
+}
