@@ -52,6 +52,7 @@ import { TokenInterceptor } from "./services/TokenInterceptor";
 import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
 import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
 import { KpiComponent } from './kpi/kpi.component';
+import { GestionPrivilegeComponent } from "./components/gestion-privilege/gestion-privilege.component";
 
 
 @NgModule({
@@ -62,10 +63,20 @@ import { KpiComponent } from './kpi/kpi.component';
     LoginComponent,
     SidenavComponent,
     NavbarComponent,
-    UpdateUserComponent, AllCandidatsComponent, AddCongeComponent, ListCongeComponent,
-    ListCampagnesComponent, AddCampagneComponent, AddPlanningComponent, TestComponent,
-    ListSortieComponent, TaxiComponent, MapComponent, ListAttestationTravailComponent,
-    GestionTypologieCanalComponent, GestionSiteComponent,
+    UpdateUserComponent,
+    AllCandidatsComponent,
+    AddCongeComponent,
+    ListCongeComponent,
+    ListCampagnesComponent,
+    AddCampagneComponent,
+    AddPlanningComponent,
+    TestComponent,
+    ListSortieComponent,
+    TaxiComponent,
+    MapComponent,
+    ListAttestationTravailComponent,
+    GestionTypologieCanalComponent,
+    GestionSiteComponent,
     GestionSocieteComponent,
     GestionTypologieComponent,
     GestionPaysComponent,
@@ -90,6 +101,7 @@ import { KpiComponent } from './kpi/kpi.component';
     GestionCandidatsComponent,
     GestionPointageComponent,
     KpiComponent,
+    GestionPrivilegeComponent,
 
   ],
   imports: [
@@ -103,7 +115,7 @@ import { KpiComponent } from './kpi/kpi.component';
     NgbModule,
 
   ],
-  providers: [ [
+  providers: [[
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

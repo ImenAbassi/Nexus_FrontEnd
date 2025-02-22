@@ -39,6 +39,7 @@ import { AuthGuard } from './services/auth.guard';
 import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
 import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
 import { KpiComponent } from './kpi/kpi.component';
+import { GestionPrivilegeComponent } from './components/gestion-privilege/gestion-privilege.component';
 
 
 
@@ -77,7 +78,7 @@ const routes: Routes = [
   { path: 'gestion-role', component: RoleComponent, canActivate: [AuthGuard] },
   { path: 'gestion-type-contrat', component: GestionTypeContratComponent, canActivate: [AuthGuard] },
   { path: 'gestion-etat-civil', component: GestionEtatCivilComponent, canActivate: [AuthGuard] },
-  { path: 'news', component: PostListComponent, canActivate: [AuthGuard] },
+  { path: 'gestion-privilege', component: GestionPrivilegeComponent, canActivate: [AuthGuard] },
   { path: 'news', component: PostListComponent, canActivate: [AuthGuard] },
   { path: 'gestion-candidats', component: GestionCandidatsComponent, canActivate: [AuthGuard] },
   { path: 'pointage', component: GestionPointageComponent, canActivate: [AuthGuard] },
