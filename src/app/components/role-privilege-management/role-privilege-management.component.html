@@ -1,0 +1,89 @@
+<div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+        <div class="card">
+          <div class="card-header pb-0">
+            <div class="row">
+              <div class="col-lg-6 col-7">
+                <h6>Gestion des Privilèges pour {{ role?.name }}</h6>
+                <p class="text-sm mb-0">Ajouter ou supprimer des privilèges pour ce rôle.</p>
+              </div>
+              <div class="col-lg-6 col-5 my-auto text-end">
+                <button class="btn btn-primary btn-sm mb-0 me-3" (click)="openAddPrivilegeModal(addPrivilegeModal)">
+                  Ajouter un Privilège
+                </button>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Liste des privilèges du rôle -->
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let privilege of role?.privileges">
+                    <td>{{ privilege.name }}</td>
+                    <td>
+                      <button class="btn btn-danger btn-sm" (click)="removePrivilegeFromRole(privilege)">
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal pour Ajouter un Privilège -->
+  <ng-template #addPrivilegeModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Ajouter un Privilège</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+      <!-- Champ de recherche -->
+      <input
+        type="text"
+        class="form-control mb-3"
+        placeholder="Rechercher un privilège..."
+        [(ngModel)]="searchText"
+        (input)="onSearchChange()"
+      />
+  
+      <!-- Liste des privilèges disponibles -->
+      <ul class="list-group">
+        <li
+          *ngFor="let privilege of filteredPrivileges | slice: (page - 1) * pageSize : page * pageSize"
+          class="list-group-item"
+          (click)="addPrivilegeToRole(privilege)"
+        >
+          {{ privilege.name }}
+        </li>
+      </ul>
+  
+      <!-- Pagination -->
+      <div class="d-flex justify-content-center mt-3">
+        <ngb-pagination
+          [(page)]="page"
+          [pageSize]="pageSize"
+          [collectionSize]="filteredPrivileges.length"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+        ></ngb-pagination>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+    </div>
+  </ng-template>

@@ -53,6 +53,7 @@ import { GestionCandidatsComponent } from './components/gestion-candidats/gestio
 import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
 import { KpiComponent } from './kpi/kpi.component';
 import { GestionPrivilegeComponent } from "./components/gestion-privilege/gestion-privilege.component";
+import { RolePrivilegeManagementComponent } from "./components/role-privilege-management/role-privilege-management.component";
 
 
 @NgModule({
@@ -102,6 +103,7 @@ import { GestionPrivilegeComponent } from "./components/gestion-privilege/gestio
     GestionPointageComponent,
     KpiComponent,
     GestionPrivilegeComponent,
+    RolePrivilegeManagementComponent,
 
   ],
   imports: [

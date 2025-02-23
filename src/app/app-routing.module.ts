@@ -40,6 +40,7 @@ import { GestionCandidatsComponent } from './components/gestion-candidats/gestio
 import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
 import { KpiComponent } from './kpi/kpi.component';
 import { GestionPrivilegeComponent } from './components/gestion-privilege/gestion-privilege.component';
+import { RolePrivilegeManagementComponent } from './components/role-privilege-management/role-privilege-management.component';
 
 
 
@@ -83,6 +84,7 @@ const routes: Routes = [
   { path: 'gestion-candidats', component: GestionCandidatsComponent, canActivate: [AuthGuard] },
   { path: 'pointage', component: GestionPointageComponent, canActivate: [AuthGuard] },
   { path: 'kpi', component: KpiComponent, canActivate: [AuthGuard] },
+  { path: 'RolePrivilege/:id', component: RolePrivilegeManagementComponent, canActivate: [AuthGuard] }
 
 ];
 

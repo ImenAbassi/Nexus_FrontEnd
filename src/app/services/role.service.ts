@@ -30,5 +30,18 @@ export class roleService {
   public getById(id: number): Observable<any> {
     return this.http.get<any>(`${this.link}role/getById/${id}`);
   }
+  // Récupérer les privilèges d'un rôle
+  public getRolePrivileges(roleId: number): Observable<any> {
+    return this.http.get<any>(`${this.link}role/${roleId}/privileges`);
+  }
 
+  // Ajouter un privilège à un rôle
+  public addPrivilegeToRole(roleId: number, privilegeId: number): Observable<any> {
+    return this.http.post<any>(`${this.link}role/${roleId}/addPrivilege/${privilegeId}`, {});
+  }
+
+  // Supprimer un privilège d'un rôle
+  public removePrivilegeFromRole(roleId: number, privilegeId: number): Observable<any> {
+    return this.http.delete<any>(`${this.link}role/${roleId}/removePrivilege/${privilegeId}`);
+  }
 }

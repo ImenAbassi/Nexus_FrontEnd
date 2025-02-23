@@ -1,5 +1,6 @@
 // src/app/components/gestion-role/gestion-role.component.ts
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Role } from 'src/app/models/Role';
 import { roleService } from 'src/app/services/role.service';
@@ -17,7 +18,8 @@ export class RoleComponent implements OnInit {
 
   constructor(
     private roleService: roleService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -86,5 +88,10 @@ export class RoleComponent implements OnInit {
         }
       );
     }
+  }
+
+  gotToPrivileges(id: any): void {
+    console.log(id)
+    this.router.navigate(['/RolePrivilege', id]);
   }
 }

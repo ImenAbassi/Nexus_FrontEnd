@@ -32,6 +32,9 @@
                     <td>{{ role.name }}</td>
                     <td>{{ role.description }}</td>
                     <td>
+                      <button class="btn btn-info btn-sm me-2" (click)="gotToPrivileges(role.id)">
+                        Privileges
+                      </button>
                       <button class="btn btn-info btn-sm me-2" (click)="openModal(roleModal, 'edit', role)">
                         Modifier
                       </button>
