@@ -41,4 +41,26 @@ export class PrivilegeService {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url);
   }
+
+
+
+  getPrivileges(): any[] {
+    const privileges = localStorage.getItem('privileges');
+    return privileges ? JSON.parse(privileges) : [];
+  }
+
+  // Check if the user has a specific privilege
+  hasPrivilege(privilegeNames: string | string[]): boolean {
+    const privileges = this.getPrivileges();
+    const requiredPrivileges = Array.isArray(privilegeNames) ? privilegeNames : [privilegeNames];
+
+    return requiredPrivileges.some((privilegeName) =>
+      privileges.some((privilege) => privilege.name === privilegeName)
+    );
+  }
+
+  // Clear privileges (e.g., on logout)
+  clearPrivileges(): void {
+    localStorage.removeItem('privileges');
+  }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DemandeConge } from '../models/DemandeConge.model';
@@ -43,11 +43,40 @@ export class DemandeCongeService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  validerParSuperviseur(id: number, etat: string): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/validerSuperviseur/${id}`, { etat });
+  validerParSuperviseur(id: number, etat: string): Observable<any> {
+    // Ajouter l'état en tant que paramètre de requête
+    const params = new HttpParams().set('etat', etat);
+
+    // Envoyer la requête POST avec l'ID dans l'URL et l'état en paramètre
+    return this.http.post<any>(`${this.apiUrl}/validerSuperviseur/${id}`, {}, { params });
   }
 
-  validerParChefProjet(id: number, etat: string): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/validerChefProjet/${id}`, { etat });
+  validerParChefProjet(id: number, etat: string): Observable<any> {
+    // Ajouter l'état en tant que paramètre de requête
+    const params = new HttpParams().set('etat', etat);
+
+    // Envoyer la requête POST avec l'ID dans l'URL et l'état en paramètre
+    return this.http.post<any>(`${this.apiUrl}/validerChefProjet/${id}`, {}, { params });
+  }
+
+  validerParRH(id: number, etat: string): Observable<any> {
+    // Ajouter l'état en tant que paramètre de requête
+    const params = new HttpParams().set('etat', etat);
+
+    // Envoyer la requête POST avec l'ID dans l'URL et l'état en paramètre
+    return this.http.post<any>(`${this.apiUrl}/validerRH/${id}`, {}, { params });
+  }
+
+  getDemandesForSupervisor(supervisorId: number): Observable<DemandeConge[]> {
+    return this.http.get<DemandeConge[]>(`${this.apiUrl}/superviseur/${supervisorId}`);
+  }
+
+  // Récupérer toutes les demandes de congé pour un chef de projet
+  getDemandesForProjectLeader(projectLeaderId: number): Observable<DemandeConge[]> {
+    return this.http.get<DemandeConge[]>(`${this.apiUrl}/chef-projet/${projectLeaderId}`);
+  }
+
+  getDemandesByUser(userId: number): Observable<DemandeConge[]> {
+    return this.http.get<DemandeConge[]>(`${this.apiUrl}/user/${userId}`);
   }
 }

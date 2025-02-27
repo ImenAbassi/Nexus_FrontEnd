@@ -6,6 +6,7 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 interface LoginResponse {
   token: string;
   user: any;
+  privileges: any;
 }
 
 @Injectable({
@@ -28,6 +29,7 @@ export class AuthService {
         if (response.token && response.user) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
+          localStorage.setItem('privileges', JSON.stringify(response.privileges));
         }
       }),
       catchError(this.handleError)

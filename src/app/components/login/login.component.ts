@@ -18,6 +18,8 @@ export class LoginComponent {
       (response) => {
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('token', response.token);
+        localStorage.setItem('privileges',JSON.stringify(response.privileges));
+
         this.message = 'Authentification réussie';
         this.router.navigate(['/home']);
       },

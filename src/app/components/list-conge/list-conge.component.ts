@@ -23,13 +23,18 @@ export class ListCongeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadDemandes();
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      const userId = user.idUser; 
+    this.loadDemandesByUser(userId);
+    }
     this.loadTypesConge(); // Charger les types de congé
   }
 
   // Charger la liste des demandes de congé
-  loadDemandes(): void {
-    this.demandeCongeService.getAllConges().subscribe(
+  loadDemandesByUser(userId: number): void {
+    this.demandeCongeService.getDemandesByUser(userId).subscribe(
       (data) => {
         this.demandes = data;
       },
@@ -59,7 +64,7 @@ export class ListCongeComponent implements OnInit {
     this.demandeCongeService.creerDemande(this.nouvelleDemande).subscribe(
       (response) => {
         console.log('Demande créée avec succès', response);
-        this.loadDemandes(); // Recharger la liste après création
+        window.location.reload();
         this.nouvelleDemande = new DemandeConge(); // Réinitialiser le formulaire
       },
       (error) => {
@@ -69,40 +74,15 @@ export class ListCongeComponent implements OnInit {
     );
   }
 
-  // Valider par le superviseur
-  validerParSuperviseur(id: number, etat: string): void {
-    this.demandeCongeService.validerParSuperviseur(id, etat).subscribe(
-      (response) => {
-        console.log(response);
-        this.loadDemandes(); // Recharger les demandes après validation
-      },
-      (error) => {
-        console.error('Erreur lors de la validation par le superviseur', error);
-        alert('Une erreur est survenue lors de la validation par le superviseur.');
-      }
-    );
-  }
 
-  // Valider par le chef de projet
-  validerParChefProjet(id: number, etat: string): void {
-    this.demandeCongeService.validerParChefProjet(id, etat).subscribe(
-      (response) => {
-        console.log(response);
-        this.loadDemandes(); // Recharger les demandes après validation
-      },
-      (error) => {
-        console.error('Erreur lors de la validation par le chef de projet', error);
-        alert('Une erreur est survenue lors de la validation par le chef de projet.');
-      }
-    );
-  }
+
 
   // Supprimer une demande de congé
   deleteConge(id: number): void {
     this.demandeCongeService.deleteConge(id).subscribe(
       () => {
-        this.loadDemandes(); // Recharger les demandes après suppression
-      },
+        window.location.reload();
+            },
       (error) => {
         console.error('Erreur lors de la suppression de la demande de congé', error);
         alert('Une erreur est survenue lors de la suppression de la demande de congé.');
@@ -122,6 +102,11 @@ export class ListCongeComponent implements OnInit {
     this.modalService.open(content, { ariaLabelledBy: 'validerChefProjetModalLabel' });
   }
 
+  ouvrirValiderRHModal(content: any, id: number): void {
+    this.selectedDemandeId = id;
+    this.modalService.open(content, { ariaLabelledBy: 'validerRHModalLabel' });
+  }
+
   // Ouvrir la modale de suppression
   ouvrirSupprimerModal(content: any, id: number): void {
     this.selectedDemandeId = id;
@@ -131,15 +116,36 @@ export class ListCongeComponent implements OnInit {
   // Confirmer la validation par le superviseur
   confirmerValiderSuperviseur(): void {
     if (this.selectedDemandeId !== null) {
-      this.validerParSuperviseur(this.selectedDemandeId, 'ACCEPTEE');
+      this.modalService.dismissAll();
+    }
+  }
+  refuserValiderSuperviseur(): void {
+    if (this.selectedDemandeId !== null) {
+      this.modalService.dismissAll();
+    }
+  }
+  // Confirmer la validation par le chef de projet
+  confirmerValiderChefProjet(): void {
+    if (this.selectedDemandeId !== null) {
       this.modalService.dismissAll();
     }
   }
 
-  // Confirmer la validation par le chef de projet
-  confirmerValiderChefProjet(): void {
+  refuserValiderChefProjet(): void {
     if (this.selectedDemandeId !== null) {
-      this.validerParChefProjet(this.selectedDemandeId, 'ACCEPTEE');
+      this.modalService.dismissAll();
+    }
+  }
+
+
+  confirmerValiderRH(): void {
+    if (this.selectedDemandeId !== null) {
+      this.modalService.dismissAll();
+    }
+  }
+
+  refuserValiderRH(): void {
+    if (this.selectedDemandeId !== null) {
       this.modalService.dismissAll();
     }
   }

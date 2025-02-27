@@ -6,13 +6,16 @@ import { TaxiService } from 'src/app/services/taxi.service';
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-taxi',
-  templateUrl: './taxi.component.html',
-  styleUrls: ['./taxi.component.css'],
+  selector: 'app-validation-taxi',
+  templateUrl: './validation-taxi.component.html',
+  styleUrls: ['./validation-taxi.component.css']
 })
-export class TaxiComponent implements OnInit {
+export class ValidationTaxiComponent implements OnInit {
+  listTaxisFiltered: any[] = [];
+  selectedDate: Date = new Date(); // Initialiser avec la date actuelle
   listTaxis: Taxi[] = []; // Liste des demandes de taxi
   selectedTaxi: Taxi | null = null; // Taxi sélectionné pour la vue ou l'édition
+  selectedTaxiId: any;
   isEditing: boolean = false; // Indicateur pour savoir si on est en mode édition
   taxi: Taxi = { // Objet pour le formulaire d'ajout
     id: 0,
@@ -22,28 +25,36 @@ export class TaxiComponent implements OnInit {
     etatDemande: EtatDemande.EN_ATTENTE,
   };
 
-  constructor(private taxiService: TaxiService, private modalService: NgbModal) { }
+  constructor(private taxiService: TaxiService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
-    this.loadTaxisByUser();
-
+    this.obtenirTousLesTaxis();
+    this.filterByDate(); // Appliquer le filtre par défaut dès le chargement
   }
 
   // Récupérer toutes les demandes de taxi
-  loadTaxisByUser(): void {
-    // Récupérer l'utilisateur connecté depuis le localStorage
-    const userJson = localStorage.getItem('user');
-    if (userJson) {
-      const user = JSON.parse(userJson);
-      const userId = user.idUser; // ID de l'utilisateur connecté
+  obtenirTousLesTaxis(): void {
+    this.taxiService.obtenirTousLesTaxis().subscribe({
+      next: (data) => {
+        this.listTaxis = data;
+        this.filterByDate(); // Filtrer après avoir récupéré les données
+      },
+      error: (err) => console.error('Erreur lors de la récupération des taxis:', err),
+    });
+  }
 
-      // Récupérer les demandes de taxi pour cet utilisateur
-      this.taxiService.getTaxisByUser(userId).subscribe({
-        next: (data) => (this.listTaxis = data),
-        error: (err) => console.error('Erreur lors de la récupération des taxis:', err),
-      });
+  // Filtrer les demandes par date
+  filterByDate(): void {
+    if (!this.selectedDate) {
+      this.listTaxisFiltered = [...this.listTaxis];
     } else {
-      console.error('Aucun utilisateur connecté trouvé dans le localStorage.');
+      const selectedDateObj = new Date(this.selectedDate);
+      selectedDateObj.setHours(0, 0, 0, 0); // Réinitialiser l'heure pour une comparaison précise
+      this.listTaxisFiltered = this.listTaxis.filter((taxi) => {
+        const taxiDate = new Date(taxi.dateCreation);
+        taxiDate.setHours(0, 0, 0, 0); // Réinitialiser l'heure pour une comparaison précise
+        return taxiDate.getTime() === selectedDateObj.getTime();
+      });
     }
   }
 
@@ -60,10 +71,10 @@ export class TaxiComponent implements OnInit {
       heureDepart: this.taxi.heureDepart,
       etatDemande: EtatDemande.EN_ATTENTE,
     };
-
     this.taxiService.ajouterTaxi(user.idUser, taxiRequest).subscribe({
       next: () => {
-        this.loadTaxisByUser(); this.taxi = {
+        this.obtenirTousLesTaxis(); // Rafraîchir la liste
+        this.taxi = {
           id: 0,
           user: null,
           localisationArrivee: '',
@@ -112,7 +123,8 @@ export class TaxiComponent implements OnInit {
     if (this.selectedTaxi) {
       this.taxiService.mettreAJourEtatTaxi(this.selectedTaxi.id, this.selectedTaxi.etatDemande).subscribe({
         next: () => {
-          this.loadTaxisByUser(); this.selectedTaxi = null; // Réinitialiser la sélection
+          this.obtenirTousLesTaxis(); // Rafraîchir la liste
+          this.selectedTaxi = null; // Réinitialiser la sélection
           this.isEditing = false; // Quitter le mode édition
         },
         error: (err) => console.error('Erreur lors de la mise à jour de la demande de taxi:', err),
@@ -125,7 +137,8 @@ export class TaxiComponent implements OnInit {
     if (this.selectedTaxi) {
       this.taxiService.supprimerTaxi(this.selectedTaxi.id).subscribe({
         next: () => {
-          this.loadTaxisByUser(); this.selectedTaxi = null; // Réinitialiser la sélection
+          this.obtenirTousLesTaxis(); // Rafraîchir la liste
+          this.selectedTaxi = null; // Réinitialiser la sélection
         },
         error: (err) => console.error('Erreur lors de la suppression de la demande de taxi:', err),
       });
@@ -134,28 +147,49 @@ export class TaxiComponent implements OnInit {
 
   // Exporter les données en Excel
   exportToExcel(): void {
-    const aujourdHui = new Date();
-    aujourdHui.setHours(0, 0, 0, 0);
-
-    const taxisAujourdHui = this.listTaxis.filter((taxi) => {
-      const dateCreation = new Date(taxi.dateCreation);
-      dateCreation.setHours(0, 0, 0, 0);
-      return dateCreation.getTime() === aujourdHui.getTime();
-    });
-
-    const data = taxisAujourdHui.map((taxi) => ({
-      ID: taxi.id,
-      Utilisateur: taxi.user.nom + ' ' + taxi.user.prenom,
-      CIN: taxi.user.cin,
-      'Localisation Arrivée': taxi.localisationArrivee,
-      'Heure Départ': taxi.heureDepart,
-      'État Demande': taxi.etatDemande,
-      'Date Création': taxi.dateCreation,
+    const data = this.listTaxisFiltered.map((taxi) => ({
+      "Utilisateur": `${taxi.user?.nom} ${taxi.user?.prenom}`,
+      'Localisation': taxi?.localisationArrivee,
+      'Heure Départ': taxi?.heureDepart,
+      'État Demande': taxi?.etatDemande,
+      'Date Création': taxi?.dateCreation,
     }));
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Taxis Aujourd\'hui');
-    XLSX.writeFile(wb, 'Taxis_Aujourdhui.xlsx');
+    XLSX.writeFile(wb, `Taxis_${this.selectedDate.toISOString().split('T')[0]}.xlsx`);
+  }
+
+  // Ouvrir la modal de validation RH
+  ouvrirValiderRHModal(modal: any, taxiId: number): void {
+    this.selectedTaxiId = taxiId; // Stocker l'ID de la demande sélectionnée
+    this.modalService.open(modal, { centered: true }); // Ouvrir la modale
+  }
+
+  // Valider la demande par les RH
+  confirmerValiderRH(): void {
+    if (this.selectedTaxiId !== null) {
+      this.taxiService.validateDemande(this.selectedTaxiId, EtatDemande.APPROUVEE).subscribe({
+        next: () => {
+          window.location.reload();
+          this.modalService.dismissAll(); // Fermer la modale
+        },
+        error: (err) => console.error('Erreur lors de la validation par les RH:', err),
+      });
+    }
+  }
+
+  // Refuser la demande par les RH
+  refuserValiderRH(): void {
+    if (this.selectedTaxiId !== null) {
+      this.taxiService.validateDemande(this.selectedTaxiId, EtatDemande.REJETEE).subscribe({
+        next: () => {
+          window.location.reload();
+          this.modalService.dismissAll(); // Fermer la modale
+        },
+        error: (err) => console.error('Erreur lors du refus par les RH:', err),
+      });
+    }
   }
 }

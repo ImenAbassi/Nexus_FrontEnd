@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AutorisationSortie } from 'src/app/models/AutorisationSortie.model';
 import { AutorisationSortieService } from 'src/app/services/autorisation-sortie.service';
 
 @Component({
-  selector: 'app-list-sortie',
-  templateUrl: './list-sortie.component.html',
-  styleUrls: ['./list-sortie.component.css']
+  selector: 'app-validation-autorisation',
+  templateUrl: './validation-autorisation.component.html',
+  styleUrls: ['./validation-autorisation.component.css']
 })
-export class ListSortieComponent implements OnInit {
+export class ValidationAutorisationComponent {
   autorisations: AutorisationSortie[] = [];
   nouvelleAutorisation:AutorisationSortie = new AutorisationSortie(); // Objet pour stocker les données du formulaire
   selectedAutorisationId: number | null = null; // ID de l'autorisation sélectionnée
@@ -19,12 +19,7 @@ export class ListSortieComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const userJson = localStorage.getItem('user');
-    if (userJson) {
-      const user = JSON.parse(userJson);
-      const userId = user.idUser; 
-    this.loadAutorisationsByUser(userId);
-    }
+    this.loadAutorisations();
   }
 
   loadAutorisationsByUser(userId: number): void {
@@ -57,12 +52,7 @@ export class ListSortieComponent implements OnInit {
     this.autorisationSortieService.creerDemande(this.nouvelleAutorisation).subscribe(
       (response) => {
         console.log('Autorisation créée avec succès', response);
-        const userJson = localStorage.getItem('user');
-        if (userJson) {
-          const user = JSON.parse(userJson);
-          const userId = user.idUser; 
-        this.loadAutorisationsByUser(userId);
-        }
+        this.loadAutorisations(); // Recharger la liste après création
         this.nouvelleAutorisation = new AutorisationSortie(); // Réinitialiser le formulaire
       },
       (error) => {
@@ -117,12 +107,7 @@ export class ListSortieComponent implements OnInit {
   deleteAutorisation(id: number): void {
     this.autorisationSortieService.deleteAutorisation(id).subscribe(
       () => {
-        const userJson = localStorage.getItem('user');
-    if (userJson) {
-      const user = JSON.parse(userJson);
-      const userId = user.idUser; 
-    this.loadAutorisationsByUser(userId);
-    }
+        this.loadAutorisations(); // Recharger les autorisations après suppression
       },
       (error) => {
         console.error('Erreur lors de la suppression de l\'autorisation de sortie', error);

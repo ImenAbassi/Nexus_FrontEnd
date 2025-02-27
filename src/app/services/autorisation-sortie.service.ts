@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ValidationHistorique } from '../models/user.model';
 import { AutorisationSortie } from '../models/AutorisationSortie.model';
@@ -34,12 +34,12 @@ export class AutorisationSortieService {
   }
 
   // Valider une autorisation de sortie par le superviseur
-  validerParSuperviseur(id: number): Observable<string> {
+  validerParSuperviseurs(id: number): Observable<string> {
     return this.http.post<string>(`${this.apiUrl}/validerSuperviseur/${id}`, { });
   }
 
   // Valider une autorisation de sortie par le chef de projet
-  validerParChefProjet(id: number): Observable<string> {
+  validerParChefProjets(id: number): Observable<string> {
     return this.http.post<string>(`${this.apiUrl}/validerChefProjet/${id}`, { });
   }
 
@@ -87,4 +87,42 @@ export class AutorisationSortieService {
   getAutorisationsRefusees(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/refusees`);
   }
+
+  getAutorisationsByUser(userId: number): Observable<AutorisationSortie[]> {
+    return this.http.get<AutorisationSortie[]>(`${this.apiUrl}/user/${userId}`);
+  }
+
+  // Récupérer toutes les autorisations de sortie pour un superviseur spécifique
+  getAutorisationsForSupervisor(supervisorId: number): Observable<AutorisationSortie[]> {
+    return this.http.get<AutorisationSortie[]>(`${this.apiUrl}/superviseur/${supervisorId}`);
+  }
+
+  // Récupérer toutes les autorisations de sortie pour un chef de projet spécifique
+  getAutorisationsForProjectLeader(projectLeaderId: number): Observable<AutorisationSortie[]> {
+    return this.http.get<AutorisationSortie[]>(`${this.apiUrl}/chef-projet/${projectLeaderId}`);
+  }
+
+    validerParSuperviseur(id: number, etat: string): Observable<any> {
+      // Ajouter l'état en tant que paramètre de requête
+      const params = new HttpParams().set('etat', etat);
+  
+      // Envoyer la requête POST avec l'ID dans l'URL et l'état en paramètre
+      return this.http.post<any>(`${this.apiUrl}/validerSuperviseur/${id}`, {}, { params });
+    }
+  
+    validerParChefProjet(id: number, etat: string): Observable<any> {
+      // Ajouter l'état en tant que paramètre de requête
+      const params = new HttpParams().set('etat', etat);
+  
+      // Envoyer la requête POST avec l'ID dans l'URL et l'état en paramètre
+      return this.http.post<any>(`${this.apiUrl}/validerChefProjet/${id}`, {}, { params });
+    }
+  
+    validerParRH(id: number, etat: string): Observable<any> {
+      // Ajouter l'état en tant que paramètre de requête
+      const params = new HttpParams().set('etat', etat);
+  
+      // Envoyer la requête POST avec l'ID dans l'URL et l'état en paramètre
+      return this.http.post<any>(`${this.apiUrl}/validerRH/${id}`, {}, { params });
+    }
 }

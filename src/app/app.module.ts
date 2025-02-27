@@ -54,6 +54,11 @@ import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.co
 import { KpiComponent } from './kpi/kpi.component';
 import { GestionPrivilegeComponent } from "./components/gestion-privilege/gestion-privilege.component";
 import { RolePrivilegeManagementComponent } from "./components/role-privilege-management/role-privilege-management.component";
+import { ValidationDemandeCongeComponent } from './components/validation-demande-conge/validation-demande-conge.component';
+import { ValidationAutorisationComponent } from './components/validation-autorisation/validation-autorisation.component';
+import { ValidationAttestationComponent } from './components/validation-attestation/validation-attestation.component';
+import { ValidationTaxiComponent } from './components/validation-taxi/validation-taxi.component';
+import { ValidationPointageComponent } from './components/validation-pointage/validation-pointage.component';
 
 
 @NgModule({
@@ -104,6 +109,11 @@ import { RolePrivilegeManagementComponent } from "./components/role-privilege-ma
     KpiComponent,
     GestionPrivilegeComponent,
     RolePrivilegeManagementComponent,
+    ValidationDemandeCongeComponent,
+    ValidationAutorisationComponent,
+    ValidationAttestationComponent,
+    ValidationTaxiComponent,
+    ValidationPointageComponent,
 
   ],
   imports: [

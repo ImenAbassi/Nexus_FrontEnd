@@ -2,11 +2,9 @@
   <div class="row">
     <div class="col-md-12 p-3">
       <!-- Bouton pour ouvrir le modal d'ajout -->
-      <button class="btn btn-primary" (click)="ouvrirAjouterTaxiModal(ajouterTaxiModal)">
+      <button class="btn btn-primary mr-3" (click)="ouvrirAjouterTaxiModal(ajouterTaxiModal)">
         Ajouter une demande de taxi
       </button>
-      <button class="btn btn-primary" (click)="exportToExcel()">
-Exporter      </button>
       <!-- Liste des demandes de taxi -->
       <div class="card mt-4">
         <div class="card-header pb-0 p-3">
@@ -65,14 +63,14 @@ Exporter      </button>
         <label for="heureDepart" class="form-label">Heure de départ</label>
         <input type="time" class="form-control" id="heureDepart" [(ngModel)]="taxi.heureDepart" name="heureDepart" required>
       </div>
-      <div class="mb-3">
+    <!--  <div class="mb-3">
         <label for="etatDemande" class="form-label">État de la demande</label>
         <select class="form-control" id="etatDemande" [(ngModel)]="taxi.etatDemande" name="etatDemande" required>
           <option value="EN_ATTENTE">En attente</option>
           <option value="APPROUVEE">Approuvée</option>
           <option value="REJETEE">Rejetée</option>
         </select>
-      </div>
+      </div>-->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
         <button type="submit" class="btn btn-primary">Enregistrer</button>

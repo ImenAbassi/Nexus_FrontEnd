@@ -68,7 +68,7 @@
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">TYPE</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 90px;">DATE SOUHAITÉE</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">DESCRIPTION</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">ACTION</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">STATUT</th>
                 </tr>
               </thead>
               <tbody>
@@ -90,9 +90,11 @@
                     <span class="text-xs font-weight-bold">{{ attestation.motif }}</span>
                   </td>
                   <td class="align-middle text-left text-sm">
-                    <a class="btn btn-link text-dark mb-0" href="javascript:;" (click)="validerAttestation(attestation?.id)">
-                      <i class="fas fa-check text-success" aria-hidden="true"></i>
-                    </a>
+                      <span class="badge badge-sm" [ngClass]="{
+                        'bg-gradient-success': attestation.etatDemande == 'APPROUVEE',
+                          'bg-gradient-danger': attestation.etatDemande == 'REJETEE',
+                          'bg-gradient-warning': attestation.etatDemande == 'EN_ATTENTE'
+                      }">{{ attestation.etatDemande }}</span>
                   </td>
                 </tr>
               </tbody>

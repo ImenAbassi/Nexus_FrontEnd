@@ -41,6 +41,10 @@ import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.co
 import { KpiComponent } from './kpi/kpi.component';
 import { GestionPrivilegeComponent } from './components/gestion-privilege/gestion-privilege.component';
 import { RolePrivilegeManagementComponent } from './components/role-privilege-management/role-privilege-management.component';
+import { ValidationDemandeCongeComponent } from './components/validation-demande-conge/validation-demande-conge.component';
+import { ValidationAutorisationComponent } from './components/validation-autorisation/validation-autorisation.component';
+import { ValidationAttestationComponent } from './components/validation-attestation/validation-attestation.component';
+import { ValidationTaxiComponent } from './components/validation-taxi/validation-taxi.component';
 
 
 
@@ -84,8 +88,13 @@ const routes: Routes = [
   { path: 'gestion-candidats', component: GestionCandidatsComponent, canActivate: [AuthGuard] },
   { path: 'pointage', component: GestionPointageComponent, canActivate: [AuthGuard] },
   { path: 'kpi', component: KpiComponent, canActivate: [AuthGuard] },
-  { path: 'RolePrivilege/:id', component: RolePrivilegeManagementComponent, canActivate: [AuthGuard] }
+  { path: 'RolePrivilege/:id', component: RolePrivilegeManagementComponent, canActivate: [AuthGuard] },
+  { path: 'ValidationConge', component: ValidationDemandeCongeComponent, canActivate: [AuthGuard] },
+  { path: 'ValidationAutorisation', component: ValidationAutorisationComponent, canActivate: [AuthGuard] },
+  { path: 'ValidationAttestation', component: ValidationAttestationComponent, canActivate: [AuthGuard] },
+  { path: 'ValidationTransports', component: ValidationTaxiComponent, canActivate: [AuthGuard] },
 
+  
 ];
 
 @NgModule({
