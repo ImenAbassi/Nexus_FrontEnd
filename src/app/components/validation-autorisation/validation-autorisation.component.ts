@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AutorisationSortie } from 'src/app/models/AutorisationSortie.model';
 import { AutorisationSortieService } from 'src/app/services/autorisation-sortie.service';
+import { PrivilegeService } from 'src/app/services/PrivilegeService.service';
 
 @Component({
   selector: 'app-validation-autorisation',
@@ -12,13 +13,22 @@ export class ValidationAutorisationComponent {
   autorisations: AutorisationSortie[] = [];
   nouvelleAutorisation:AutorisationSortie = new AutorisationSortie(); // Objet pour stocker les données du formulaire
   selectedAutorisationId: number | null = null; // ID de l'autorisation sélectionnée
+  Validation_Autorisation_RH: boolean = false;
+  Validation_Autorisation_ChefProjet: boolean = false;
+  Validation_Autorisation_Superviseur: boolean = false;
+
+
 
   constructor(
+    private privilegeService: PrivilegeService,
     private autorisationSortieService: AutorisationSortieService,
     private modalService: NgbModal // Injecter NgbModal
   ) {}
 
   ngOnInit(): void {
+    this.Validation_Autorisation_RH=this.privilegeService.hasPrivilege(['Validation_Autorisation_RH']);
+    this.Validation_Autorisation_ChefProjet=this.privilegeService.hasPrivilege(['Validation_Autorisation_ChefProjet']);
+    this.Validation_Autorisation_Superviseur=this.privilegeService.hasPrivilege(['Validation_Autorisation_Superviseur']);
     this.loadAutorisations();
   }
 

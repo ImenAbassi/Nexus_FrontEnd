@@ -30,6 +30,10 @@ export class ValidationDemandeCongeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.ValidationRH=this.privilegeService.hasPrivilege(['Validation_Conge_RH']);
+    this.ValidationChef=this.privilegeService.hasPrivilege(['Validation_Conge_ChefProjet']);
+    this.ValidationSuperviseur=this.privilegeService.hasPrivilege(['Validation_Conge_Superviseur']);
+    
     this.loadTypesConge(); // Charger les types de congé
   
     // Récupérer l'utilisateur connecté depuis le localStorage

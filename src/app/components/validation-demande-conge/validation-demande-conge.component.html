@@ -72,25 +72,32 @@
                 </td>
                 <td class="align-middle text-left text-sm">
                   <!-- Bouton Valider Superviseur -->
+                  <ng-container *ngIf="ValidationSuperviseur">
+
                   <a class="btn btn-link text-dark mb-0" href="javascript:;"
                      data-bs-toggle="tooltip" data-bs-placement="top" title="Valider par le superviseur"
                      (click)="ouvrirValiderSuperviseurModal(validerSuperviseurModal, demande.id)">
                     <i class="fas fa-check text-secondary"></i>
                   </a>
-                
+                </ng-container>
+                  <ng-container *ngIf="ValidationChef">
+
                   <!-- Bouton Valider Chef de Projet -->
                   <a class="btn btn-link text-dark mb-0" href="javascript:;"
                      data-bs-toggle="tooltip" data-bs-placement="top" title="Valider par le chef de projet"
                      (click)="ouvrirValiderChefProjetModal(validerChefProjetModal, demande.id)">
                     <i class="fas fa-check text-secondary"></i>
                   </a>
-                
+                </ng-container>
+                  <ng-container *ngIf="ValidationRH">
+
                   <!-- Bouton Valider RH -->
                   <a class="btn btn-link text-dark mb-0" href="javascript:;"
                      data-bs-toggle="tooltip" data-bs-placement="top" title="Valider par les RH"
                      (click)="ouvrirValiderRHModal(validerRHModal, demande.id)">
                     <i class="fas fa-check text-secondary"></i>
                   </a>
+                </ng-container>
                 </td>
               </tr>
             </tbody>

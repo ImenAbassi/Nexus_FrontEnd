@@ -1,161 +1,179 @@
 <div class="container-fluid px-4">
-    <div class="row">
-      <div class="col-md-12 p-3">
-        <!-- Liste des autorisations de sortie -->
-        <div class="card">
-          <div class="card-header pb-0 p-3">
-            <h6 class="mb-0 px-4">Liste des autorisations de sortie</h6>
-          </div>
-          <div class="card-body px-3 pt-1 mt-2">
-            <table class="table align-items-center mb-0" style="text-align: center;">
-              <thead>
-                <tr>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">NOM & prénom</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">DATE DEBUT</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 90px;">DATE FIN</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">HEURE DEBUT</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">HEURE FIN</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">MOTIF</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;"> SUPERVISEUR</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;"> CHEF PROJET</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;"> RH</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
-                    Acceptation Demande </th>              
-                  </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let autorisation of autorisations">
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">{{ autorisation.utilisateur?.nom }} {{ autorisation.utilisateur?.prenom }}</h6>
-                      </div>
+  <div class="row">
+    <div class="col-md-12 p-3">
+      <!-- Liste des autorisations de sortie -->
+      <div class="card">
+        <div class="card-header pb-0 p-3">
+          <h6 class="mb-0 px-4">Liste des autorisations de sortie</h6>
+        </div>
+        <div class="card-body px-3 pt-1 mt-2">
+          <table class="table align-items-center mb-0" style="text-align: center;">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
+                  NOM & prénom</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  style="width: 100px;">DATE DEBUT</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 90px;">
+                  DATE FIN</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
+                  HEURE DEBUT</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
+                  HEURE FIN</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
+                  MOTIF</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
+                  SUPERVISEUR</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
+                  CHEF PROJET</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
+                  RH</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 100px;">
+                  Acceptation Demande </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let autorisation of autorisations">
+                <td>
+                  <div class="d-flex px-2 py-1">
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">{{ autorisation.utilisateur?.nom }} {{ autorisation.utilisateur?.prenom
+                        }}</h6>
                     </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold">{{ autorisation.dateDebut | date: 'dd-MM-yyyy' }}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold">{{ autorisation.dateFin | date: 'dd-MM-yyyy' }}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold">{{ autorisation.heureDebut }}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold">{{ autorisation.heureFin }}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold">{{ autorisation.raison }}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm" [ngClass]="{
+                  </div>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ autorisation.dateDebut | date: 'dd-MM-yyyy' }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ autorisation.dateFin | date: 'dd-MM-yyyy' }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ autorisation.heureDebut }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ autorisation.heureFin }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ autorisation.raison }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="badge badge-sm" [ngClass]="{
                       'bg-gradient-success': autorisation?.etatSuperviseur == 'APPROUVEE',
                       'bg-gradient-danger': autorisation?.etatSuperviseur == 'REJETEE',
                       'bg-gradient-warning': autorisation?.etatSuperviseur == 'EN_ATTENTE'
                     }">{{ autorisation.etatSuperviseur }}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm" [ngClass]="{
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="badge badge-sm" [ngClass]="{
                       'bg-gradient-success': autorisation?.etatChefProjet == 'APPROUVEE',
                       'bg-gradient-danger': autorisation?.etatChefProjet == 'REJETEE',
                       'bg-gradient-warning': autorisation?.etatChefProjet == 'EN_ATTENTE'
                     }">{{ autorisation.etatChefProjet }}</span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm" [ngClass]="{
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="badge badge-sm" [ngClass]="{
                       'bg-gradient-success': autorisation?.etatRH == 'APPROUVEE',
                       'bg-gradient-danger': autorisation?.etatRH == 'REJETEE',
                       'bg-gradient-warning': autorisation?.etatRH == 'EN_ATTENTE'
                     }">{{ autorisation.etatRH }}</span>
-                  </td>
-                  <td class="align-middle text-left text-sm">
-                    <!-- Bouton Valider Superviseur -->
-                    <a class="btn btn-link text-dark mb-0" href="javascript:;"
-                       data-bs-toggle="tooltip" data-bs-placement="top" title="Valider par le superviseur"
-                       (click)="ouvrirValiderSuperviseurModal(validerSuperviseurModal, autorisation.id)">
+                </td>
+                <td class="align-middle text-left text-sm">
+                  <!-- Bouton Valider Superviseur -->
+                  <ng-container *ngIf="Validation_Autorisation_Superviseur">
+                    <a class="btn btn-link text-dark mb-0" href="javascript:;" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Valider par le superviseur"
+                      (click)="ouvrirValiderSuperviseurModal(validerSuperviseurModal, autorisation.id)">
                       <i class="fas fa-check text-secondary"></i>
                     </a>
-                  
+                  </ng-container>
+                  <ng-container *ngIf="Validation_Autorisation_ChefProjet">
+
                     <!-- Bouton Valider Chef de Projet -->
-                    <a class="btn btn-link text-dark mb-0" href="javascript:;"
-                       data-bs-toggle="tooltip" data-bs-placement="top" title="Valider par le chef de projet"
-                       (click)="ouvrirValiderChefProjetModal(validerChefProjetModal, autorisation.id)">
+                    <a class="btn btn-link text-dark mb-0" href="javascript:;" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Valider par le chef de projet"
+                      (click)="ouvrirValiderChefProjetModal(validerChefProjetModal, autorisation.id)">
                       <i class="fas fa-check text-secondary"></i>
                     </a>
-                  
+                  </ng-container>
+
+                  <ng-container *ngIf="Validation_Autorisation_RH">
+
                     <!-- Bouton Valider RH -->
-                    <a class="btn btn-link text-dark mb-0" href="javascript:;"
-                       data-bs-toggle="tooltip" data-bs-placement="top" title="Valider par les RH"
-                       (click)="ouvrirValiderRHModal(validerRHModal, autorisation.id)">
+                    <a class="btn btn-link text-dark mb-0" href="javascript:;" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Valider par les RH"
+                      (click)="ouvrirValiderRHModal(validerRHModal, autorisation.id)">
                       <i class="fas fa-check text-secondary"></i>
                     </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div *ngIf="autorisations.length === 0" class="text-center py-3">
-              <p>Aucune autorisation de sortie trouvée.</p>
-            </div>
+                  </ng-container>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="autorisations.length === 0" class="text-center py-3">
+            <p>Aucune autorisation de sortie trouvée.</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
-  <ng-template #validerSuperviseurModal let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title" id="validerSuperviseurModalLabel">Valider la demande</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
-    </div>
-    <div class="modal-body">
-      Êtes-vous sûr de vouloir valider cette demande ?
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger" (click)="refuserValiderSuperviseur()">Refuser</button>
-      <button type="button" class="btn btn-primary" (click)="confirmerValiderSuperviseur()">Valider</button>
-    </div>
-  </ng-template>
-  
-  <!-- Modale pour valider par le chef de projet -->
-  <ng-template #validerChefProjetModal let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title" id="validerChefProjetModalLabel">Valider la demande</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
-    </div>
-    <div class="modal-body">
-      Êtes-vous sûr de vouloir valider cette demande ?
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger" (click)="refuserValiderChefProjet()">Refuser</button>
-      <button type="button" class="btn btn-primary" (click)="confirmerValiderChefProjet()">Valider</button>
-    </div>
-  </ng-template>
-  
-  <ng-template #validerRHModal let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title" id="validerChefProjetModalLabel">Valider la demande</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
-    </div>
-    <div class="modal-body">
-      Êtes-vous sûr de vouloir valider cette demande ?
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger" (click)="refuserValiderRH()">Refuser</button>
-      <button type="button" class="btn btn-primary" (click)="confirmerValiderRH()">Valider</button>
-    </div>
-  </ng-template>
-  
-  <!-- Modale pour supprimer la demande -->
-  <ng-template #supprimerModal let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title" id="supprimerModalLabel">Supprimer la demande</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
-    </div>
-    <div class="modal-body">
-      Êtes-vous sûr de vouloir supprimer cette demande ?
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
-      <button type="button" class="btn btn-danger" (click)="confirmerSupprimer()">Supprimer</button>
-    </div>
-  </ng-template>
+</div>
+
+<ng-template #validerSuperviseurModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="validerSuperviseurModalLabel">Valider la demande</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir valider cette demande ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="refuserValiderSuperviseur()">Refuser</button>
+    <button type="button" class="btn btn-primary" (click)="confirmerValiderSuperviseur()">Valider</button>
+  </div>
+</ng-template>
+
+<!-- Modale pour valider par le chef de projet -->
+<ng-template #validerChefProjetModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="validerChefProjetModalLabel">Valider la demande</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir valider cette demande ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="refuserValiderChefProjet()">Refuser</button>
+    <button type="button" class="btn btn-primary" (click)="confirmerValiderChefProjet()">Valider</button>
+  </div>
+</ng-template>
+
+<ng-template #validerRHModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="validerChefProjetModalLabel">Valider la demande</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir valider cette demande ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="refuserValiderRH()">Refuser</button>
+    <button type="button" class="btn btn-primary" (click)="confirmerValiderRH()">Valider</button>
+  </div>
+</ng-template>
+
+<!-- Modale pour supprimer la demande -->
+<ng-template #supprimerModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="supprimerModalLabel">Supprimer la demande</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir supprimer cette demande ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+    <button type="button" class="btn btn-danger" (click)="confirmerSupprimer()">Supprimer</button>
+  </div>
+</ng-template>
