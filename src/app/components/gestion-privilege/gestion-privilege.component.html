@@ -1,83 +1,98 @@
 <div class="container-fluid py-4">
-    <div class="row">
-      <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
-        <div class="card" style="height: 100vh;">
-          <div class="card-header pb-0">
-            <div class="row">
-              <div class="col-lg-6 col-7">
-                <h6>Liste des Privilèges</h6>
-                <p class="text-sm mb-0">Gestion des privilèges.</p>
-              </div>
-              <div class="col-lg-6 col-5 my-auto text-end">
-                <button class="btn btn-primary btn-sm mb-0 me-3" (click)="openModal(privilegeModal, 'add')">
-                  Ajouter Privilège
-                </button>
-              </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+      <div class="card" style="height: 100vh;">
+        <div class="card-header pb-0">
+          <div class="row">
+            <div class="col-lg-6 col-7">
+              <h6>Liste des Privilèges</h6>
+              <p class="text-sm mb-0">Gestion des privilèges.</p>
             </div>
-          </div>
-  
-          <!-- Table des privilèges -->
-          <div class="card-body px-0 pb-2">
-            <div class="table-responsive">
-              <table class="table align-items-center mb-0" style="text-align: center;">
-                <thead>
-                  <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let privilege of privilegeList">
-                    <td>{{ privilege.name }}</td>
-                    <td>
-                      <!-- Bouton Modifier -->
-                      <button class="btn btn-info btn-sm me-2" (click)="openModal(privilegeModal, 'edit', privilege)">
-                        Modifier
-                      </button>
-                      <!-- Bouton Supprimer avec confirmation -->
-                      <button class="btn btn-danger btn-sm" (click)="deletePrivilege(privilege.id)">
-                        Supprimer
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="col-lg-6 col-5 my-auto text-end">
+              <button class="btn btn-primary btn-sm mb-0 me-3" (click)="openModal(privilegeModal, 'add')">
+                Ajouter Privilège
+              </button>
             </div>
           </div>
         </div>
+
+        <!-- Table des privilèges -->
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive">
+            <table class="table align-items-center mb-0" style="text-align: center;">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let privilege of paginatedPrivileges">
+                  <td>{{ privilege.name }}</td>
+                  <td>
+                    <!-- Bouton Modifier -->
+                    <button class="btn btn-info btn-sm me-2" (click)="openModal(privilegeModal, 'edit', privilege)">
+                      Modifier
+                    </button>
+                    <!-- Bouton Supprimer avec confirmation -->
+                    <button class="btn btn-danger btn-sm" (click)="deletePrivilege(privilege.id)">
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <nav aria-label="Page navigation example" class="mt-3">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" (click)="changePage(currentPage - 1)">Préc</a>
+            </li>
+            <li *ngFor="let page of totalPagesArray" class="page-item" [class.active]="page === currentPage">
+              <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" (click)="changePage(currentPage + 1)">Suiv</a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
-  
-    <!-- Modal -->
-    <ng-template #privilegeModal let-modal>
-      <div class="modal-header">
-        <h5 class="modal-title">{{ modalTitle }}</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-      </div>
-      <div class="modal-body">
-        <form (ngSubmit)="savePrivilege(modal)" #form="ngForm">
-          <div class="mb-3">
-            <label for="name" class="form-label">Nom</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              [(ngModel)]="selectedPrivilege.name"
-              name="name"
-              required
-            />
-            <!-- Message d'erreur si le champ est vide -->
-            <div *ngIf="form.submitted && !selectedPrivilege.name" class="text-danger">
-              Le nom est requis.
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
-            <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
-              {{ modalButtonLabel }}
-            </button>
-          </div>
-        </form>
-      </div>
-    </ng-template>
   </div>
+
+  <!-- Modal -->
+  <ng-template #privilegeModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">{{ modalTitle }}</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="savePrivilege(modal)" #form="ngForm">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nom</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            [(ngModel)]="selectedPrivilege.name"
+            name="name"
+            required
+          />
+          <!-- Message d'erreur si le champ est vide -->
+          <div *ngIf="form.submitted && !selectedPrivilege.name" class="text-danger">
+            Le nom est requis.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
+            {{ modalButtonLabel }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>

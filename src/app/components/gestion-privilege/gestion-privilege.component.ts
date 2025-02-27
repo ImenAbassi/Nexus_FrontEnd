@@ -10,10 +10,14 @@ import { PrivilegeService } from 'src/app/services/PrivilegeService.service';
 })
 export class GestionPrivilegeComponent {
   privilegeList: Privilege[] = [];
-  selectedPrivilege: Privilege = { id: 0, name: '' }; // Utilisez 'name' selon votre modèle
+  selectedPrivilege: Privilege = { id: 0, name: '' };
   modalTitle = '';
   modalButtonLabel = '';
 
+  // Pagination variables
+  itemsPerPage = 7;
+  currentPage = 1;
+  totalPages = 1;
   constructor(private service: PrivilegeService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
@@ -25,12 +29,33 @@ export class GestionPrivilegeComponent {
     this.service.getAllPrivileges().subscribe(
       (data) => {
         this.privilegeList = data;
+        this.totalPages =data.length;
+        this.currentPage = 1; // Reset to first page when data is refreshed
       },
       (error) => {
         console.error('Erreur lors de la récupération des privilèges:', error);
         alert('Une erreur est survenue lors de la récupération des privilèges.');
       }
     );
+  }
+
+  // Calculate paginated privileges
+  get paginatedPrivileges(): Privilege[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.privilegeList.slice(start, end);
+  }
+
+  // Generate array of total pages
+  get totalPagesArray(): number[] {
+    return Array.from({ length: Math.ceil(this.privilegeList.length / this.itemsPerPage) }, (_, i) => i + 1);
+  }
+
+  // Change page
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPagesArray.length) {
+      this.currentPage = page;
+    }
   }
 
   // Ouvre la modale en mode "ajout" ou "modification"
@@ -47,7 +72,6 @@ export class GestionPrivilegeComponent {
       console.error('Mode non valide ou privilège manquant.');
       return;
     }
-
     this.modalService.open(content, { centered: true });
   }
 
