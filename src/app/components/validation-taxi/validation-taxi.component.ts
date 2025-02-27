@@ -158,7 +158,7 @@ export class ValidationTaxiComponent implements OnInit {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Taxis Aujourd\'hui');
-    XLSX.writeFile(wb, `Taxis_${this.selectedDate.toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(wb, `Taxis_${this.selectedDate}.xlsx`);
   }
 
   // Ouvrir la modal de validation RH
