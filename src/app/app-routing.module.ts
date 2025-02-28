@@ -37,7 +37,7 @@ import { RoleComponent } from './components/role/role.component';
 import { TaxiComponent } from './components/taxi/taxi.component';
 import { AuthGuard } from './services/auth.guard';
 import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
-import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
+import { GestionPointageComponent } from './components/gestion-pointage/gestion-pointage.component';
 import { KpiComponent } from './kpi/kpi.component';
 import { GestionPrivilegeComponent } from './components/gestion-privilege/gestion-privilege.component';
 import { RolePrivilegeManagementComponent } from './components/role-privilege-management/role-privilege-management.component';
