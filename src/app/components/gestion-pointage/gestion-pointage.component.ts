@@ -1,54 +1,63 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Pointage } from '../../models/Pointage.model';
-import { PointageOperation } from '../../models/PointageOperation.modal';
 import { PointageService } from '../../services/pointage.service';
 import * as XLSX from 'xlsx';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-gestion-pointage',
   templateUrl: './gestion-pointage.component.html',
   styleUrls: ['./gestion-pointage.component.css']
 })
-export class GestionPointageComponent  implements OnInit{
-  compagne: string = ''; // Variable for campagne
-  type: string = 'ENTREE'; // Variable for type with default value
-  heure: string | null = null; // Variable for heure
-  operationId: number | null = null; // Variable for operation ID
-  pointages: Pointage[] = [];
-  selectedPointage?: Pointage;
-  newPointage: Pointage = { id: 0, datePointage: null, operations: [], user: null, etatDemande: '', heuresTravaillees: 0 };
-  selectedOperation: PointageOperation = { id: 0, type: '', heure: null, compagne: ''};
+export class GestionPointageComponent implements OnInit {
+  pointages: any[] = [];
+  selectedPointage?: any;
+  selectedOperation?: any;
 
-  // Variables for filtering by date
+  // Formulaire réactif pour gérer les opérations
+  operationForm: FormGroup;
+
+  // Variables pour filtrer par date et afficher des messages
   selectedDate: string = '';
-  loading: boolean = false;
   message: string = '';
 
   @ViewChild('detailsModal') detailsModalTemplate!: TemplateRef<any>;
   @ViewChild('operationModal') operationModalTemplate!: TemplateRef<any>;
 
-  constructor(private pointageService: PointageService, private modalService: NgbModal) {}
+  constructor(
+    private pointageService: PointageService,
+    private modalService: NgbModal,
+    private fb: FormBuilder
+  ) {
+    this.operationForm = this.fb.group({
+      compagne: ['', Validators.required],
+      type: ['ENTREE', Validators.required],
+      heure: [null, Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.loadPointages();
   }
 
+  /**
+   * Charger tous les pointages depuis le service
+   */
   loadPointages(): void {
-    this.loading = true;
     this.pointageService.getAllPointages().subscribe(
       (data) => {
-        this.pointages = data;
-        this.loading = false;
+        this.pointages = data || [];
       },
       (error) => {
         this.message = 'Une erreur s\'est produite lors du chargement des pointages.';
-        this.loading = false;
+        console.error(error);
       }
     );
   }
 
+  /**
+   * Créer des pointages pour un superviseur donné
+   */
   createPointagesBySupervisor(): void {
     if (!this.selectedDate) {
       this.message = 'Veuillez sélectionner une date.';
@@ -70,55 +79,51 @@ export class GestionPointageComponent  implements OnInit{
     }
   }
 
-  selectPointage(pointage: Pointage): void {
+  /**
+   * Sélectionner un pointage spécifique
+   * @param pointage - Le pointage à sélectionner
+   */
+  selectPointage(pointage: any): void {
     this.selectedPointage = pointage;
   }
 
-  addOperationToSelectedPointage(): void {
+  /**
+   * Ouvrir le modal pour ajouter ou modifier une opération
+   * @param operation - L'opération à éditer (facultatif)
+   */
+  openOperationModal(operation?: any): void {
+    if (operation) {
+      this.operationForm.patchValue({
+        id: operation.id,
+        compagne: operation.compagne || '',
+        type: operation.type || 'ENTREE',
+        heure: operation.heure ? new Date(operation.heure).toISOString().slice(0, 16) : null
+      });
+    } else {
+      this.operationForm.reset({ type: 'ENTREE' });
+    }
+
+    this.modalService.open(this.operationModalTemplate, { centered: true });
+  }
+
+  /**
+   * Enregistrer ou mettre à jour une opération
+   */
+  saveOperation(): void {
+    if (this.operationForm.invalid) {
+      this.message = 'Veuillez remplir tous les champs obligatoires.';
+      return;
+    }
+
+    const operationData = this.operationForm.value;
+
     if (!this.selectedPointage?.id) {
       this.message = 'Aucun pointage sélectionné.';
       return;
     }
-    this.pointageService.addOperationToPointage(this.selectedPointage.id, this.selectedOperation).subscribe(
-      () => {
-        this.loadPointages();
-        this.message = 'Nouvelle opération ajoutée avec succès.';
-      },
-      (error) => {
-        this.message = 'Une erreur s\'est produite lors de l\'ajout de l\'opération.';
-      }
-    );
-  }
 
-
-  openOperationModal(operation?: PointageOperation): void {
-    if (operation) {
-      this.operationId = operation.id; // Set operation ID if editing
-      this.compagne = operation.compagne || '';
-      this.type = operation.type || 'ENTREE';
-      this.heure = operation.heure ? new Date(operation.heure).toISOString().slice(0, 16) : null; // Format datetime-local
-    } else {
-      this.operationId = null; // Reset ID for new operation
-      this.compagne = '';
-      this.type = 'ENTREE';
-      this.heure = null;
-    }
-        this.modalService.open(this.operationModalTemplate, { centered: true });
-  }
-
-  saveOperation(): void {
-    if (!this.selectedPointage?.id ) {
-      this.message = 'Aucun pointage ou opération sélectionnée.';
-      return;
-    }
-    const operationData = {
-      id: this.operationId,
-      compagne: this.compagne,
-      type: this.type,
-      heure: this.heure ? new Date(this.heure) : null // Convert back to Date
-    };
     if (operationData.id) {
-      // Update operation
+      // Mettre à jour une opération existante
       this.pointageService.updateOperation(operationData.id, operationData).subscribe(
         () => {
           this.loadPointages();
@@ -126,10 +131,11 @@ export class GestionPointageComponent  implements OnInit{
         },
         (error) => {
           this.message = 'Une erreur s\'est produite lors de la mise à jour de l\'opération.';
+          console.error(error);
         }
       );
     } else {
-      // Add new operation
+      // Ajouter une nouvelle opération
       this.pointageService.addOperationToPointage(this.selectedPointage.id, operationData).subscribe(
         () => {
           this.loadPointages();
@@ -137,35 +143,45 @@ export class GestionPointageComponent  implements OnInit{
         },
         (error) => {
           this.message = 'Une erreur s\'est produite lors de l\'ajout de l\'opération.';
+          console.error(error);
         }
       );
     }
+
     this.modalService.dismissAll();
   }
 
-  deleteOperation(): void {
-    if (!this.selectedOperation?.id) {
+  /**
+   * Supprimer une opération
+   */
+  deleteOperation(operationId: number): void {
+    if (!operationId) {
       this.message = 'Aucune opération sélectionnée.';
       return;
     }
-    this.pointageService.deleteOperation(this.selectedOperation.id).subscribe(
+
+    this.pointageService.deleteOperation(operationId).subscribe(
       () => {
         this.loadPointages();
         this.message = 'Opération supprimée avec succès.';
       },
       (error) => {
         this.message = 'Une erreur s\'est produite lors de la suppression de l\'opération.';
+        console.error(error);
       }
     );
-    this.modalService.dismissAll();
   }
 
+  /**
+   * Valider un pointage
+   */
   validatePointage(): void {
     if (!this.selectedPointage?.id) {
       this.message = 'Aucun pointage sélectionné.';
       return;
     }
-    this.selectedPointage.etatDemande = 'Validé'; // Set validation status
+
+    this.selectedPointage.etatDemande = 'APPROUVEE';
     this.pointageService.updatePointage(this.selectedPointage.id, this.selectedPointage).subscribe(
       () => {
         this.loadPointages();
@@ -173,30 +189,48 @@ export class GestionPointageComponent  implements OnInit{
       },
       (error) => {
         this.message = 'Une erreur s\'est produite lors de la validation du pointage.';
+        console.error(error);
       }
     );
   }
 
+  /**
+   * Supprimer un pointage
+   * @param pointageId - ID du pointage à supprimer
+   */
   deletePointage(pointageId: number): void {
     this.pointageService.deletePointage(pointageId).subscribe(
       () => {
+        this.loadPointages();
         this.message = 'Pointage supprimé avec succès.';
-        // Refresh the list of pointages or perform other actions
       },
       (error) => {
         this.message = 'Une erreur s\'est produite lors de la suppression du pointage.';
+        console.error(error);
       }
     );
   }
 
-  getPointagesByDate(date: string): Pointage[] {
+  /**
+   * Filtrer les pointages par date
+   * @param date - La date à filtrer
+   * @returns Les pointages correspondants à la date donnée
+   */
+  getPointagesByDate(date: string): any[] {
     return this.pointages.filter((p) => p.datePointage === date);
   }
 
+  /**
+   * Gérer le changement de date dans le filtre
+   * @param event - Événement de changement de date
+   */
   onDateChange(event: any): void {
     this.selectedDate = event.target.value;
   }
 
+  /**
+   * Exporter les pointages vers Excel
+   */
   exportToExcel(): void {
     const worksheet = XLSX.utils.json_to_sheet(this.getPointagesByDate(this.selectedDate));
     const workbook = XLSX.utils.book_new();
@@ -204,7 +238,11 @@ export class GestionPointageComponent  implements OnInit{
     XLSX.writeFile(workbook, 'pointages.xlsx');
   }
 
-  openDetailsModal(pointage: Pointage): void {
+  /**
+   * Ouvrir le modal de détails d'un pointage
+   * @param pointage - Le pointage à afficher
+   */
+  openDetailsModal(pointage: any): void {
     this.selectedPointage = pointage;
     this.modalService.open(this.detailsModalTemplate, { centered: true, size: 'lg' });
   }

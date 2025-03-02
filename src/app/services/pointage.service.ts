@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Pointage } from '../models/Pointage.model';
 import { PointageOperation } from '../models/PointageOperation.modal';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PointageService {
   private apiUrl = 'http://localhost:8081/nexus/pointages'; // URL de base des APIs REST
@@ -14,48 +14,40 @@ export class PointageService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Récupère tous les pointages depuis le backend.
+   * Récupérer tous les pointages
    */
   getAllPointages(): Observable<Pointage[]> {
-    const url = `${this.apiUrl}`;
-    return this.http.get<Pointage[]>(url).pipe(
-      tap(data => console.log('Tous les pointages récupérés :', data)),
+    return this.http.get<Pointage[]>(`${this.apiUrl}`).pipe(
       catchError(this.handleError)
     );
   }
 
   /**
-   * Récupère les pointages par date depuis le backend.
-   * @param date La date pour filtrer les pointages.
+   * Récupérer les pointages par date
+   * @param date - Date pour filtrer les pointages
    */
   getPointagesByDate(date: string): Observable<Pointage[]> {
-    const url = `${this.apiUrl}/by-date?date=${date}`;
-    return this.http.get<Pointage[]>(url).pipe(
-      tap(data => console.log(`Pointages récupérés pour la date ${date} :`, data)),
+    return this.http.get<Pointage[]>(`${this.apiUrl}/by-date?date=${date}`).pipe(
       catchError(this.handleError)
     );
   }
 
   /**
-   * Récupère un pointage par son ID.
-   * @param id L'ID du pointage à récupérer.
+   * Récupérer un pointage par ID
+   * @param id - ID du pointage
    */
   getPointageById(id: number): Observable<Pointage> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.get<Pointage>(url).pipe(
-      tap(data => console.log(`Pointage récupéré avec l'ID=${id}`, data)),
+    return this.http.get<Pointage>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }
 
   /**
-   * Crée un nouveau pointage dans le backend.
-   * @param pointage Le pointage à créer.
+   * Créer un nouveau pointage
+   * @param pointage - Données du pointage à créer
    */
   createPointage(pointage: Pointage): Observable<Pointage> {
-    const url = `${this.apiUrl}`;
-    return this.http.post<Pointage>(url, pointage).pipe(
-      tap(data => console.log('Nouveau pointage créé :', data)),
+    return this.http.post<Pointage>(`${this.apiUrl}`, pointage).pipe(
       catchError(this.handleError)
     );
   }
@@ -68,115 +60,124 @@ export class PointageService {
     );
   }
 
-  createPointageParJour(date:any): Observable<Pointage[]> {
-    const url = `${this.apiUrl}`;
-    return this.http.post<Pointage[]>(url, date).pipe(
-      tap(data => console.log('Nouveau pointage créé :', data)),
-      catchError(this.handleError)
-    );
-  }
-
   /**
-   * Met à jour un pointage existant dans le backend.
-   * @param id L'ID du pointage à mettre à jour.
-   * @param pointage Les nouvelles données du pointage.
+   * Mettre à jour un pointage existant
+   * @param id - ID du pointage
+   * @param pointage - Données mises à jour du pointage
    */
   updatePointage(id: number, pointage: Pointage): Observable<Pointage> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.put<Pointage>(url, pointage).pipe(
-      tap(data => console.log(`Pointage mis à jour avec l'ID=${id}`, data)),
+    return this.http.put<Pointage>(`${this.apiUrl}/${id}`, pointage).pipe(
       catchError(this.handleError)
     );
   }
 
   /**
-   * Supprime un pointage dans le backend.
-   * @param id L'ID du pointage à supprimer.
+   * Supprimer un pointage par ID
+   * @param id - ID du pointage à supprimer
    */
   deletePointage(id: number): Observable<void> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.delete<void>(url).pipe(
-      tap(data => console.log(`Pointage supprimé avec l'ID=${id}`)),
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }
 
   /**
-   * Ajoute une opération à un pointage spécifique.
-   * @param pointageId L'ID du pointage auquel ajouter l'opération.
-   * @param operation L'opération à ajouter.
+   * Valider un pointage
+   * @param id - ID du pointage à valider
    */
-  addOperationToPointage(pointageId: number, operation: any): Observable<PointageOperation> {
-    const url = `${this.apiUrl}/${pointageId}/operations`;
-    return this.http.post<PointageOperation>(url, operation).pipe(
-      tap(data => console.log(`Opération ajoutée au pointage ID=${pointageId}`, data)),
+  validatePointage(id: number): Observable<Pointage> {
+    return this.http.post<Pointage>(`${this.apiUrl}/${id}/validate`, {}).pipe(
       catchError(this.handleError)
     );
   }
 
   /**
-   * Récupère toutes les opérations d'un pointage spécifique.
-   * @param pointageId L'ID du pointage dont on veut récupérer les opérations.
+   * Ajouter une opération à un pointage
+   * @param pointageId - ID du pointage
+   * @param operation - Données de l'opération à ajouter
+   */
+  addOperationToPointage(
+    pointageId: number,
+    operation: PointageOperation
+  ): Observable<PointageOperation> {
+    return this.http
+      .post<PointageOperation>(`${this.apiUrl}/${pointageId}/operations`, operation)
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Mettre à jour une opération
+   * @param operationId - ID de l'opération
+   * @param operation - Données mises à jour de l'opération
+   */
+  updateOperation(
+    operationId: number,
+    operation: PointageOperation
+  ): Observable<PointageOperation> {
+    return this.http
+      .put<PointageOperation>(`${this.apiUrl}/operations/${operationId}`, operation)
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Supprimer une opération
+   * @param operationId - ID de l'opération à supprimer
+   */
+  deleteOperation(operationId: number): Observable<void> {
+    return this.http
+      .delete<void>(`${this.apiUrl}/operations/${operationId}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Obtenir toutes les opérations d'un pointage
+   * @param pointageId - ID du pointage
    */
   getOperationsByPointageId(pointageId: number): Observable<PointageOperation[]> {
-    const url = `${this.apiUrl}/${pointageId}/operations`;
-    return this.http.get<PointageOperation[]>(url).pipe(
-      tap(data => console.log(`Opérations récupérées pour le pointage ID=${pointageId}`, data)),
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<PointageOperation[]>(`${this.apiUrl}/${pointageId}/operations`)
+      .pipe(catchError(this.handleError));
   }
 
   /**
-   * Importe un fichier Excel contenant des pointages.
-   * @param file Le fichier Excel à importer.
+   * Importer un fichier Excel
+   * @param file - Fichier Excel à importer
    */
   importExcelFile(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
 
-    const url = `${this.apiUrl}/import`;
-    return this.http.post<any>(url, formData).pipe(
-      tap(data => console.log('Fichier Excel importé avec succès :', data)),
+    return this.http.post(`${this.apiUrl}/import`, formData).pipe(
       catchError(this.handleError)
     );
   }
-
-
-
-
-
-
-
-  // Update an operation
-  updateOperation(operationId: number, operation: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/operations/${operationId}`, operation).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  // Delete an operation
-  deleteOperation(operationId: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/operations/${operationId}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-
 
   /**
-   * Gestionnaire d'erreurs générique pour les requêtes HTTP.
-   * @param error L'erreur renvoyée par la requête.
+   * Exporter les pointages vers un fichier Excel
+   * @param date - Date pour filtrer les pointages (facultatif)
+   */
+  exportPointagesToExcel(date?: string): Observable<Blob> {
+    const url = date ? `${this.apiUrl}/export/excel?date=${date}` : `${this.apiUrl}/export/excel`;
+
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Gestion des erreurs HTTP
+   * @param error - Erreur HTTP
    */
   private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
+    let errorMessage = 'Une erreur s\'est produite.';
     if (error.error instanceof ErrorEvent) {
-      // Erreur côté client ou réseau
+      // Client-side error
       errorMessage = `Erreur côté client : ${error.error.message}`;
     } else {
-      // Erreur côté serveur
+      // Server-side error
       errorMessage = `Code d'erreur : ${error.status}, message : ${error.message}`;
     }
     console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
+    return throwError(() => errorMessage);
   }
 }

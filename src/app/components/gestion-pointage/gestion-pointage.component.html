@@ -1,10 +1,4 @@
 <div class="container">
-  <!-- Indicateur de chargement -->
-  <div *ngIf="loading" class="text-center">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Chargement...</span>
-    </div>
-  </div>
   <h2>Liste des Pointages</h2>
 
   <!-- Sélecteur de date -->
@@ -20,12 +14,20 @@
   </div>
 
   <!-- Bouton pour créer des pointages par superviseur -->
-  <button class="btn btn-primary mb-3" (click)="createPointagesBySupervisor()">
+  <button
+    class="btn btn-primary mb-3"
+    (click)="createPointagesBySupervisor()"
+    [disabled]="!selectedDate"
+  >
     <i class="fas fa-plus"></i> Créer des pointages pour mes utilisateurs
   </button>
 
   <!-- Bouton d'exportation Excel -->
-  <button class="btn btn-success mb-3" (click)="exportToExcel()" [disabled]="!selectedDate">
+  <button
+    class="btn btn-success mb-3"
+    (click)="exportToExcel()"
+    [disabled]="!selectedDate || getPointagesByDate(selectedDate).length === 0"
+  >
     Exporter vers Excel
   </button>
 
@@ -34,7 +36,10 @@
 
   <!-- Afficher les pointages pour la date sélectionnée -->
   <h3>Pointages pour le {{ selectedDate | date: 'dd/MM/yyyy' }}</h3>
-  <div *ngIf="getPointagesByDate(selectedDate).length === 0" class="alert alert-info text-center">
+  <div
+    *ngIf="getPointagesByDate(selectedDate).length === 0"
+    class="alert alert-info text-center"
+  >
     Aucun pointage disponible pour cette date.
   </div>
 
@@ -56,18 +61,20 @@
         <td>{{ pointage.heuresTravaillees }} minutes</td>
         <td>{{ pointage.datePointage | date: 'dd/MM/yyyy' }}</td>
         <td>
-          <button class="btn btn-link" (click)="openDetailsModal(pointage)">
+          <button
+            class="btn btn-link"
+            (click)="openDetailsModal(pointage)"
+            [disabled]="!pointage"
+          >
             <i class="fas fa-eye"></i>
           </button>
         </td>
         <td>
-          <button class="btn btn-primary btn-sm me-2" (click)="selectPointage(pointage)">
-            Modifier
-          </button>
-          <button class="btn btn-danger btn-sm" (click)="deletePointage(pointage.id!)">
-            Supprimer
-          </button>
-          <button class="btn btn-success btn-sm" (click)="validatePointage()" [disabled]="pointage.etatDemande === 'Validé'">
+          <button
+            class="btn btn-success btn-sm"
+            (click)="validatePointage()"
+            [disabled]="pointage.etatDemande === 'APPROUVEE' || !pointage"
+          >
             Valider
           </button>
         </td>
@@ -80,22 +87,39 @@
 <ng-template #detailsModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Détails des Opérations</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <h5>Informations sur le pointage :</h5>
-    <ul>
-      <li><strong>ID :</strong> {{ selectedPointage?.id }}</li>
-      <li><strong>Utilisateur :</strong> {{ selectedPointage?.user?.nom }} {{ selectedPointage?.user?.prenom }}</li>
-      <li><strong>CIN :</strong> {{ selectedPointage?.user?.cin }}</li>
-      <li><strong>Heures travaillées :</strong> {{ selectedPointage?.heuresTravaillees }} minutes</li>
-      <li><strong>Date :</strong> {{ selectedPointage?.datePointage | date: 'dd/MM/yyyy' }}</li>
-      <li><strong>État :</strong> {{ selectedPointage?.etatDemande }}</li>
+    <h5 *ngIf="selectedPointage">Informations sur le pointage :</h5>
+    <ul *ngIf="selectedPointage">
+      <li><strong>ID :</strong> {{ selectedPointage.id }}</li>
+      <li>
+        <strong>Utilisateur :</strong>
+        {{ selectedPointage.user?.nom }} {{ selectedPointage.user?.prenom }}
+      </li>
+      <li><strong>CIN :</strong> {{ selectedPointage.user?.cin }}</li>
+      <li>
+        <strong>Heures travaillées :</strong>
+        {{ selectedPointage.heuresTravaillees }} minutes
+      </li>
+      <li>
+        <strong>Date :</strong>
+        {{ selectedPointage.datePointage | date: 'dd/MM/yyyy' }}
+      </li>
+      <li><strong>État :</strong> {{ selectedPointage.etatDemande }}</li>
     </ul>
-    <h5>Liste des opérations :</h5>
-    <table class="table table-bordered">
+    <h5 *ngIf="selectedPointage?.operations?.length > 0">Liste des opérations :</h5>
+    <table
+      class="table table-bordered"
+      *ngIf="selectedPointage?.operations?.length > 0"
+    >
       <thead>
         <tr>
           <th>ID</th>
@@ -106,114 +130,99 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let operation of selectedPointage?.operations">
+        <tr *ngFor="let operation of selectedPointage.operations">
           <td>{{ operation.id }}</td>
           <td>{{ operation.compagne }}</td>
           <td>{{ operation.type }}</td>
-          <td>{{ operation.heure | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
           <td>
-            <button class="btn btn-primary btn-sm me-2" (click)="openOperationModal(operation)">
+            {{ operation.heure | date: 'dd/MM/yyyy HH:mm:ss' }}
+          </td>
+          <td>
+            <button
+              class="btn btn-primary btn-sm me-2"
+              (click)="openOperationModal(operation)"
+              [disabled]="!operation"
+            >
               Modifier
             </button>
-            <button class="btn btn-danger btn-sm" (click)="deleteOperation()">
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deleteOperation(operation.id)"
+              [disabled]="!operation"
+            >
               Supprimer
             </button>
           </td>
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-success" (click)="openOperationModal()">Ajouter une opération</button>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
-  </div>
-</ng-template>
-<!--
-<ng-template #operationModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">Gestion des Opérations</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-      <span aria-hidden="true">&times;</span>
+    <button
+      class="btn btn-success"
+      (click)="openOperationModal()"
+      [disabled]="!selectedPointage"
+    >
+      Ajouter une opération
     </button>
   </div>
-  <div class="modal-body">
-    <form>
-      <div class="mb-3">
-        <label for="compagne" class="form-label">Campagne :</label>
-        <input
-          type="text"
-          id="compagne"
-          class="form-control"
-          [(ngModel)]="selectedOperation.compagne"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label for="type" class="form-label">Type :</label>
-        <select
-          id="type"
-          class="form-control"
-          [(ngModel)]="selectedOperation.type"
-          required
-        >
-          <option value="ENTREE">ENTREE</option>
-          <option value="SORTIE">SORTIE</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label for="heure" class="form-label">Heure :</label>
-        <input
-          type="datetime-local"
-          id="heure"
-          class="form-control"
-          [(ngModel)]="selectedOperation.heure"
-          required
-        />
-      </div>
-    </form>
-  </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="saveOperation()">Enregistrer</button>
     <button
       type="button"
-      class="btn btn-danger"
-      (click)="deleteOperation()"
-      *ngIf="selectedOperation?.id && selectedOperation?.id !== 0 "
+      class="btn btn-secondary"
+      (click)="modal.dismiss()"
     >
-      Supprimer
+      Fermer
     </button>
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
   </div>
-</ng-template>-->
+</ng-template>
 
+<!-- Template for Operation Modal -->
 <ng-template #operationModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Gestion des Opérations</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="operationForm">
       <div class="mb-3">
         <label for="compagne" class="form-label">Campagne :</label>
         <input
           type="text"
           id="compagne"
           class="form-control"
-          [(ngModel)]="compagne"
+          formControlName="compagne"
+          [class.is-invalid]="operationForm.get('compagne')?.invalid && operationForm.get('compagne')?.touched"
         />
+        <div
+          *ngIf="operationForm.get('compagne')?.invalid && operationForm.get('compagne')?.touched"
+          class="invalid-feedback"
+        >
+          Ce champ est obligatoire.
+        </div>
       </div>
       <div class="mb-3">
         <label for="type" class="form-label">Type :</label>
         <select
           id="type"
           class="form-control"
-          [(ngModel)]="type"
+          formControlName="type"
+          [class.is-invalid]="operationForm.get('type')?.invalid && operationForm.get('type')?.touched"
         >
           <option value="ENTREE">ENTREE</option>
           <option value="SORTIE">SORTIE</option>
         </select>
+        <div
+          *ngIf="operationForm.get('type')?.invalid && operationForm.get('type')?.touched"
+          class="invalid-feedback"
+        >
+          Ce champ est obligatoire.
+        </div>
       </div>
       <div class="mb-3">
         <label for="heure" class="form-label">Heure :</label>
@@ -221,14 +230,33 @@
           type="datetime-local"
           id="heure"
           class="form-control"
-          [(ngModel)]="heure"
+          formControlName="heure"
+          [class.is-invalid]="operationForm.get('heure')?.invalid && operationForm.get('heure')?.touched"
         />
+        <div
+          *ngIf="operationForm.get('heure')?.invalid && operationForm.get('heure')?.touched"
+          class="invalid-feedback"
+        >
+          Ce champ est obligatoire.
+        </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="saveOperation()">Enregistrer</button>
-
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="saveOperation()"
+      [disabled]="operationForm.invalid"
+    >
+      Enregistrer
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.dismiss()"
+    >
+      Fermer
+    </button>
   </div>
 </ng-template>
