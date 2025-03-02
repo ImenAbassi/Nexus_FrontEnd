@@ -28,7 +28,7 @@ export class GestionCandidatsComponent implements OnInit {
   isEditing = false;
   loading = false;
 
-  constructor(private candidatService: CandidatService, private sexeService: SexeService,private compagneService:CompagneService) { }
+  constructor(private candidatService: CandidatService, private sexeService: SexeService, private compagneService: CompagneService) { }
 
   ngOnInit(): void {
     this.loadCandidats();
@@ -64,6 +64,8 @@ export class GestionCandidatsComponent implements OnInit {
   }
 
   editCandidat(candidat: CandidatDTO): void {
+
+    // Mettre à jour le candidat avec l'objet Compagne complet
     this.candidat = { ...candidat };
     this.isEditing = true;
   }

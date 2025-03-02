@@ -71,7 +71,9 @@
                         <div class="mb-3">
                           <label for="compagne" class="form-label">Compagne</label>
                           <select id="compagne" [(ngModel)]="candidat.compagne" name="compagne" class="form-control">
-                            <option *ngFor="let compagne of compagnes" [ngValue]="compagne">{{ compagne.nom }}</option>
+                            <option *ngFor="let compagne of compagnes" [ngValue]="compagne">
+                              {{ compagne.nom }}
+                            </option>
                           </select>
                         </div>
                         <div class="mb-3">

@@ -25,7 +25,7 @@
 
       <!-- Afficher l'image en base64 -->
       <div *ngIf="post.mediaUrl && post.mediaType === 'IMAGE'" class="mb-3">
-        <img [src]="post.mediaUrl" class="img-fluid" />
+        <img [src]="post.mediaUrl" class="img-fluid" width="200px" height="200px"  />
       </div>
 
       <!-- Afficher la vidéo -->
