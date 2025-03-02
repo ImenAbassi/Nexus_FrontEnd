@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-// Importez vos composants
 import { AddCampagneComponent } from './components/add-campagne/add-campagne.component';
 import { AddCongeComponent } from './components/add-conge/add-conge.component';
 import { AddPlanningComponent } from './components/add-planning/add-planning.component';
@@ -16,6 +14,7 @@ import { GestionJoursSemaineComponent } from './components/gestion-jours-semaine
 import { GestionLanguesComponent } from './components/gestion-langues/gestion-langues.component';
 import { GestionPaysComponent } from './components/gestion-pays/gestion-pays.component';
 import { GestionPlanningComponent } from './components/gestion-planning/gestion-planning.component';
+import { GestionPointageComponent } from './components/gestion-pointage/gestion-pointage.component';
 import { GestionPrivilegeComponent } from './components/gestion-privilege/gestion-privilege.component';
 import { GestionSexeComponent } from './components/gestion-sexe/gestion-sexe.component';
 import { GestionSiteComponent } from './components/gestion-site/gestion-site.component';
@@ -38,21 +37,12 @@ import { PostListComponent } from './components/post-list/post-list.component';
 import { RolePrivilegeManagementComponent } from './components/role-privilege-management/role-privilege-management.component';
 import { RoleComponent } from './components/role/role.component';
 import { TaxiComponent } from './components/taxi/taxi.component';
-<<<<<<< Updated upstream
-import { AuthGuard } from './services/auth.guard';
-import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
-import { GestionPointageComponent } from './components/gestion-pointage/gestion-pointage.component';
-=======
 import { ValidationAttestationComponent } from './components/validation-attestation/validation-attestation.component';
 import { ValidationAutorisationComponent } from './components/validation-autorisation/validation-autorisation.component';
 import { ValidationDemandeCongeComponent } from './components/validation-demande-conge/validation-demande-conge.component';
 import { ValidationTaxiComponent } from './components/validation-taxi/validation-taxi.component';
-import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
->>>>>>> Stashed changes
 import { KpiComponent } from './kpi/kpi.component';
 import { AuthGuard } from './services/auth.guard';
-
-
 
 
 const routes: Routes = [
