@@ -1,8 +1,10 @@
 <!-- src/app/components/pointage-list/pointage-list.component.html -->
 <div class="container">
   <h2>Liste des pointages</h2>
-  <button class="btn btn-primary mb-3" (click)="openModal(addTemplate)">Ajouter un pointage</button>
 
+  <ng-container *ngIf="superviseur">
+  <button class="btn btn-primary mb-3" (click)="openModal(addTemplate)">Ajouter un pointage</button>
+</ng-container>
   <!-- Modal Template : Ajouter -->
   <ng-template #addTemplate let-modal>
     <div class="modal-header">
@@ -173,15 +175,20 @@
         <td>{{ pointage.etatDemande }}</td>
         <td>
           <button class="btn btn-secondary me-2" (click)="openOperationsModal(operationsModal, pointage)">consulter</button>
+          <ng-container *ngIf="superviseur">
           <button class="btn btn-info me-2" (click)="openModal(editTemplate, pointage)" [disabled]="pointage.etatDemande !== 'EN_ATTENTE'">Modifier</button>
+          </ng-container>
+          <ng-container *ngIf="chefProjet">
           <button 
   class="btn btn-success me-2" 
   (click)="openValiderModal(validerModal,pointage.id!)" 
   [disabled]="pointage.etatDemande !== 'EN_ATTENTE'"
 >
   Valider
-</button>
+</button></ng-container>
+<ng-container *ngIf="superviseur">
           <button class="btn btn-danger" (click)="deletePointage(pointage.id!)" [disabled]="pointage.etatDemande !== 'EN_ATTENTE'">Supprimer</button>
+          </ng-container>
         </td>
       </tr>
     </tbody>

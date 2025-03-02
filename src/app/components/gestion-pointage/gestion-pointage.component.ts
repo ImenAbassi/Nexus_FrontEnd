@@ -26,6 +26,9 @@ export class GestionPointageComponent implements OnInit {
   itemsPerPage = 7;
   currentPage = 1;
   totalPages = 1;
+superviseur = false;
+chefProjet = false;
+
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
@@ -35,6 +38,8 @@ export class GestionPointageComponent implements OnInit {
     private service: TypePointageService
 
   ) {
+    this.superviseur =this.privilegeService.hasPrivilege(['Validation_Pointage_Superviseur']);
+    this.chefProjet =this.privilegeService.hasPrivilege(['Validation_Pointage_ChefProjet']);
     this.form = this.fb.group({
       id: [null], // Valeur par défaut null pour l'ID
       userId: ['', Validators.required], // Champ obligatoire
@@ -88,7 +93,7 @@ export class GestionPointageComponent implements OnInit {
   }*/
 
   loadUsers(): void {
-    if (!this.privilegeService.hasPrivilege(['Validation_Pointage_Superviseur'])) {
+    if (this.privilegeService.hasPrivilege(['Validation_Pointage_Superviseur'])) {
       const userJson = localStorage.getItem('user');
       if (userJson) {
         const user = JSON.parse(userJson);

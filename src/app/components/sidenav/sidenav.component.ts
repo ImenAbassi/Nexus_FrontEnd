@@ -13,10 +13,11 @@ export class SidenavComponent implements OnInit {
   validationAutorisation: boolean = false;
   validationAttestation: boolean = false;
   validationTaxi: boolean = false;
-
+  pointage: boolean = false;
   constructor(private privilegeService: PrivilegeService) {}
   
   ngOnInit(): void {
+    this.pointage =this.privilegeService.hasPrivilege(['Validation_Pointage_Superviseur']);
     this.AllParam = this.privilegeService.hasPrivilege('All_Parametrage');
     this.validationConge= this.privilegeService.hasPrivilege(['Validation_Conge_RH', 'Validation_Conge_ChefProjet', 'Validation_Conge_Superviseur']);
     this.validationAutorisation= this.privilegeService.hasPrivilege(['Validation_Autorisation_RH', 'Validation_Autorisation_ChefProjet', 'Validation_Autorisation_Superviseur']);
