@@ -1,0 +1,182 @@
+
+<body>
+    <form id="userForm">
+        <h1>Formulaire Utilisateur</h1>
+
+        <!-- Informations de base -->
+        <div class="form-group">
+            <label for="prenom">Prénom <span class="required">*</span></label>
+            <input type="text" id="prenom" name="prenom" required>
+        </div>
+
+        <div class="form-group">
+            <label for="nom">Nom <span class="required">*</span></label>
+            <input type="text" id="nom" name="nom" required>
+        </div>
+
+        <div class="form-group">
+            <label for="nomJeuneFille">Nom de jeune fille</label>
+            <input type="text" id="nomJeuneFille" name="nomJeuneFille">
+        </div>
+
+        <div class="form-group">
+            <label for="etatCivil">État civil</label>
+            <select id="etatCivil" name="etatCivil">
+                <option value="Célibataire">Célibataire</option>
+                <option value="Marié">Marié</option>
+                <option value="Divorcé">Divorcé</option>
+                <option value="Veuf">Veuf</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sexe">Sexe</label>
+            <select id="sexe" name="sexe">
+                <option value="Homme">Homme</option>
+                <option value="Femme">Femme</option>
+                <option value="Autre">Autre</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="dateNaissance">Date de naissance</label>
+            <input type="date" id="dateNaissance" name="dateNaissance">
+        </div>
+
+        <div class="form-group">
+            <label for="lieuNaissance">Lieu de naissance</label>
+            <input type="text" id="lieuNaissance" name="lieuNaissance">
+        </div>
+
+        <div class="form-group">
+            <label for="cin">CIN <span class="required">*</span></label>
+            <input type="text" id="cin" name="cin" required>
+        </div>
+
+        <div class="form-group">
+            <label for="delivreeLe">Délivré le</label>
+            <input type="date" id="delivreeLe" name="delivreeLe">
+        </div>
+
+        <div class="form-group">
+            <label for="delivreeA">Délivré à</label>
+            <input type="text" id="delivreeA" name="delivreeA">
+        </div>
+
+        <!-- Coordonnées -->
+        <div class="form-group">
+            <label for="adresseMail">Adresse mail</label>
+            <input type="email" id="adresseMail" name="adresseMail">
+        </div>
+
+        <div class="form-group">
+            <label for="adresseMailPro">Adresse mail professionnelle</label>
+            <input type="email" id="adresseMailPro" name="adresseMailPro">
+        </div>
+
+        <div class="form-group">
+            <label for="adresseCIN">Adresse CIN</label>
+            <input type="text" id="adresseCIN" name="adresseCIN">
+        </div>
+
+        <div class="form-group">
+            <label for="adressePersonnelle2">Adresse personnelle 2</label>
+            <input type="text" id="adressePersonnelle2" name="adressePersonnelle2">
+        </div>
+
+        <div class="form-group">
+            <label for="adressePersonnelle3">Adresse personnelle 3</label>
+            <input type="text" id="adressePersonnelle3" name="adressePersonnelle3">
+        </div>
+
+        <div class="form-group">
+            <label for="codePostal">Code postal</label>
+            <input type="text" id="codePostal" name="codePostal">
+        </div>
+
+        <div class="form-group">
+            <label for="ville">Ville</label>
+            <input type="text" id="ville" name="ville">
+        </div>
+
+        <div class="form-group">
+            <label for="telFixe">Téléphone fixe</label>
+            <input type="tel" id="telFixe" name="telFixe">
+        </div>
+
+        <div class="form-group">
+            <label for="telPortable1">Téléphone portable 1 <span class="required">*</span></label>
+            <input type="tel" id="telPortable1" name="telPortable1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="telPortable2">Téléphone portable 2</label>
+            <input type="tel" id="telPortable2" name="telPortable2">
+        </div>
+
+        <div class="form-group">
+            <label for="nationalite">Nationalité</label>
+            <input type="text" id="nationalite" name="nationalite">
+        </div>
+
+        <div class="form-group">
+            <label for="cnssCnrps">CNSS/CNRPS</label>
+            <input type="text" id="cnssCnrps" name="cnssCnrps">
+        </div>
+
+        <div class="form-group">
+            <label for="banque">Banque</label>
+            <input type="text" id="banque" name="banque">
+        </div>
+
+        <div class="form-group">
+            <label for="agence">Agence</label>
+            <input type="text" id="agence" name="agence">
+        </div>
+
+        <div class="form-group">
+            <label for="rib">RIB</label>
+            <input type="text" id="rib" name="rib">
+        </div>
+
+        <!-- Fichiers -->
+        <div class="form-group">
+            <label for="photoCin">Photo CIN</label>
+            <input type="file" id="photoCin" name="photoCin">
+        </div>
+
+        <div class="form-group">
+            <label for="photoDiplome">Photo diplôme</label>
+            <input type="file" id="photoDiplome" name="photoDiplome">
+        </div>
+
+        <div class="form-group">
+            <label for="photoProfil">Photo de profil</label>
+            <input type="file" id="photoProfil" name="photoProfil">
+        </div>
+
+        <!-- Autres informations -->
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe <span class="required">*</span></label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <!-- Bouton de soumission -->
+        <div class="form-group">
+            <button type="submit">Soumettre</button>
+        </div>
+    </form>
+
+    <script>
+        // Gestion de la soumission du formulaire
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Formulaire soumis avec succès !');
+        });
+    </script>
+</body>

@@ -6,6 +6,7 @@ import { AddCampagneComponent } from './components/add-campagne/add-campagne.com
 import { AddCongeComponent } from './components/add-conge/add-conge.component';
 import { AddPlanningComponent } from './components/add-planning/add-planning.component';
 import { AllCandidatsComponent } from './components/all-candidats/all-candidats.component';
+import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
 import { GestionCiblesComponent } from './components/gestion-cibles/gestion-cibles.component';
 import { GestionEtatCivilComponent } from './components/gestion-etat-civil/gestion-etat-civil.component';
 import { GestionFonctionComponent } from './components/gestion-fonction/gestion-fonction.component';
@@ -15,6 +16,7 @@ import { GestionJoursSemaineComponent } from './components/gestion-jours-semaine
 import { GestionLanguesComponent } from './components/gestion-langues/gestion-langues.component';
 import { GestionPaysComponent } from './components/gestion-pays/gestion-pays.component';
 import { GestionPlanningComponent } from './components/gestion-planning/gestion-planning.component';
+import { GestionPrivilegeComponent } from './components/gestion-privilege/gestion-privilege.component';
 import { GestionSexeComponent } from './components/gestion-sexe/gestion-sexe.component';
 import { GestionSiteComponent } from './components/gestion-site/gestion-site.component';
 import { GestionSocieteComponent } from './components/gestion-societes/gestion-societes.component';
@@ -33,18 +35,22 @@ import { ListSortieComponent } from './components/list-sortie/list-sortie.compon
 import { LoginComponent } from './components/login/login.component';
 import { MapComponent } from './components/map/map.component';
 import { PostListComponent } from './components/post-list/post-list.component';
+import { RolePrivilegeManagementComponent } from './components/role-privilege-management/role-privilege-management.component';
 import { RoleComponent } from './components/role/role.component';
 import { TaxiComponent } from './components/taxi/taxi.component';
+<<<<<<< Updated upstream
 import { AuthGuard } from './services/auth.guard';
 import { GestionCandidatsComponent } from './components/gestion-candidats/gestion-candidats.component';
 import { GestionPointageComponent } from './components/gestion-pointage/gestion-pointage.component';
-import { KpiComponent } from './kpi/kpi.component';
-import { GestionPrivilegeComponent } from './components/gestion-privilege/gestion-privilege.component';
-import { RolePrivilegeManagementComponent } from './components/role-privilege-management/role-privilege-management.component';
-import { ValidationDemandeCongeComponent } from './components/validation-demande-conge/validation-demande-conge.component';
-import { ValidationAutorisationComponent } from './components/validation-autorisation/validation-autorisation.component';
+=======
 import { ValidationAttestationComponent } from './components/validation-attestation/validation-attestation.component';
+import { ValidationAutorisationComponent } from './components/validation-autorisation/validation-autorisation.component';
+import { ValidationDemandeCongeComponent } from './components/validation-demande-conge/validation-demande-conge.component';
 import { ValidationTaxiComponent } from './components/validation-taxi/validation-taxi.component';
+import { GestionPointageComponent } from './gestion-pointage/gestion-pointage.component';
+>>>>>>> Stashed changes
+import { KpiComponent } from './kpi/kpi.component';
+import { AuthGuard } from './services/auth.guard';
 
 
 

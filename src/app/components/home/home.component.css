@@ -1,0 +1,27 @@
+.card {
+  border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.reactions .btn {
+  border: none;
+  background: transparent;
+  color: #606770;
+  font-size: 14px;
+}
+
+.reactions .btn:hover {
+  background: #d7d9db38;
+  border-radius: 4px;
+}
+
+.rounded-circle {
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.reaction-icon-small {
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
+}
