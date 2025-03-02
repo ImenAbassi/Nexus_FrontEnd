@@ -1,8 +1,12 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { PointageService } from '../../services/pointage.service';
-import * as XLSX from 'xlsx';
+import { Pointage } from 'src/app/models/Pointage.model';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserCompagne } from 'src/app/models/user.model';
+import { userCompagneService } from 'src/app/services/userCompagne.service';
+import { PrivilegeService } from 'src/app/services/PrivilegeService.service';
+import { TypePointageService } from 'src/app/services/type-pointage.service';
 
 @Component({
   selector: 'app-gestion-pointage',
@@ -10,240 +14,282 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./gestion-pointage.component.css']
 })
 export class GestionPointageComponent implements OnInit {
-  pointages: any[] = [];
-  selectedPointage?: any;
-  selectedOperation?: any;
+  selectedPointageOperations: any[] = [];
 
-  // Formulaire réactif pour gérer les opérations
-  operationForm: FormGroup;
-
-  // Variables pour filtrer par date et afficher des messages
-  selectedDate: string = '';
-  message: string = '';
-
-  @ViewChild('detailsModal') detailsModalTemplate!: TemplateRef<any>;
-  @ViewChild('operationModal') operationModalTemplate!: TemplateRef<any>;
-
+  currentPointageId: number | undefined; 
+  filteredPointages: Pointage[] = []; 
+  pointages: Pointage[] = [];
+  users: UserCompagne[] = [];
+  form: FormGroup;
+  operationTypes:any[] = []; 
+  operations:any[]=[];
+  itemsPerPage = 7;
+  currentPage = 1;
+  totalPages = 1;
   constructor(
-    private pointageService: PointageService,
     private modalService: NgbModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private pointageService: PointageService,
+    private userService: userCompagneService,
+    private privilegeService: PrivilegeService,
+    private service: TypePointageService
+
   ) {
-    this.operationForm = this.fb.group({
-      compagne: ['', Validators.required],
-      type: ['ENTREE', Validators.required],
-      heure: [null, Validators.required]
+    this.form = this.fb.group({
+      id: [null], // Valeur par défaut null pour l'ID
+      userId: ['', Validators.required], // Champ obligatoire
+      retard: [0, [Validators.required, Validators.min(0)]], // Retard doit être un nombre positif
+      totalHeure: [0, [Validators.required, Validators.min(0)]], // Total des heures doit être un nombre positif
+      datePointage: [null, Validators.required] // Date obligatoire
     });
+
   }
 
   ngOnInit(): void {
+    this.loadAllTypes();
     this.loadPointages();
+    this.loadUsers();
+  }
+  openOperationsModal(modal: any, pointage: Pointage): void {
+    this.selectedPointageOperations = pointage.listOperation || [];
+    this.modalService.open(modal, { size: 'lg' });
+  }
+  get totalPagesArray(): number[] {
+    return Array.from({ length: Math.ceil(this.pointages.length / this.itemsPerPage) }, (_, i) => i + 1);
   }
 
-  /**
-   * Charger tous les pointages depuis le service
-   */
-  loadPointages(): void {
-    this.pointageService.getAllPointages().subscribe(
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPagesArray.length) {
+      this.currentPage = page;
+    }
+  }
+
+  loadAllTypes(){
+    this.service.getAll().subscribe(
       (data) => {
-        this.pointages = data || [];
-      },
-      (error) => {
-        this.message = 'Une erreur s\'est produite lors du chargement des pointages.';
-        console.error(error);
+        this.operationTypes = data;
       }
     );
   }
 
-  /**
-   * Créer des pointages pour un superviseur donné
-   */
-  createPointagesBySupervisor(): void {
-    if (!this.selectedDate) {
-      this.message = 'Veuillez sélectionner une date.';
-      return;
-    }
-    const userJson = localStorage.getItem('user');
-    if (userJson) {
-      const user = JSON.parse(userJson);
-      const userId = user.idUser; 
-      this.pointageService.createPointagesBySupervisor(userId, this.selectedDate).subscribe(
-        (data) => {
-          this.loadPointages();
-          this.message = `Pointages créés avec succès pour ${data.length} utilisateurs.`;
-        },
-        (error) => {
-          this.message = 'Une erreur s\'est produite lors de la création des pointages.';
-        }
-      );
-    }
+  loadPointages(): void {
+    this.pointageService.getAll().subscribe(data => {
+      this.pointages = data;
+   //   this.filterPointagesByDate(new Date());
+    });
   }
 
-  /**
-   * Sélectionner un pointage spécifique
-   * @param pointage - Le pointage à sélectionner
-   */
-  selectPointage(pointage: any): void {
-    this.selectedPointage = pointage;
-  }
+ /* filterPointagesByDate(date: Date): void {
+    const dateString = date.toISOString().split('T')[0]; // Convertir la date en format YYYY-MM-DD
+    this.filteredPointages = this.pointages.filter(pointage => {
+      const pointageDate = new Date(pointage.datePointage).toISOString().split('T')[0];
+      return pointageDate === dateString;
+    });
+  }*/
 
-  /**
-   * Ouvrir le modal pour ajouter ou modifier une opération
-   * @param operation - L'opération à éditer (facultatif)
-   */
-  openOperationModal(operation?: any): void {
-    if (operation) {
-      this.operationForm.patchValue({
-        id: operation.id,
-        compagne: operation.compagne || '',
-        type: operation.type || 'ENTREE',
-        heure: operation.heure ? new Date(operation.heure).toISOString().slice(0, 16) : null
+  loadUsers(): void {
+    if (!this.privilegeService.hasPrivilege(['Validation_Pointage_Superviseur'])) {
+      const userJson = localStorage.getItem('user');
+      if (userJson) {
+        const user = JSON.parse(userJson);
+        const userId = user.idUser;
+        this.userService.getUserCompagnesBySupervisor(userId).subscribe(data => {
+          this.users = data;
+          console.log(this.users);
+
+        });
+      }
+    } else {
+      this.userService.getAll().subscribe(data => {
+        this.users = data;
+        console.log(this.users);
+
       });
-    } else {
-      this.operationForm.reset({ type: 'ENTREE' });
     }
-
-    this.modalService.open(this.operationModalTemplate, { centered: true });
   }
 
-  /**
-   * Enregistrer ou mettre à jour une opération
-   */
-  saveOperation(): void {
-    if (this.operationForm.invalid) {
-      this.message = 'Veuillez remplir tous les champs obligatoires.';
-      return;
-    }
+  openModal(template: TemplateRef<any>, pointage?: Pointage): void {
+    this.resetForm(pointage);
+    this.modalService.open(template, { size: 'lg' });
+  }
 
-    const operationData = this.operationForm.value;
-
-    if (!this.selectedPointage?.id) {
-      this.message = 'Aucun pointage sélectionné.';
-      return;
-    }
-
-    if (operationData.id) {
-      // Mettre à jour une opération existante
-      this.pointageService.updateOperation(operationData.id, operationData).subscribe(
-        () => {
-          this.loadPointages();
-          this.message = 'Opération mise à jour avec succès.';
-        },
-        (error) => {
-          this.message = 'Une erreur s\'est produite lors de la mise à jour de l\'opération.';
-          console.error(error);
+  resetForm(pointage?: Pointage): void {
+    this.operations = [];
+    pointage?.listOperation.forEach((action)=>{
+      this.operations.push(
+        {
+          typePointage: action.typePointage.id, // Initialisé vide
+      totalHeure: action.totalHeure 
         }
       );
-    } else {
-      // Ajouter une nouvelle opération
-      this.pointageService.addOperationToPointage(this.selectedPointage.id, operationData).subscribe(
-        () => {
-          this.loadPointages();
-          this.message = 'Nouvelle opération ajoutée avec succès.';
+    });
+    //this.operations = pointage?.listOperation || [];
+    this.form = this.fb.group({
+      id: [pointage?.id],
+      userId: [pointage?.user?.id, Validators.required],
+      retard: [pointage?.retard, [Validators.required, Validators.min(0)]],
+      totalHeure: [pointage?.totalHeure, [Validators.required, Validators.min(0)]],
+      datePointage: [pointage?.datePointage, Validators.required]
+    });
+  }
+
+
+  
+
+  addOperation(): void {
+    this.operations.push({
+      typePointage: '', // Initialisé vide
+      totalHeure: null // Initialisé à null (ou 0 selon vos besoins)
+    });
+  }
+
+  // Supprimer une opération par son index
+  removeOperation(index: number): void {
+    if (index >= 0 && index < this.operations.length) {
+      this.operations.splice(index, 1); // Utiliser splice pour supprimer l'élément
+    }
+  }
+
+  onSubmit(action: string): void {
+    // Vérification si le formulaire est invalide
+    if (this.form.invalid) {
+        alert('Veuillez remplir tous les champs correctement.');
+        return;
+    }
+
+    // Création d'un nouvel objet Pointage
+    const pointage = new Pointage();
+
+    // Affectation des valeurs du formulaire à l'objet Pointage
+    pointage.datePointage = this.form.value.datePointage || null; // Assurez-vous que la date est valide
+    pointage.etatDemande = 'EN_ATTENTE'; // État par défaut
+    pointage.retard = this.form.value.retard || 0; // Retard par défaut à 0 si non défini
+    pointage.totalHeure = this.form.value.totalHeure || 0; // Heures totales par défaut à 0 si non défini
+    if(this.operations.length>0){
+      this.operations.forEach((action)=>{
+        const type = this.operationTypes.find(u => u.id == action.typePointage);
+        pointage.listOperation.push({
+          typePointage: type, // Initialisé vide
+      totalHeure: action.totalHeure 
+        });
+      });
+      //pointage.listOperation = this.operations;
+    }
+    
+    // Recherche de l'utilisateur correspondant à l'ID spécifié dans le formulaire
+    const userId = this.form.value.userId;
+    const user = this.users.find(u => u.id == userId);
+
+    if (!user) {
+        alert('Utilisateur introuvable. Veuillez vérifier l\'ID utilisateur.');
+        return;
+    }
+
+    pointage.user = user; // Attribuer l'utilisateur trouvé à l'objet Pointage
+
+    console.log('Données du formulaire :', this.form.value);
+    console.log('Objet Pointage créé :', pointage);
+
+    // Gestion des différentes actions
+    switch (action) {
+        case 'add':
+            this.createPointage(pointage);
+            break;
+
+        case 'edit':
+            if (!this.form.value.id) {
+                alert('Impossible de modifier : ID manquant.');
+                return;
+            }
+            pointage.id = this.form.value.id; // Ajoute l'ID existant au pointage
+            this.updatePointage(pointage);
+            break;
+
+        case 'validate':
+            if (!this.form.value.id) {
+                alert('Impossible de valider : ID manquant.');
+                return;
+            }
+            this.validatePointage(this.form.value.id);
+            break;
+
+        default:
+            alert('Action non reconnue.');
+            return;
+    }
+}
+
+  createPointage(pointage: Pointage): void {
+    this.pointageService.createWithOperation(pointage).subscribe(() => {
+      alert('Pointage ajouté avec succès');
+      this.modalService.dismissAll();
+      this.loadPointages();
+    });
+  }
+
+  updatePointage(pointage: Pointage): void {
+    this.pointageService.updateWithOperation(this.form.value.id!, pointage).subscribe(() => {
+      alert('Pointage mis à jour avec succès');
+      this.modalService.dismissAll();
+      this.loadPointages();
+    });
+  }
+
+  validatePointage(id: number): void {
+    this.pointageService.validate(id).subscribe(() => {
+      alert('Pointage validé avec succès');
+      this.modalService.dismissAll();
+      this.loadPointages();
+    });
+  }
+
+  deletePointage(id: number): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce pointage ?')) {
+      this.pointageService.delete(id).subscribe(() => {
+        alert('Pointage supprimé avec succès');
+        this.loadPointages();
+      });
+    }
+  }
+
+  openValiderModal(content: any,id: number): void {
+    this.currentPointageId = id;
+    this.modalService.open(content, { centered: true });
+  }
+
+  refuserValider(modal: any,etat:string): void {
+    if (this.currentPointageId) {
+    console.log('Demande refusée pour l\'ID :', this.currentPointageId);
+    this.pointageService.validerRefuser(this.currentPointageId, etat).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('Erreur lors de la validation par le chef de projet', error);
+        alert('Une erreur est survenue lors de la validation par le chef de projet.');
+      }
+    );
+  }
+    modal.close();
+  }
+
+  // Gère l'action "Valider"
+  confirmerValider(modal: any,etat:string): void {
+    if (this.currentPointageId) {
+      console.log('Demande validée pour l\'ID :', this.currentPointageId);
+      // Appel à votre service ou logique de validation ici
+      this.pointageService.validerRefuser(this.currentPointageId, etat).subscribe(
+        (response) => {
+          console.log(response);
         },
         (error) => {
-          this.message = 'Une erreur s\'est produite lors de l\'ajout de l\'opération.';
-          console.error(error);
+          console.error('Erreur lors de la validation par le chef de projet', error);
+          alert('Une erreur est survenue lors de la validation par le chef de projet.');
         }
       );
     }
-
-    this.modalService.dismissAll();
+    modal.close();
   }
 
-  /**
-   * Supprimer une opération
-   */
-  deleteOperation(operationId: number): void {
-    if (!operationId) {
-      this.message = 'Aucune opération sélectionnée.';
-      return;
-    }
 
-    this.pointageService.deleteOperation(operationId).subscribe(
-      () => {
-        this.loadPointages();
-        this.message = 'Opération supprimée avec succès.';
-      },
-      (error) => {
-        this.message = 'Une erreur s\'est produite lors de la suppression de l\'opération.';
-        console.error(error);
-      }
-    );
-  }
-
-  /**
-   * Valider un pointage
-   */
-  validatePointage(): void {
-    if (!this.selectedPointage?.id) {
-      this.message = 'Aucun pointage sélectionné.';
-      return;
-    }
-
-    this.selectedPointage.etatDemande = 'APPROUVEE';
-    this.pointageService.updatePointage(this.selectedPointage.id, this.selectedPointage).subscribe(
-      () => {
-        this.loadPointages();
-        this.message = 'Pointage validé avec succès.';
-      },
-      (error) => {
-        this.message = 'Une erreur s\'est produite lors de la validation du pointage.';
-        console.error(error);
-      }
-    );
-  }
-
-  /**
-   * Supprimer un pointage
-   * @param pointageId - ID du pointage à supprimer
-   */
-  deletePointage(pointageId: number): void {
-    this.pointageService.deletePointage(pointageId).subscribe(
-      () => {
-        this.loadPointages();
-        this.message = 'Pointage supprimé avec succès.';
-      },
-      (error) => {
-        this.message = 'Une erreur s\'est produite lors de la suppression du pointage.';
-        console.error(error);
-      }
-    );
-  }
-
-  /**
-   * Filtrer les pointages par date
-   * @param date - La date à filtrer
-   * @returns Les pointages correspondants à la date donnée
-   */
-  getPointagesByDate(date: string): any[] {
-    return this.pointages.filter((p) => p.datePointage === date);
-  }
-
-  /**
-   * Gérer le changement de date dans le filtre
-   * @param event - Événement de changement de date
-   */
-  onDateChange(event: any): void {
-    this.selectedDate = event.target.value;
-  }
-
-  /**
-   * Exporter les pointages vers Excel
-   */
-  exportToExcel(): void {
-    const worksheet = XLSX.utils.json_to_sheet(this.getPointagesByDate(this.selectedDate));
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Pointages');
-    XLSX.writeFile(workbook, 'pointages.xlsx');
-  }
-
-  /**
-   * Ouvrir le modal de détails d'un pointage
-   * @param pointage - Le pointage à afficher
-   */
-  openDetailsModal(pointage: any): void {
-    this.selectedPointage = pointage;
-    this.modalService.open(this.detailsModalTemplate, { centered: true, size: 'lg' });
-  }
 }

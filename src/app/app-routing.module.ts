@@ -43,6 +43,7 @@ import { ValidationDemandeCongeComponent } from './components/validation-demande
 import { ValidationTaxiComponent } from './components/validation-taxi/validation-taxi.component';
 import { KpiComponent } from './kpi/kpi.component';
 import { AuthGuard } from './services/auth.guard';
+import { GestionTypePointageComponent } from './components/gestion-type-pointage/gestion-type-pointage.component';
 
 
 const routes: Routes = [
@@ -89,6 +90,7 @@ const routes: Routes = [
   { path: 'ValidationAutorisation', component: ValidationAutorisationComponent, canActivate: [AuthGuard] },
   { path: 'ValidationAttestation', component: ValidationAttestationComponent, canActivate: [AuthGuard] },
   { path: 'ValidationTransports', component: ValidationTaxiComponent, canActivate: [AuthGuard] },
+  { path: 'gestion-typePointage', component: GestionTypePointageComponent, canActivate: [AuthGuard] },
 
   
 ];

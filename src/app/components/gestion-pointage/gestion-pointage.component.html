@@ -1,262 +1,248 @@
+<!-- src/app/components/pointage-list/pointage-list.component.html -->
 <div class="container">
-  <h2>Liste des Pointages</h2>
+  <h2>Liste des pointages</h2>
+  <button class="btn btn-primary mb-3" (click)="openModal(addTemplate)">Ajouter un pointage</button>
 
-  <!-- Sélecteur de date -->
-  <div class="mb-3">
-    <label for="datePicker" class="form-label">Sélectionner une date :</label>
-    <input
-      type="date"
-      id="datePicker"
-      class="form-control"
-      [value]="selectedDate"
-      (change)="onDateChange($event)"
-    />
-  </div>
+  <!-- Modal Template : Ajouter -->
+  <ng-template #addTemplate let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Ajouter un pointage</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" >
+        <!-- Existing Fields -->
+        <div class="mb-3">
+          <label for="datePointage" class="form-label">Date</label>
+          <input type="date" id="datePointage" class="form-control" formControlName="datePointage" required />
+        </div>
+        <div class="mb-3">
+          <label for="userId" class="form-label">Utilisateur</label>
+          <select id="userId" class="form-select" formControlName="userId" required>
+            <option *ngFor="let user of users" [value]="user.id">
+              {{ user.user?.nom }} {{ user.user?.prenom }} - {{ user.compagne?.nom }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="retard" class="form-label">Retard (heures)</label>
+          <input type="number" id="retard" class="form-control" formControlName="retard" required />
+        </div>
+        <div class="mb-3">
+          <label for="totalHeure" class="form-label">Total Heure</label>
+          <input type="number" id="totalHeure" class="form-control" formControlName="totalHeure" required />
+        </div>
+      </form>
+        <!-- New Section for Pointage Operations -->
+        <div class="mb-3">
+          <h5>Ajouter des opérations</h5>
+          <div>
+            <!-- Vérifier si le tableau "operations" n'est pas vide -->
+            <ng-container *ngIf="operations.length > 0">
+              <!-- Itérer sur chaque opération -->
+              <div *ngFor="let operation of operations; let i = index" class="d-flex align-items-center mb-2">
+                <!-- Sélection du type d'opération -->
+                <div class="me-2">
+                  <label [for]="'operationType' + i" class="form-label">Type d'opération</label>
+                  <select [id]="'operationType' + i" class="form-select" [(ngModel)]="operation.typePointage" required>
+                    <option *ngFor="let type of operationTypes" [value]="type.id">{{ type.name }}</option>
+                  </select>
+                </div>
+        
+                <!-- Entrée pour la valeur (heures) -->
+                <div class="me-2">
+                  <label [for]="'valeur' + i" class="form-label">Valeur (heures)</label>
+                  <input type="number" [id]="'valeur' + i" class="form-control" [(ngModel)]="operation.totalHeure" required />
+                </div>
+        
+                <!-- Bouton pour supprimer l'opération -->
+                <button type="button" class="btn btn-danger btn-sm" (click)="removeOperation(i)">-</button>
+              </div>
+            </ng-container>
+        
+            <!-- Message si aucune opération n'est définie -->
+            <ng-container *ngIf="operations.length === 0">
+              <p>Aucune opération ajoutée.</p>
+            </ng-container>
+          </div>
+        
+          <!-- Bouton pour ajouter une nouvelle opération -->
+          <button type="button" class="btn btn-primary btn-sm" (click)="addOperation()">+</button>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid" (click)="onSubmit('add')">Ajouter</button>
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+        </div>
+    
+    </div>
+  </ng-template>
 
-  <!-- Bouton pour créer des pointages par superviseur -->
-  <button
-    class="btn btn-primary mb-3"
-    (click)="createPointagesBySupervisor()"
-    [disabled]="!selectedDate"
-  >
-    <i class="fas fa-plus"></i> Créer des pointages pour mes utilisateurs
-  </button>
+  <!-- Modal Template : Modifier -->
+  <ng-template #editTemplate let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Modifier un pointage</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" >
+        <div class="mb-3">
+          <label for="datePointage" class="form-label">Date</label>
+          <input type="date" id="datePointage" class="form-control" formControlName="datePointage" required />
+        </div>
+        <div class="mb-3">
+          <label for="userId" class="form-label">Utilisateur</label>
+          <select id="userId" class="form-select" formControlName="userId"  required>
+            <option *ngFor="let user of users" [value]="user.id" disabled>
+              {{ user.user?.nom }} {{ user.user?.prenom }} - {{ user.compagne?.nom }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="retard" class="form-label">Retard (heures)</label>
+          <input type="number" id="retard" class="form-control" formControlName="retard" required />
+        </div>
+        <div class="mb-3">
+          <label for="totalHeure" class="form-label">Total Heure</label>
+          <input type="number" id="totalHeure" class="form-control" formControlName="totalHeure" required />
+        </div>
+      </form>
+        <div class="mb-3">
+          <h5>Ajouter des opérations</h5>
+          <div>
+            <!-- Vérifier si le tableau "operations" n'est pas vide -->
+            <ng-container *ngIf="operations.length > 0">
+              <!-- Itérer sur chaque opération -->
+              <div *ngFor="let operation of operations; let i = index" class="d-flex align-items-center mb-2">
+                <!-- Sélection du type d'opération -->
+                <div class="me-2">
+                  <label [for]="'operationType' + i" class="form-label">Type d'opération</label>
+                  <select [id]="'operationType' + i" class="form-select" [(ngModel)]="operation.typePointage" required>
+                    <option *ngFor="let type of operationTypes" [value]="type.id">{{ type.name }}</option>
+                  </select>
+                </div>
+        
+                <!-- Entrée pour la valeur (heures) -->
+                <div class="me-2">
+                  <label [for]="'valeur' + i" class="form-label">Valeur (heures)</label>
+                  <input type="number" [id]="'valeur' + i" class="form-control" [(ngModel)]="operation.totalHeure" required />
+                </div>
+        
+                <!-- Bouton pour supprimer l'opération -->
+                <button type="button" class="btn btn-danger btn-sm" (click)="removeOperation(i)">-</button>
+              </div>
+            </ng-container>
+        
+            <!-- Message si aucune opération n'est définie -->
+            <ng-container *ngIf="operations.length === 0">
+              <p>Aucune opération ajoutée.</p>
+            </ng-container>
+          </div>
+        
+          <!-- Bouton pour ajouter une nouvelle opération -->
+          <button type="button" class="btn btn-primary btn-sm" (click)="addOperation()">+</button>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid" (click)="onSubmit('edit')">Modifier</button>
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+        </div>
+     
+    </div>
+  </ng-template>
 
-  <!-- Bouton d'exportation Excel -->
-  <button
-    class="btn btn-success mb-3"
-    (click)="exportToExcel()"
-    [disabled]="!selectedDate || getPointagesByDate(selectedDate).length === 0"
-  >
-    Exporter vers Excel
-  </button>
-
-  <!-- Message d'information -->
-  <div *ngIf="message" class="alert alert-info">{{ message }}</div>
-
-  <!-- Afficher les pointages pour la date sélectionnée -->
-  <h3>Pointages pour le {{ selectedDate | date: 'dd/MM/yyyy' }}</h3>
-  <div
-    *ngIf="getPointagesByDate(selectedDate).length === 0"
-    class="alert alert-info text-center"
-  >
-    Aucun pointage disponible pour cette date.
-  </div>
-
+  <!-- Tableau des pointages -->
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Utilisateur</th>
-        <th>CIN</th>
-        <th>Heures Travaillées</th>
-        <th>Date Pointage</th>
-        <th>Détails</th>
+        <th>Compagne</th>
+        <th>User</th>
+        <th>Retard</th>
+        <th>Total Heure</th>
+        <th>Date</th>
+        <th>État</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let pointage of getPointagesByDate(selectedDate)">
-        <td>{{ pointage.user?.nom }} {{ pointage.user?.prenom }}</td>
-        <td>{{ pointage.user?.cin }}</td>
-        <td>{{ pointage.heuresTravaillees }} minutes</td>
-        <td>{{ pointage.datePointage | date: 'dd/MM/yyyy' }}</td>
+      <tr *ngFor="let pointage of pointages">
+        <td>{{ pointage.user?.compagne?.nom }}</td>
+        <td>{{ pointage.user?.user?.nom }} {{ pointage.user?.user?.prenom }}</td>
+        <td>{{ pointage.retard }}</td>
+        <td>{{ pointage.totalHeure }}</td>
+        <td>{{ pointage.datePointage }}</td>
+        <td>{{ pointage.etatDemande }}</td>
         <td>
-          <button
-            class="btn btn-link"
-            (click)="openDetailsModal(pointage)"
-            [disabled]="!pointage"
-          >
-            <i class="fas fa-eye"></i>
-          </button>
-        </td>
-        <td>
-          <button
-            class="btn btn-success btn-sm"
-            (click)="validatePointage()"
-            [disabled]="pointage.etatDemande === 'APPROUVEE' || !pointage"
-          >
-            Valider
-          </button>
+          <button class="btn btn-secondary me-2" (click)="openOperationsModal(operationsModal, pointage)">consulter</button>
+          <button class="btn btn-info me-2" (click)="openModal(editTemplate, pointage)" [disabled]="pointage.etatDemande !== 'EN_ATTENTE'">Modifier</button>
+          <button 
+  class="btn btn-success me-2" 
+  (click)="openValiderModal(validerModal,pointage.id!)" 
+  [disabled]="pointage.etatDemande !== 'EN_ATTENTE'"
+>
+  Valider
+</button>
+          <button class="btn btn-danger" (click)="deletePointage(pointage.id!)" [disabled]="pointage.etatDemande !== 'EN_ATTENTE'">Supprimer</button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <nav aria-label="Page navigation example" class="mt-3">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="changePage(currentPage - 1)">Préc</a>
+      </li>
+      <li *ngFor="let page of totalPagesArray" class="page-item" [class.active]="page === currentPage">
+        <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === pointages.length">
+        <a class="page-link" (click)="changePage(currentPage + 1)">Suiv</a>
+      </li>
+    </ul>
+  </nav>
 </div>
 
-<!-- Template for Details Modal -->
-<ng-template #detailsModal let-modal>
+
+
+<!-- Modal Template -->
+<ng-template #validerModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Détails des Opérations</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h5 class="modal-title" id="validerSuperviseurModalLabel">Valider la demande</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>
   <div class="modal-body">
-    <h5 *ngIf="selectedPointage">Informations sur le pointage :</h5>
-    <ul *ngIf="selectedPointage">
-      <li><strong>ID :</strong> {{ selectedPointage.id }}</li>
-      <li>
-        <strong>Utilisateur :</strong>
-        {{ selectedPointage.user?.nom }} {{ selectedPointage.user?.prenom }}
-      </li>
-      <li><strong>CIN :</strong> {{ selectedPointage.user?.cin }}</li>
-      <li>
-        <strong>Heures travaillées :</strong>
-        {{ selectedPointage.heuresTravaillees }} minutes
-      </li>
-      <li>
-        <strong>Date :</strong>
-        {{ selectedPointage.datePointage | date: 'dd/MM/yyyy' }}
-      </li>
-      <li><strong>État :</strong> {{ selectedPointage.etatDemande }}</li>
-    </ul>
-    <h5 *ngIf="selectedPointage?.operations?.length > 0">Liste des opérations :</h5>
-    <table
-      class="table table-bordered"
-      *ngIf="selectedPointage?.operations?.length > 0"
-    >
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Campagne</th>
-          <th>Type</th>
-          <th>Heure</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let operation of selectedPointage.operations">
-          <td>{{ operation.id }}</td>
-          <td>{{ operation.compagne }}</td>
-          <td>{{ operation.type }}</td>
-          <td>
-            {{ operation.heure | date: 'dd/MM/yyyy HH:mm:ss' }}
-          </td>
-          <td>
-            <button
-              class="btn btn-primary btn-sm me-2"
-              (click)="openOperationModal(operation)"
-              [disabled]="!operation"
-            >
-              Modifier
-            </button>
-            <button
-              class="btn btn-danger btn-sm"
-              (click)="deleteOperation(operation.id)"
-              [disabled]="!operation"
-            >
-              Supprimer
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <button
-      class="btn btn-success"
-      (click)="openOperationModal()"
-      [disabled]="!selectedPointage"
-    >
-      Ajouter une opération
-    </button>
+    Êtes-vous sûr de vouloir valider cette demande ?
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-secondary"
-      (click)="modal.dismiss()"
-    >
-      Fermer
-    </button>
+    <button type="button" class="btn btn-danger" (click)="refuserValider(modal,'REJETEE')">Refuser</button>
+    <button type="button" class="btn btn-primary" (click)="confirmerValider(modal,'APPROUVEE')">Valider</button>
   </div>
 </ng-template>
 
-<!-- Template for Operation Modal -->
-<ng-template #operationModal let-modal>
+
+<!-- Modal Template : Consulter les opérations -->
+<ng-template #operationsModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Gestion des Opérations</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h4 class="modal-title">Opérations du pointage</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="operationForm">
-      <div class="mb-3">
-        <label for="compagne" class="form-label">Campagne :</label>
-        <input
-          type="text"
-          id="compagne"
-          class="form-control"
-          formControlName="compagne"
-          [class.is-invalid]="operationForm.get('compagne')?.invalid && operationForm.get('compagne')?.touched"
-        />
-        <div
-          *ngIf="operationForm.get('compagne')?.invalid && operationForm.get('compagne')?.touched"
-          class="invalid-feedback"
-        >
-          Ce champ est obligatoire.
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="type" class="form-label">Type :</label>
-        <select
-          id="type"
-          class="form-control"
-          formControlName="type"
-          [class.is-invalid]="operationForm.get('type')?.invalid && operationForm.get('type')?.touched"
-        >
-          <option value="ENTREE">ENTREE</option>
-          <option value="SORTIE">SORTIE</option>
-        </select>
-        <div
-          *ngIf="operationForm.get('type')?.invalid && operationForm.get('type')?.touched"
-          class="invalid-feedback"
-        >
-          Ce champ est obligatoire.
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="heure" class="form-label">Heure :</label>
-        <input
-          type="datetime-local"
-          id="heure"
-          class="form-control"
-          formControlName="heure"
-          [class.is-invalid]="operationForm.get('heure')?.invalid && operationForm.get('heure')?.touched"
-        />
-        <div
-          *ngIf="operationForm.get('heure')?.invalid && operationForm.get('heure')?.touched"
-          class="invalid-feedback"
-        >
-          Ce champ est obligatoire.
-        </div>
-      </div>
-    </form>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Type d'opération</th>
+          <th>Valeur (heures)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let operation of selectedPointageOperations">
+          <td>{{ operation.typePointage?.name }}</td>
+          <td>{{ operation.totalHeure }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="saveOperation()"
-      [disabled]="operationForm.invalid"
-    >
-      Enregistrer
-    </button>
-    <button
-      type="button"
-      class="btn btn-secondary"
-      (click)="modal.dismiss()"
-    >
-      Fermer
-    </button>
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
   </div>
 </ng-template>

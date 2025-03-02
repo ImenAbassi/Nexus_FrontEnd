@@ -11,7 +11,7 @@ import { Pointage } from 'src/app/models/Pointage.model';
   styleUrls: ['./validation-pointage.component.css']
 })
 export class ValidationPointageComponent {
-@ViewChild('importModal') importModal!: TemplateRef<any>; // Référence au template du modal
+/*@ViewChild('importModal') importModal!: TemplateRef<any>; // Référence au template du modal
   pointages: Pointage[] = [];
   groupedPointages: { [key: string]: Pointage[] } = {}; // Données groupées par date
   selectedDate: string = new Date().toISOString().split('T')[0]; // Date du jour par défaut
@@ -186,5 +186,5 @@ export class ValidationPointageComponent {
       centered: true,
       size: 'lg',
     });
-  }
+  }*/
 }

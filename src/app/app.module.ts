@@ -59,6 +59,7 @@ import { ValidationAutorisationComponent } from './components/validation-autoris
 import { ValidationAttestationComponent } from './components/validation-attestation/validation-attestation.component';
 import { ValidationTaxiComponent } from './components/validation-taxi/validation-taxi.component';
 import { ValidationPointageComponent } from './components/validation-pointage/validation-pointage.component';
+import { GestionTypePointageComponent } from './components/gestion-type-pointage/gestion-type-pointage.component';
 
 
 @NgModule({
@@ -114,6 +115,7 @@ import { ValidationPointageComponent } from './components/validation-pointage/va
     ValidationAttestationComponent,
     ValidationTaxiComponent,
     ValidationPointageComponent,
+    GestionTypePointageComponent,
 
   ],
   imports: [

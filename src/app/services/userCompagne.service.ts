@@ -31,4 +31,8 @@ export class userCompagneService {
     return this.http.get<any>(`${this.link}usercompagne/getById/${id}`);
   }
 
+  getUserCompagnesBySupervisor(supervisorId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.link}usercompagne/supervisor/${supervisorId}`);
+  }
+
 }
