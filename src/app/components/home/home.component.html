@@ -9,7 +9,7 @@
           <div class="d-flex align-items-center mb-3">
             <img src="../assets/img/ib7gmznm.png" alt="Avatar" class="rounded-circle me-3" width="50" height="50" />
             <div>
-              <h6 class="mb-0 font-weight-bold">Nexus Contact Center <!--{{ post.username }}--></h6>
+              <h6 class="mb-0 font-weight-bold">Nexus Contact Center</h6>
               <small class="text-muted">{{ post.createdAt | date:'medium' }}</small>
             </div>
           </div>
@@ -19,7 +19,7 @@
 
           <!-- Media (image ou vidéo) -->
           <div *ngIf="post.mediaUrl && post.mediaType === 'IMAGE'" class="mb-3">
-            <img [src]="post.mediaUrl" alt="Image de la publication" class="img-fluid rounded" style=" width: 50%; height: 400px; background-size: cover; background-position: center;" />
+            <img [src]="post.mediaUrl" alt="Image de la publication" class="img-fluid rounded" style="width: 50%; height: 400px; background-size: cover; background-position: center;" />
           </div>
           <div *ngIf="post.mediaUrl && post.mediaType === 'VIDEO'" class="mb-3">
             <video class="img-fluid rounded" controls>
@@ -33,15 +33,15 @@
             <div class="d-flex align-items-center">
               <!-- Icônes des réactions les plus populaires -->
               <div class="reaction-icons d-flex">
-                <img src="../assets/img/thumb-up.png" alt="J'aime" class="reaction-icon-small" />
-                <img src="../assets/img/heart.png" alt="Love" class="reaction-icon-small" />
-                <img src="../assets/img/happy-face.png" alt="Haha" class="reaction-icon-small" />
+                <img *ngIf="post.reactions?.['LIKE']" src="../assets/img/thumb-up.png" alt="J'aime" class="reaction-icon-small" />
+                <img *ngIf="post.reactions?.['LOVE']" src="../assets/img/heart.png" alt="Love" class="reaction-icon-small" />
+                <img *ngIf="post.reactions?.['HAHA']" src="../assets/img/happy-face.png" alt="Haha" class="reaction-icon-small" />
               </div>
               <!-- Nombre total de réactions -->
-              <span class="ms-2 text-muted">7  réactions</span>
+              <span class="ms-2 text-muted">
+                {{ getTotalReactions(post.reactions) }} réactions
+              </span>
             </div>
-            <!-- Nombre de commentaires et partages -->
-           
           </div>
 
           <!-- Ligne horizontale -->
@@ -49,20 +49,9 @@
 
           <!-- Zone de réactions -->
           <div class="reactions d-flex gap-2">
-            <button class="btn btn-light btn-sm reaction-btn">
-              <img src="../assets/img/thumb-up.png" height="20" width="20" class="reaction-icon" /> J'aime
-            </button>
-            <button class="btn btn-light btn-sm reaction-btn">
-              <img src="../assets/img/heart.png" height="20" width="20" class="reaction-icon" /> Love
-            </button>
-            <button class="btn btn-light btn-sm reaction-btn">
-              <img src="../assets/img/happy-face.png" height="20" width="20" class="reaction-icon" /> Haha
-            </button>
-            <button class="btn btn-light btn-sm reaction-btn">
-              <img src="../assets/img/angry.png" height="20" width="20" class="reaction-icon" /> Grrr
-            </button>
-            <button class="btn btn-light btn-sm reaction-btn">
-              <img src="../assets/img/sad-face.png" height="20" width="20" class="reaction-icon" /> Triste
+            <button *ngFor="let reactionType of reactionTypes" class="btn btn-light btn-sm reaction-btn" (click)="addReaction(post.id, reactionType)">
+              <img [src]="getReactionIcon(reactionType)" height="20" width="20" class="reaction-icon" />
+              {{ reactionType }} ({{ post.reactions?.[reactionType] || 0 }})
             </button>
           </div>
         </div>

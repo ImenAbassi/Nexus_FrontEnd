@@ -61,7 +61,8 @@ export class PostListComponent implements OnInit {
       mediaUrl: '', // Valeur par défaut si aucun média n'est fourni
       mediaType: '', // Optionnel, valeur par défaut
       createdAt: new Date().toISOString(), // Optionnel
-      updatedAt: new Date().toISOString(), // Optionnel
+      updatedAt: new Date().toISOString(),
+      reactions: {}
     };
 
     this.postService.createPost(newPost).subscribe(

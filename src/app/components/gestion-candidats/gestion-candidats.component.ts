@@ -90,7 +90,11 @@ export class GestionCandidatsComponent implements OnInit {
       this.loadCandidats();
     });
   }
-
+  validateCandidat(id: number) {
+    // Logique pour valider le candidat
+    console.log(`Candidat avec l'ID ${id} validé`);
+    // Vous pouvez appeler un service ici pour mettre à jour le statut du candidat
+  }
   resetForm(): void {
     this.candidat = {
       nom: '',
