@@ -31,7 +31,8 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="addCandidatModalLabel">Ajouter un candidat</h5>
+                  <h5 *ngIf="isEditing" class="modal-title" id="addCandidatModalLabel">  Modifier un candidat</h5>
+                  <h5 *ngIf="!isEditing" class="modal-title" id="addCandidatModalLabel">  Ajouter un candidat</h5>
                   <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -70,12 +71,20 @@
                         </div>
                         <div class="mb-3">
                           <label for="compagne" class="form-label">Compagne</label>
-                          <select id="compagne" [(ngModel)]="candidat.compagne" name="compagne" class="form-control">
+                          <select id="compagne" [(ngModel)]="candidat.compagne" name="compagne" class="form-control" [compareWith]="compareCompagne">
                             <option *ngFor="let compagne of compagnes" [ngValue]="compagne">
                               {{ compagne.nom }}
                             </option>
                           </select>
                         </div>
+                       <!--<div class="mb-3">
+                          <label for="compagne" class="form-label">Compagne</label>
+                          <select id="compagne" [(ngModel)]="candidat.compagne" name="compagne" class="form-control">
+                            <option *ngFor="let compagne of compagnes" [ngValue]="compagne">
+                              {{ compagne.nom }}
+                            </option>
+                          </select>
+                        </div>--> 
                         <div class="mb-3">
                             <label for="dateHeureFormation">Date et heure de formation</label>
                             <input
@@ -111,6 +120,7 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Téléphone</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date et heure de formation</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Compagne</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                   </tr>
                 </thead>
@@ -123,6 +133,7 @@
                     <td>{{ c.adresseMail }}</td>
                     <td>{{ c.telPortable1 }}</td>
                     <td>{{ c.dateHeureFormation | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ c.compagne?.nom}}</td>
 
                     <td>
                       <button class="btn btn-link text-dark mb-0" (click)="editCandidat(c)" data-bs-toggle="modal" data-bs-target="#addCandidatModal">

@@ -50,6 +50,11 @@ export class GestionCandidatsComponent implements OnInit {
     });
   }
 
+  compareCompagne(c1: any, c2: any): boolean {
+    // Comparer les objets par leur identifiant (ou une autre propriété unique)
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
+
   loadCompagnes(): void {
     this.compagneService.getAllCompagnes().subscribe(data => {
       this.compagnes = data;
