@@ -176,18 +176,18 @@
         <td>
           <button class="btn btn-secondary me-2" (click)="openOperationsModal(operationsModal, pointage)">consulter</button>
           <ng-container *ngIf="superviseur">
-          <button class="btn btn-info me-2" (click)="openModal(editTemplate, pointage)" [disabled]="pointage.etatDemande !== 'EN_ATTENTE'">Modifier</button>
+          <button class="btn btn-info me-2" (click)="openModal(editTemplate, pointage)" [disabled]="pointage.etatDemande !== 'APPROUVEE'">Modifier</button>
           </ng-container>
           <ng-container *ngIf="chefProjet">
           <button 
   class="btn btn-success me-2" 
   (click)="openValiderModal(validerModal,pointage.id!)" 
-  [disabled]="pointage.etatDemande !== 'EN_ATTENTE'"
+  [disabled]="pointage.etatDemande !== 'APPROUVEE'"
 >
   Valider
 </button></ng-container>
 <ng-container *ngIf="superviseur">
-          <button class="btn btn-danger" (click)="deletePointage(pointage.id!)" [disabled]="pointage.etatDemande !== 'EN_ATTENTE'">Supprimer</button>
+          <button class="btn btn-danger" (click)="deletePointage(pointage.id!)" [disabled]="pointage.etatDemande !== 'APPROUVEE'">Supprimer</button>
           </ng-container>
         </td>
       </tr>
