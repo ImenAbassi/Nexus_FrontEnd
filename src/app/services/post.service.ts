@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Post } from '../models/post.model';
+import { ReactionType } from '../models/ReactionType.model';
 
 @Injectable({
   providedIn: 'root',
@@ -85,5 +86,14 @@ updatePost(id: number, post: Post, file?: File): Observable<Post> {
 
   getMediaUrl(fileName: string): string {
     return `http://localhost:8081/nexus/api/posts/uploads/${fileName}`;
+  }
+  // Add a reaction to a post
+  addReaction(postId: number, type: ReactionType, reactedBy: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${postId}/reactions`, { type, reactedBy });
+  }
+
+  // Get reaction counts for a post
+  getReactionCounts(postId: number): Observable<{ [key: string]: number }> {
+    return this.http.get<{ [key: string]: number }>(`${this.apiUrl}/${postId}/reactions/count`);
   }
 }

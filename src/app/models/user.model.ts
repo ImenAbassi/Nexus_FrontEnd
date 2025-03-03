@@ -215,7 +215,7 @@ export interface AttestationTravail {
    reference?: string;
 }
 export interface User {
-  idUser?: number;
+  idUser?: number; 
   prenom: string;
   nom: string;
   nomJeuneFille?: string;

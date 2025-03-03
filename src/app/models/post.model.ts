@@ -4,7 +4,7 @@ export interface Post {
   content: string;
   mediaUrl: string;
   mediaType?: string;
-  reactions?: { [key: string]: number };  // Réactions par type (LIKE, LOVE, etc.)
+  reactions: { [key: string]: number }; // Réactions par type (LIKE, LOVE, etc.)
   createdAt?: string;
   updatedAt?: string;
 }

@@ -64,5 +64,11 @@ export class UserService {
   assignUserToSociete(userId: number, societeId: number): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${userId}/assign-societe/${societeId}`, {});
   }
-
+  changePassword(userId: number, oldPassword: string, newPassword: string): Observable<any> {
+    const body = {
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    };
+    return this.http.post(`${this.apiUrl}/${userId}/change-password`, body);
+  }
 }
