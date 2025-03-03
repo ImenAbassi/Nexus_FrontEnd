@@ -78,10 +78,57 @@ chefProjet = false;
   }
 
   loadPointages(): void {
-    this.pointageService.getAll().subscribe(data => {
-      this.pointages = data;
-   //   this.filterPointagesByDate(new Date());
-    });
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      const userId = user.idUser;
+  
+      if (this.privilegeService.hasPrivilege(['Validation_Pointage_Superviseur'])) {
+        // Charger les pointages pour le superviseur
+        this.pointageService.getPointagesBySupervisor(userId).subscribe({
+          next: (data) => {
+            this.pointages = data;
+          },
+          error: (err) => {
+            console.error('Erreur lors du chargement des pointages par superviseur :', err);
+            this.pointages = []; // Réinitialiser la liste en cas d'erreur
+          },
+        });
+      } else if (this.privilegeService.hasPrivilege(['Validation_Pointage_ChefProjet'])) {
+        // Charger les pointages pour le chef de projet
+        this.pointageService.getPointagesByProjectLeader(userId).subscribe({
+          next: (data) => {
+            this.pointages = data;
+          },
+          error: (err) => {
+            console.error('Erreur lors du chargement des pointages par chef de projet :', err);
+            this.pointages = []; // Réinitialiser la liste en cas d'erreur
+          },
+        });
+      } else {
+        // Charger tous les pointages si l'utilisateur n'a pas de privilège spécifique
+        this.pointageService.getAll().subscribe({
+          next: (data) => {
+            this.pointages = data;
+          },
+          error: (err) => {
+            console.error('Erreur lors du chargement de tous les pointages :', err);
+            this.pointages = []; // Réinitialiser la liste en cas d'erreur
+          },
+        });
+      }
+    } else {
+      // Si l'utilisateur n'est pas connecté, charger tous les pointages
+      this.pointageService.getAll().subscribe({
+        next: (data) => {
+          this.pointages = data;
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement de tous les pointages :', err);
+          this.pointages = []; // Réinitialiser la liste en cas d'erreur
+        },
+      });
+    }
   }
 
  /* filterPointagesByDate(date: Date): void {

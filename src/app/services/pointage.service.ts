@@ -26,7 +26,7 @@ export class PointageService {
   createWithOperation(pointage: Pointage): Observable<Pointage> {
     return this.http.post<Pointage>(`${this.apiUrl}/withoperation`, pointage);
   }
-  updateWithOperation(id: number,pointage: Pointage): Observable<Pointage> {
+  updateWithOperation(id: number, pointage: Pointage): Observable<Pointage> {
     return this.http.put<Pointage>(`${this.apiUrl}/withoperation/${id}`, pointage);
   }
   update(id: number, pointage: Pointage): Observable<Pointage> {
@@ -42,12 +42,21 @@ export class PointageService {
   }
 
   validerRefuser(id: number, etat: string): Observable<any> {
-      // Ajouter l'état en tant que paramètre de requête
-      const params = new HttpParams().set('etat', etat);
-  
-      // Envoyer la requête POST avec l'ID dans l'URL et l'état en paramètre
-      return this.http.post<any>(`${this.apiUrl}/valider/${id}`, {}, { params });
-    }
+    // Ajouter l'état en tant que paramètre de requête
+    const params = new HttpParams().set('etat', etat);
+
+    // Envoyer la requête POST avec l'ID dans l'URL et l'état en paramètre
+    return this.http.post<any>(`${this.apiUrl}/valider/${id}`, {}, { params });
+  }
+
+  getPointagesBySupervisor(supervisorId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/supervisor/${supervisorId}`);
+  }
+
+  // Récupérer les pointages par chef de projet
+  getPointagesByProjectLeader(projectLeaderId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/project-leader/${projectLeaderId}`);
+  }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Une erreur s\'est produite.';
