@@ -62,7 +62,7 @@ export class PostListComponent implements OnInit {
       mediaType: '', // Optionnel, valeur par défaut
       createdAt: new Date().toISOString(), // Optionnel
       updatedAt: new Date().toISOString(),
-      reactions: {}
+      reactions: []
     };
 
     this.postService.createPost(newPost).subscribe(

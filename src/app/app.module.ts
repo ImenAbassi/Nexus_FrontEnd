@@ -60,6 +60,7 @@ import { ValidationAttestationComponent } from './components/validation-attestat
 import { ValidationTaxiComponent } from './components/validation-taxi/validation-taxi.component';
 import { ValidationPointageComponent } from './components/validation-pointage/validation-pointage.component';
 import { GestionTypePointageComponent } from './components/gestion-type-pointage/gestion-type-pointage.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
 
 
 @NgModule({
@@ -116,6 +117,7 @@ import { GestionTypePointageComponent } from './components/gestion-type-pointage
     ValidationTaxiComponent,
     ValidationPointageComponent,
     GestionTypePointageComponent,
+    UserFormComponent,
 
   ],
   imports: [

@@ -94,6 +94,6 @@ updatePost(id: number, post: Post, file?: File): Observable<Post> {
 
   // Get reaction counts for a post
   getReactionCounts(postId: number): Observable<{ [key: string]: number }> {
-    return this.http.get<{ [key: string]: number }>(`${this.apiUrl}/${postId}/reactions/count`);
+    return this.http.get<any>(`${this.apiUrl}/${postId}/reactions/count`);
   }
 }

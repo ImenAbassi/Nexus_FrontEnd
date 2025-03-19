@@ -44,6 +44,7 @@ import { ValidationTaxiComponent } from './components/validation-taxi/validation
 import { KpiComponent } from './kpi/kpi.component';
 import { AuthGuard } from './services/auth.guard';
 import { GestionTypePointageComponent } from './components/gestion-type-pointage/gestion-type-pointage.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
 
 
 const routes: Routes = [
@@ -91,6 +92,8 @@ const routes: Routes = [
   { path: 'ValidationAttestation', component: ValidationAttestationComponent, canActivate: [AuthGuard] },
   { path: 'ValidationTransports', component: ValidationTaxiComponent, canActivate: [AuthGuard] },
   { path: 'gestion-typePointage', component: GestionTypePointageComponent, canActivate: [AuthGuard] },
+  { path: 'users/add', component: UserFormComponent },
+  { path: 'users/edit/:id', component: UserFormComponent },
 
   
 ];

@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Enfant, EtatUser, User, UserCompagne } from '../models/user.model';
 import { UserCompagneDTO } from '../models/UserCompagneDTO.model';
 
@@ -70,5 +70,40 @@ export class UserService {
       newPassword: newPassword
     };
     return this.http.post(`${this.apiUrl}/${userId}/change-password`, body);
+  }
+
+  createUserFromCandidat(candidatId: number): Observable<{ status: string; message: string }> {
+    const url = `${this.apiUrl}/create-from-candidat/${candidatId}`;
+    return this.http.post<{ status: string; message: string }>(url, {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+   // Ajouter un User
+   addUser(user: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/add`, user).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Modifier un User
+  updateUserNew(id: number, user: any): Observable<any> {
+    const url = `${this.apiUrl}/update/${id}`;
+    return this.http.put<any>(url, user).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An error occurred';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

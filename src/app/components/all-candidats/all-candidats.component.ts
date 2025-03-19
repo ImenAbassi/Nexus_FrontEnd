@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import { Compagne } from 'src/app/models/Compagne.model';
 import { Fonction } from 'src/app/models/fonction.model';
@@ -9,6 +10,7 @@ import { CompagneService } from 'src/app/services/compagne.service';
 import { FonctionService } from 'src/app/services/fonction.service';
 import { UserService } from 'src/app/services/user.service';
 import * as XLSX from 'xlsx';
+import { UserFormComponent } from '../user-form/user-form.component';
 
 @Component({
   selector: 'app-all-candidats',
@@ -19,16 +21,18 @@ export class AllCandidatsComponent implements OnInit {
   userForm!: FormGroup;
   compagnes: Compagne[] = [];
   fonctions: Fonction[] = [];
-  usersWithoutSupervisorOrProjectLeader: UserCompagne[] = [];
+  usersWithoutSupervisorOrProjectLeader: any[] = [];
   currentPage: number = 1;
   loading: boolean = false; // Variable pour gérer l'état de chargement
   idUser: any;
-
+  @ViewChild('userFormDialog') userFormDialog!: TemplateRef<any>;
+  user: any = {};
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private compagneService: CompagneService,
     private fonctionService: FonctionService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -75,8 +79,8 @@ export class AllCandidatsComponent implements OnInit {
   getUsersWithoutSupervisorOrProjectLeader(): void {
     this.loading = true; // Activer le loading
 
-    this.userService.getUsersWithoutSupervisorOrProjectLeader().subscribe(
-      (data: UserCompagne[]) => {
+    this.userService.getAllUsers().subscribe(
+      (data: any[]) => {
         this.usersWithoutSupervisorOrProjectLeader = data;
         this.loading = false; // Désactiver le loading une fois les données chargées
       },
@@ -131,26 +135,6 @@ export class AllCandidatsComponent implements OnInit {
     }
   }
 
-  // Méthode pour ouvrir le modal d'édition
-  openEditModal(userCompagne: any): void { 
-    console.log(userCompagne);
-    this.idUser = userCompagne.id;
-    this.userForm.patchValue({
-      userCompagneId: userCompagne.id,
-      userId: userCompagne.user?.idUser,
-      cin: userCompagne.user?.cin,
-      nom: userCompagne.user?.nom,
-      prenom: userCompagne.user?.prenom,
-      telPortable1: userCompagne.user?.telPortable1,
-      adresseMail: userCompagne.user?.adresseMail,
-      password: '',
-      compagneId: userCompagne.compagneId,
-      fonction: userCompagne.fonction.id,
-      dateAffectation: userCompagne.dateAffectation,
-      dateFinAffectation: userCompagne.dateFinAffectation,
-      dateHeureFormation: userCompagne.dateHeureFormation
-    });
-  }
 
   // Méthode pour soumettre la mise à jour
   onSubmitUpdate(): void {
@@ -225,5 +209,19 @@ export class AllCandidatsComponent implements OnInit {
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
+  }
+
+  openAddUserDialog(): void {
+    this.user = {};
+    this.modalService.open(UserFormComponent, { size: 'lg' });
+  }
+
+  openEditUserDialog(user: any): void {
+    const modalRef = this.modalService.open(UserFormComponent, { size: 'lg' });
+    
+    // Passer les données de l'utilisateur au composant UserFormComponent
+    modalRef.componentInstance.user = { ...user }; // Copie des données de l'utilisateur
+    modalRef.componentInstance.idUser = user.idUser; // Passer l'ID de l'utilisateur
+
   }
 }

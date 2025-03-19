@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PostService } from 'src/app/services/post.service';
 import { Post } from 'src/app/models/post.model';
 import { ReactionType } from 'src/app/models/ReactionType.model';
+import { PostService } from 'src/app/services/post.service';
 
 @Component({
   selector: 'app-home',
@@ -10,12 +10,14 @@ import { ReactionType } from 'src/app/models/ReactionType.model';
 })
 export class HomeComponent implements OnInit {
   posts: Post[] = [];
+  colleagues: any[] = []; // Add a separate array for colleagues
   reactionTypes = Object.values(ReactionType); // Expose reaction types to the template
 
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
     this.loadPosts();
+    //this.loadColleagues(); // Load colleagues data
   }
 
   // Load all posts
@@ -54,7 +56,7 @@ export class HomeComponent implements OnInit {
       (counts) => {
         const post = this.posts.find((p) => p.id === postId);
         if (post) {
-          post.reactions = counts;
+        //  post.reactionCounts = counts;
         }
       },
       (error) => {
@@ -77,8 +79,8 @@ export class HomeComponent implements OnInit {
   }
 
   // Get the total number of reactions
-  getTotalReactions(reactions: { [key: string]: number }): number {
-    return reactions ? Object.values(reactions).reduce((a, b) => a + b, 0) : 0;
+  getTotalReactions(reactionCounts: { [key: string]: number }): number {
+    return reactionCounts ? Object.values(reactionCounts).reduce((a, b) => a + b, 0) : 0;
   }
 
   // Get the icon for a reaction type
@@ -91,7 +93,7 @@ export class HomeComponent implements OnInit {
       case ReactionType.HAHA:
         return '../assets/img/happy-face.png';
       case ReactionType.WOW:
-        return '../assets/img/wow.png'; // Add the appropriate icon
+        return '../assets/img/wow.png';
       case ReactionType.SAD:
         return '../assets/img/sad-face.png';
       case ReactionType.ANGRY:

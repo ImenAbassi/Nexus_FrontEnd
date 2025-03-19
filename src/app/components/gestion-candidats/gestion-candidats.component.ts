@@ -5,6 +5,7 @@ import { Sexe } from 'src/app/models/sexe.model';
 import { CandidatService } from 'src/app/services/candidat.service';
 import { CompagneService } from 'src/app/services/compagne.service';
 import { SexeService } from 'src/app/services/sexe.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-gestion-candidats',
@@ -28,7 +29,10 @@ export class GestionCandidatsComponent implements OnInit {
   isEditing = false;
   loading = false;
 
-  constructor(private candidatService: CandidatService, private sexeService: SexeService, private compagneService: CompagneService) { }
+  constructor(private candidatService: CandidatService,
+     private sexeService: SexeService,
+      private compagneService: CompagneService,
+    private userService:UserService) { }
 
   ngOnInit(): void {
     this.loadCandidats();
@@ -92,8 +96,14 @@ export class GestionCandidatsComponent implements OnInit {
   }
   validateCandidat(id: number) {
     // Logique pour valider le candidat
-    console.log(`Candidat avec l'ID ${id} validé`);
-    // Vous pouvez appeler un service ici pour mettre à jour le statut du candidat
+    this.userService.createUserFromCandidat(id).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
   resetForm(): void {
     this.candidat = {

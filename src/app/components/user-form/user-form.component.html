@@ -1,0 +1,135 @@
+<div class="container">
+    <h2>{{ isEditMode ? 'Modifier un Utilisateur' : 'Ajouter un Utilisateur' }}</h2>
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+      <!-- Informations de base -->
+      <div class="form-group">
+        <label for="prenom">Prénom:</label>
+        <input type="text" id="prenom" [(ngModel)]="user.prenom" name="prenom" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" [(ngModel)]="user.nom" name="nom" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="nomJeuneFille">Nom de jeune fille:</label>
+        <input type="text" id="nomJeuneFille" [(ngModel)]="user.nomJeuneFille" name="nomJeuneFille" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="etatCivil">État civil:</label>
+        <select id="etatCivil" [(ngModel)]="user.etatCivil" name="etatCivil" class="form-control" required  [compareWith]="compareFn">
+          <option *ngFor="let etat of etatCivils" [ngValue]="etat">{{ etat.nom }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="sexe">Sexe:</label>
+        <select id="sexe" [(ngModel)]="user.sexe" name="sexe" class="form-control" required  [compareWith]="compareFn">
+          <option *ngFor="let sexe of sexes" [ngValue]="sexe">{{ sexe.nom }}</option>
+        </select>
+      </div>
+  
+      <!-- Informations personnelles -->
+      <div class="form-group">
+        <label for="dateNaissance">Date de naissance:</label>
+        <input type="date" id="dateNaissance" [(ngModel)]="user.dateNaissance" name="dateNaissance" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="lieuNaissance">Lieu de naissance:</label>
+        <input type="text" id="lieuNaissance" [(ngModel)]="user.lieuNaissance" name="lieuNaissance" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="cin">CIN:</label>
+        <input type="text" id="cin" [(ngModel)]="user.cin" name="cin" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="delivreeLe">CIN délivrée le:</label>
+        <input type="date" id="delivreeLe" [(ngModel)]="user.delivreeLe" name="delivreeLe" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="delivreeA">CIN délivrée à:</label>
+        <input type="text" id="delivreeA" [(ngModel)]="user.delivreeA" name="delivreeA" class="form-control" />
+      </div>
+  
+      <!-- Adresses et contacts -->
+      <div class="form-group">
+        <label for="adresseMail">Adresse mail:</label>
+        <input type="email" id="adresseMail" [(ngModel)]="user.adresseMail" name="adresseMail" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="adresseMailPro">Adresse mail professionnelle:</label>
+        <input type="email" id="adresseMailPro" [(ngModel)]="user.adresseMailPro" name="adresseMailPro" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="adresseCIN">Adresse CIN:</label>
+        <input type="text" id="adresseCIN" [(ngModel)]="user.adresseCIN" name="adresseCIN" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="adressePersonnelle2">Adresse personnelle 2:</label>
+        <input type="text" id="adressePersonnelle2" [(ngModel)]="user.adressePersonnelle2" name="adressePersonnelle2" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="adressePersonnelle3">Adresse personnelle 3:</label>
+        <input type="text" id="adressePersonnelle3" [(ngModel)]="user.adressePersonnelle3" name="adressePersonnelle3" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="codePostal">Code postal:</label>
+        <input type="text" id="codePostal" [(ngModel)]="user.codePostal" name="codePostal" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="ville">Ville:</label>
+        <input type="text" id="ville" [(ngModel)]="user.ville" name="ville" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="telFixe">Téléphone fixe:</label>
+        <input type="text" id="telFixe" [(ngModel)]="user.telFixe" name="telFixe" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="telPortable1">Téléphone portable 1:</label>
+        <input type="text" id="telPortable1" [(ngModel)]="user.telPortable1" name="telPortable1" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="telPortable2">Téléphone portable 2:</label>
+        <input type="text" id="telPortable2" [(ngModel)]="user.telPortable2" name="telPortable2" class="form-control" />
+      </div>
+  
+      <!-- Informations professionnelles -->
+      <div class="form-group">
+        <label for="typeContrat">Type de contrat:</label>
+        <select id="typeContrat" [(ngModel)]="user.typeContrat" name="typeContrat" class="form-control" required  [compareWith]="compareFn">
+          <option *ngFor="let type of typeContrats" [ngValue]="type">{{ type.nom }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="dateEntree">Date d'entrée:</label>
+        <input type="date" id="dateEntree" [(ngModel)]="user.dateEntree" name="dateEntree" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="dateDebutContrat">Date de début de contrat:</label>
+        <input type="date" id="dateDebutContrat" [(ngModel)]="user.dateDebutContrat" name="dateDebutContrat" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="dateFinContrat">Date de fin de contrat:</label>
+        <input type="date" id="dateFinContrat" [(ngModel)]="user.dateFinContrat" name="dateFinContrat" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="salaire">Salaire:</label>
+        <input type="number" id="salaire" [(ngModel)]="user.salaire" name="salaire" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="societe">Société:</label>
+        <select id="societe" [(ngModel)]="user.societe" name="societe" class="form-control" required  [compareWith]="compareFn">
+          <option *ngFor="let societe of societes" [ngValue]="societe">{{ societe.nom }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="site">Site:</label>
+        <select id="site" [(ngModel)]="user.site" name="site" class="form-control" required  [compareWith]="compareFn">
+          <option *ngFor="let site of sites" [ngValue]="site">{{ site.nom }}</option>
+        </select>
+      </div>
+  
+      <!-- Bouton de soumission -->
+      <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+        {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+      </button>
+    </form>
+  </div>
