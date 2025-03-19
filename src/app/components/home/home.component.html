@@ -1,0 +1,53 @@
+<div class="container-fluid py-4">
+  <div class="row mt-4">
+    <!-- Main Content - Posts -->
+    <div *ngFor="let post of posts" class="col-lg-6">
+      <!-- Loop through posts -->
+      <div  class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <!-- Post Header -->
+          <div class="d-flex align-items-center mb-3">
+            <img src="../assets/img/ib7gmznm.png" alt="Avatar" class="rounded-circle me-3" width="50" height="50" />
+            <div>
+              <h6 class="mb-0 font-weight-bold">Nexus Contact Center</h6>
+              <small class="text-muted">{{ post.createdAt | date:'medium' }}</small>
+            </div>
+          </div>
+
+          <!-- Post Content -->
+          <p class="mb-3">{{ post.content }}</p>
+
+          <!-- Media (Image or Video) -->
+          <div *ngIf="post.mediaUrl" class="mb-3">
+            <img *ngIf="post.mediaType === 'IMAGE'" [src]="post.mediaUrl" alt="Post Image" class="img-fluid rounded" />
+            <video *ngIf="post.mediaType === 'VIDEO'" class="img-fluid rounded" controls>
+              <source [src]="post.mediaUrl" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <!-- Reaction Counts -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center">
+              <!-- Reaction Icons -->
+              <div class="reaction-icons d-flex">
+                <img *ngIf="post.reactionCounts?.['LIKE']" src="../assets/img/thumb-up.png" alt="Like" class="reaction-icon-small me-1" />
+                <img *ngIf="post.reactionCounts?.['LOVE']" src="../assets/img/heart.png" alt="Love" class="reaction-icon-small me-1" />
+                <img *ngIf="post.reactionCounts?.['HAHA']" src="../assets/img/happy-face.png" alt="Haha" class="reaction-icon-small me-1" />
+              </div>
+              <!-- Total Reactions -->
+            </div>
+          </div>
+
+          <!-- Reaction Buttons -->
+          <div class="reactions d-flex gap-2">
+            <button *ngFor="let reactionType of reactionTypes" class="btn btn-outline-secondary btn-sm reaction-btn" (click)="addReaction(post.id, reactionType)">
+              <img [src]="getReactionIcon(reactionType)" height="20" width="20" class="reaction-icon me-1" />
+              {{ reactionType }} ({{ post.reactionCounts?.[reactionType] || 0 }})
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

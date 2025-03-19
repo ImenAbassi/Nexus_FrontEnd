@@ -89,11 +89,16 @@ updatePost(id: number, post: Post, file?: File): Observable<Post> {
   }
   // Add a reaction to a post
   addReaction(postId: number, type: ReactionType, reactedBy: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${postId}/reactions`, { type, reactedBy });
+    return this.http.post(`http://localhost:8081/nexus/api/reactions/${postId}`, null, {
+      params: {
+        type: type.toString(),
+        reactedBy: reactedBy,
+      },
+    });
   }
 
   // Get reaction counts for a post
   getReactionCounts(postId: number): Observable<{ [key: string]: number }> {
-    return this.http.get<any>(`${this.apiUrl}/${postId}/reactions/count`);
+    return this.http.get<{ [key: string]: number }>(`http://localhost:8081/nexus/api/reactions/count/${postId}`);
   }
 }

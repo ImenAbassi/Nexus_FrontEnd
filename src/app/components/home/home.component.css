@@ -1,27 +1,55 @@
+/* Card Styling */
 .card {
-  border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: none;
-}
-
-.reactions .btn {
   border: none;
-  background: transparent;
-  color: #606770;
-  font-size: 14px;
+  border-radius: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.reactions .btn:hover {
-  background: #d7d9db38;
-  border-radius: 4px;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.rounded-circle {
-  border: 2px solid #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Reaction Buttons */
+.reaction-btn {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+  transition: background-color 0.2s;
 }
+
+.reaction-btn:hover {
+  background-color: #f8f9fa;
+}
+
 .reaction-icon-small {
-  width: 16px;
-  height: 16px;
-  margin-right: 2px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Media Styling */
+img.img-fluid {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+video.img-fluid {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+/* Sidebar Styling */
+.card h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .col-lg-8, .col-lg-4 {
+    width: 100%;
+    max-width: 100%;
+  }
 }

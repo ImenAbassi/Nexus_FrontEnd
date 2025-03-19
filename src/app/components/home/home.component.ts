@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Post } from 'src/app/models/post.model';
-import { ReactionType } from 'src/app/models/ReactionType.model';
 import { PostService } from 'src/app/services/post.service';
+import { Post, ReactionType } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-home',
@@ -10,45 +9,28 @@ import { PostService } from 'src/app/services/post.service';
 })
 export class HomeComponent implements OnInit {
   posts: Post[] = [];
-  colleagues: any[] = []; // Add a separate array for colleagues
-  reactionTypes = Object.values(ReactionType); // Expose reaction types to the template
+  colleagues: any[] = [
+  ];
+  reactionTypes = Object.values(ReactionType);
 
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
     this.loadPosts();
-    //this.loadColleagues(); // Load colleagues data
   }
 
-  // Load all posts
   loadPosts(): void {
     this.postService.getPosts().subscribe(
       (posts) => {
+        console.log(posts);
         this.posts = posts;
-        this.posts.forEach((post) => {
-          if (post.mediaUrl) {
-            if (post.mediaType === 'IMAGE') {
-              this.postService.getMediaBase64(post.mediaUrl).subscribe(
-                (base64Image) => {
-                  post.mediaUrl = `data:image/jpeg;base64,${base64Image}`;
-                },
-                (error) => {
-                  console.error('Erreur lors de la récupération de l\'image :', error);
-                }
-              );
-            } else if (post.mediaType === 'VIDEO') {
-              post.mediaUrl = this.postService.getMediaUrl(post.mediaUrl);
-            }
-          }
-          // Load reaction counts for each post
-          this.loadReactionCounts(post.id);
-        });
       },
       (error) => {
-        console.error('Erreur lors de la récupération des posts :', error);
+        console.error('Error loading posts:', error);
       }
     );
   }
+
 
   // Load reaction counts for a post
   loadReactionCounts(postId: number): void {
@@ -56,11 +38,11 @@ export class HomeComponent implements OnInit {
       (counts) => {
         const post = this.posts.find((p) => p.id === postId);
         if (post) {
-        //  post.reactionCounts = counts;
+          post.reactionCounts = counts;
         }
       },
       (error) => {
-        console.error('Erreur lors de la récupération des réactions :', error);
+        console.error('Error loading reaction counts:', error);
       }
     );
   }
@@ -73,17 +55,16 @@ export class HomeComponent implements OnInit {
         this.loadReactionCounts(postId); // Refresh reaction counts
       },
       (error) => {
-        console.error('Erreur lors de l\'ajout de la réaction :', error);
+        console.error('Error adding reaction:', error);
       }
     );
   }
 
-  // Get the total number of reactions
   getTotalReactions(reactionCounts: { [key: string]: number }): number {
+    console.log(reactionCounts);
     return reactionCounts ? Object.values(reactionCounts).reduce((a, b) => a + b, 0) : 0;
   }
 
-  // Get the icon for a reaction type
   getReactionIcon(reactionType: ReactionType): string {
     switch (reactionType) {
       case ReactionType.LIKE:
