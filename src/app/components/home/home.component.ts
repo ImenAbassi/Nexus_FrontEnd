@@ -49,7 +49,10 @@ export class HomeComponent implements OnInit {
 
   // Add a reaction to a post
   addReaction(postId: number, type: ReactionType): void {
-    const reactedBy = 'user123'; // Replace with the actual user ID or username
+    const userJson = localStorage.getItem('user');
+    if(userJson){
+    const user = JSON.parse(userJson);
+    const reactedBy = user.cin; // Replace with the actual user ID or username
     this.postService.addReaction(postId, type, reactedBy).subscribe(
       () => {
         this.loadReactionCounts(postId); // Refresh reaction counts
@@ -58,6 +61,7 @@ export class HomeComponent implements OnInit {
         console.error('Error adding reaction:', error);
       }
     );
+  }
   }
 
   getTotalReactions(reactionCounts: { [key: string]: number }): number {
