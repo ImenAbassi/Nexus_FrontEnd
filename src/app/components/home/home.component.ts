@@ -22,11 +22,28 @@ export class HomeComponent implements OnInit {
   loadPosts(): void {
     this.postService.getPosts().subscribe(
       (posts) => {
-        console.log(posts);
         this.posts = posts;
+        this.posts.forEach((post) => {
+          if (post.mediaUrl) {
+            if (post.mediaType === 'IMAGE') {
+              this.postService.getMediaBase64(post.mediaUrl).subscribe(
+                (base64Image) => {
+                  post.mediaUrl = `data:image/jpeg;base64,${base64Image}`;
+                },
+                (error) => {
+                  console.error('Erreur lors de la récupération de l\'image :', error);
+                }
+              );
+            } else if (post.mediaType === 'VIDEO') {
+              post.mediaUrl = this.postService.getMediaUrl(post.mediaUrl);
+            }
+          }
+          // Load reaction counts for each post
+          this.loadReactionCounts(post.id);
+        });
       },
       (error) => {
-        console.error('Error loading posts:', error);
+        console.error('Erreur lors de la récupération des posts :', error);
       }
     );
   }
