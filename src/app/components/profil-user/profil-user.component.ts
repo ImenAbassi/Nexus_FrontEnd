@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EtatCivilService } from 'src/app/services/etat-civil.service';
 import { SexeService } from 'src/app/services/sexe.service';
@@ -8,12 +8,12 @@ import { TypeContratService } from 'src/app/services/type-contrat.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-user-form',
-  templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.css']
+  selector: 'app-profil-user',
+  templateUrl: './profil-user.component.html',
+  styleUrls: ['./profil-user.component.css']
 })
-export class UserFormComponent implements OnInit{
- /* user: any = {
+export class ProfilUserComponent {
+/* user: any = {
     prenom: '',
     nom: '',
     nomJeuneFille: '',
@@ -113,14 +113,15 @@ export class UserFormComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if(this.idUser){
-      this.isEditMode = true;
-    }
+   
+      //this.isEditMode = true;
+      const userJson = localStorage.getItem('user');
+      if (userJson) {
+        const user = JSON.parse(userJson);
+        const userId = user.idUser;
+        console.log(userId);        console.log(user);
 
-    if (id) {
-      this.isEditMode = true;
-      this.userService.getUserById(+id).subscribe({
+      this.userService.getUserById(userId).subscribe({
         next: (response) => {
           this.user = response;
         },
@@ -128,8 +129,8 @@ export class UserFormComponent implements OnInit{
           console.error('Error fetching user:', error);
         },
       });
+    
     }
-
     this.loadDropdowns();
   }
 
@@ -179,4 +180,9 @@ export class UserFormComponent implements OnInit{
       reader.readAsDataURL(file);
     }
   }
+
+  toggleEditMode(): void {
+    this.isEditMode = !this.isEditMode;
+  }
 }
+

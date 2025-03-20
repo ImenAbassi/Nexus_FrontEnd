@@ -20,6 +20,7 @@
                         <thead>
                             <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Utilisateur</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">adresse d'arrivée</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Localisation d'arrivée</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Heure de départ</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
@@ -31,6 +32,7 @@
                             <tr *ngFor="let taxi of listTaxisFiltered">
                                 <td>{{ taxi.user?.nom }} {{ taxi.user?.prenom }}</td>
                                 <td>{{ taxi.localisationArrivee }}</td>
+                                <td>{{ taxi.localisationMap }}</td>
                                 <td>{{ taxi.heureDepart }}</td>
                                 <td>{{ taxi.dateCreation | date:'yyyy-MM-dd' }}</td>
                                 <td>

@@ -24,7 +24,7 @@ export class UserService {
   }
   
   getUserById(idUser: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${idUser}`);
+    return this.http.get<User>(`${this.apiUrl}/getById/${idUser}`);
   }
 
   createUserAndAssignToCompagne(dto: UserCompagneDTO): Observable<UserCompagne> {

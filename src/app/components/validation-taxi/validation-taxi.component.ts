@@ -21,6 +21,7 @@ export class ValidationTaxiComponent implements OnInit {
     id: 0,
     user: null,
     localisationArrivee: '',
+    localisationMap: '',
     heureDepart: '',
     etatDemande: EtatDemande.EN_ATTENTE,
   };
@@ -78,6 +79,7 @@ export class ValidationTaxiComponent implements OnInit {
           id: 0,
           user: null,
           localisationArrivee: '',
+          localisationMap: '',
           heureDepart: '',
           etatDemande: EtatDemande.EN_ATTENTE,
         }; // Réinitialiser le formulaire

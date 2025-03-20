@@ -24,7 +24,7 @@
           </li>
   
           <!-- Notifications -->
-          <li class="nav-item dropdown pe-2 d-flex align-items-center">
+          <!--<li class="nav-item dropdown pe-2 d-flex align-items-center">
             <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fa fa-bell cursor-pointer"></i>
             </a>
@@ -96,7 +96,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li>-->
   
           <!-- Menu utilisateur -->
           <li class="nav-item dropdown ">
@@ -107,6 +107,10 @@
             </a>
             <!-- Menu déroulant utilisateur -->
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="position: absolute; background: white;">
+              <a class="dropdown-item" [routerLink]="['/profil']">
+                <i class="fa fa-lock me-sm-1"></i> Profil
+              </a>
+              <div class="dropdown-divider"></div>
               <a class="dropdown-item" [routerLink]="['/change-password']">
                 <i class="fa fa-lock me-sm-1"></i> Modifier le mot de passe
               </a>

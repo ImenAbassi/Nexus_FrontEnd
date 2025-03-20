@@ -18,10 +18,11 @@ export class TaxiComponent implements OnInit {
     id: 0,
     user: null,
     localisationArrivee: '',
+    localisationMap:'',
     heureDepart: '',
     etatDemande: EtatDemande.EN_ATTENTE,
   };
-
+  listLocalisation:any[]=[];
   constructor(private taxiService: TaxiService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
@@ -36,7 +37,13 @@ export class TaxiComponent implements OnInit {
     if (userJson) {
       const user = JSON.parse(userJson);
       const userId = user.idUser; // ID de l'utilisateur connecté
-
+      if (user.adressePersonnelle2) {
+        this.listLocalisation.push(user.adressePersonnelle2);
+      }
+      
+      if (user.adressePersonnelle3) {
+        this.listLocalisation.push(user.adressePersonnelle3);
+      }
       // Récupérer les demandes de taxi pour cet utilisateur
       this.taxiService.getTaxisByUser(userId).subscribe({
         next: (data) => (this.listTaxis = data),
@@ -67,6 +74,7 @@ export class TaxiComponent implements OnInit {
           id: 0,
           user: null,
           localisationArrivee: '',
+          localisationMap: '',
           heureDepart: '',
           etatDemande: EtatDemande.EN_ATTENTE,
         }; // Réinitialiser le formulaire

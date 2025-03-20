@@ -15,6 +15,7 @@
             <thead>
               <tr>
                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Utilisateur</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">adresse d'arrivée</th>
                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Localisation d'arrivée</th>
                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Heure de départ</th>
                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
@@ -25,6 +26,7 @@
               <tr *ngFor="let taxi of listTaxis">
                 <td>{{ taxi.user?.nom }} {{ taxi.user?.prenom }}</td>
                 <td>{{ taxi.localisationArrivee }}</td>
+                <td>{{ taxi.localisationMap }}</td>
                 <td>{{ taxi.heureDepart }}</td>
                 <td>{{ taxi.dateCreation }}</td>
                 <td>
@@ -56,8 +58,14 @@
   <div class="modal-body">
     <form (ngSubmit)="submitTaxi()">
       <div class="mb-3">
-        <label for="localisationArrivee" class="form-label">Localisation d'arrivée</label>
-        <input type="text" class="form-control" id="localisationArrivee" [(ngModel)]="taxi.localisationArrivee" name="localisationArrivee" required>
+        <label for="localisationAdress" class="form-label">Adresse d'arrivée</label>
+        <select id="localisationAdress" [(ngModel)]="taxi.localisationArrivee" name="localisationAdress" class="form-control" required  >
+          <option *ngFor="let societe of listLocalisation" [ngValue]="societe">{{ societe}}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="localisationArrivee" class="form-label">Localisation d'arrivée (position Map)</label>
+        <input type="text" class="form-control" id="localisationArrivee" [(ngModel)]="taxi.localisationMap" name="localisationArrivee" required>
       </div>
       <div class="mb-3">
         <label for="heureDepart" class="form-label">Heure de départ</label>
